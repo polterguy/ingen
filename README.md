@@ -31,6 +31,4 @@ type of exhibits they can sign up for.
 
 The system hence functions as a use case for what you can expect to be able to create with Phosphorus
 Five and Hyperlambda. The system is rendered responsively, and runs just as well on phones and tablets,
-as it does on Windows, Linux and OS X machines. Below is a screenshot of the system.
-
-![alt Screenshot of system](https://phosphorusfive.files.wordpress.com/2018/06/ingen-theme-park-dinosaurs-screenshot.png)
+as it does on Windows, Linux and OS X machines.
