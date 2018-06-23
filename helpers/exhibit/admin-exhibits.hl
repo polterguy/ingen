@@ -1,0 +1,76 @@
+
+
+create-widgets
+  micro.widgets.modal:admin-exhibits
+    widgets
+      h3
+        innerValue:Administrate exhibits
+      micro.widgets.mysql.datagrid:admin-exhibits-grid
+        class:hover striped
+        database:ingen
+        table:exhibit
+        columns
+          name
+          when
+          description
+            visible:bool:false
+          description
+            .lambda
+
+              /*
+               * Transforming description to markdown and creating a pre widget.
+               */
+              p5.markdown.markdown2html:x:/../*/row/*/description?value
+              eval-x:x:/+/*/*/*/.name
+              eval-x:x:/+/*/*
+              return
+                pre
+                  innerValue:x:/@p5.markdown.markdown2html?value
+
+      /*
+       * Add button.
+       */
+      div
+        class:right
+        widgets
+          button
+            innerValue:+
+            onclick
+              create-widgets
+                micro.widgets.modal:create-new-exhibit
+                  widgets
+                    div
+                      class:strip fill
+                      widgets
+                        label
+                          innerValue:Name
+                          class:description-9
+                        input
+                          type:text
+                          .data-field:name
+                          placeholder:Name ...
+                    div
+                      class:strip fill
+                      widgets
+                        label
+                          innerValue:Date
+                          class:description-9
+                        input
+                          type:date
+                          .data-field:name
+                          placeholder:Date ...
+                    label
+                      innerValue:Name
+                    micro.widgets.codemirror
+                      mode:markdown
+                      .data-field:description
+                    div
+                      class:right
+                      widgets
+                        button
+                          innerValue:Save
+                          onclick
+                            micro.form.serialize:create-new-exhibit
+                            create-widget
+                              element:pre
+                              innerValue:x:/..

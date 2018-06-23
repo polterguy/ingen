@@ -1,0 +1,45 @@
+
+
+
+
+/*
+ * Creating database schema for snippets if it doesn't exist.
+ */
+try
+
+  /*
+   * Making sure we prepend the database prefix in front of schema name.
+   */
+  p5.config.get:p5.data.prefix
+
+  /*
+   * Creating database schema.
+   */
+  p5.mysql.connect:[sys]
+    p5.mysql.execute:@"CREATE SCHEMA `{0}ingen`;"
+      :x:/@p5.config.get/*?value
+
+  /*
+   * Creating schema for database.
+   */
+  p5.mysql.connect:[ingen]
+    p5.mysql.execute:@"CREATE TABLE `exhibit` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `when` datetime NOT NULL,
+  `description` longtext collate utf8mb4_unicode_ci not null,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `ticket` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `exhibit_id` int(10) unsigned not null,
+  FOREIGN KEY (exhibit_id) REFERENCES exhibit(id),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;"
+
+catch
+
+  /*
+   * Simply ignoring exception,since this implies that schema already exists.
+   */

@@ -1,0 +1,17 @@
+
+/*
+ * Creating modal widget to show user exhibits.
+ */
+create-widgets
+  micro.widgets.modal:kiosk-modal
+    widgets
+      h3
+        innerValue:Kiosk
+      div
+        class:right
+        widgets
+          button
+            class:Close
+            innerValue:Close
+            onclick
+              delete-widget:kiosk-modal

@@ -1,0 +1,24 @@
+/*
+ * Launch file for InGen.
+ */
+micro.css.include
+  skin:aztec
+
+/*
+ * Verifying that we're logged in, and if not, displaying customer's frontend part(y!) :D
+ */
+whoami
+if:x:/@whoami/*/role?value
+  =:guest
+
+  /*
+   * Loading up front end.
+   */
+  micro.evaluate.file:@INGEN/helpers/parts/front-end.hl
+
+else
+
+  /*
+   * Loading up back end.
+   */
+  micro.evaluate.file:@INGEN/helpers/parts/back-end.hl

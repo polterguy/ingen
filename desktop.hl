@@ -1,0 +1,13 @@
+/*
+ * The InGen system desktop widget.
+ */
+container
+  element:a
+  class:jumbo-button
+  title:InGen
+  widgets
+    span
+      innerValue:InGen
+    literal
+      element:span
+      class:icon-paper-plane

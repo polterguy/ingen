@@ -1,0 +1,21 @@
+/*
+ * This file creates _"path"_ Active Event and evaluates all files
+ * in the _"/startup/"_ folder for module.
+ */
+
+
+/*
+ * This is our _"path"_ Active Event for module.
+ */
+micro.path.get-folder:x:/..?name
+trim-right:x:/@micro.path.get-folder?value
+  chars:/
+eval-x:x:/+/*
+create-event:p5.io.unroll-path.@INGEN
+  return:x:/@trim-right?value
+
+
+/*
+ * Evaluating all other startup files.
+ */
+micro.evaluate.folder:@INGEN/startup/

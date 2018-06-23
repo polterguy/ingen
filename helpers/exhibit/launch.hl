@@ -1,0 +1,60 @@
+
+/*
+ * Creating modal widget to show user exhibits.
+ */
+create-widgets
+  micro.widgets.modal:exhibits-modal
+    widgets
+      h3
+        innerValue:Exhibits
+      div
+        widgets
+          micro.widgets.grid:exhibits-grid
+            class:hover striped
+            columns
+              name
+              when
+            events
+              ingen.exhibits-grid.databind
+
+                /*
+                 * Populating datagrid.
+                 */
+                .data
+                if:x:/../name?value
+                  p5.mysql.connect:[ingen]
+                    p5.mysql.select:select * from exhibit where name like @name limit 10
+                    add:x:/@.data
+                      src:x:/@p5.mysql.select/*
+                else
+                  p5.mysql.connect:[ingen]
+                    p5.mysql.select:select * from exhibit limit 10
+                    add:x:/@.data
+                      src:x:/@p5.mysql.select/*
+                for-each:x:/@.data/*
+                  eval-x:x:/+/*/*/*
+                  add:x:/../*/micro.widgets.grid.databind
+                    src
+                      item
+                        .row
+                          onclick
+                            micro.windows.info:Foo
+                        name:x:/@_dp/#/*/name?value
+                        when:x:/@_dp/#/*/when?value
+                micro.widgets.grid.databind:exhibits-grid
+
+            oninit
+
+              /*
+               * Initially databinding grid.
+               */
+              ingen.exhibits-grid.databind
+
+      div
+        class:right
+        widgets
+          button
+            class:Close
+            innerValue:Close
+            onclick
+              delete-widget:exhibits-modal

@@ -1,0 +1,11 @@
+/*
+ *
+ */
+button
+  innerValue:@"<span class=""icon-key""></span>"
+  onclick
+
+    /*
+     * Displaying login window.
+     */
+    desktop.authentication.login
