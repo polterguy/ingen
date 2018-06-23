@@ -25,6 +25,4 @@ The system hence functions as a use case for what you can expect to be able to c
 Five and Hyperlambda. The system is rendered responsively, and runs just as well on phones and tablets,
 as it does on Windows, Linux and OS X machines. Below is a screenshot of the system.
 
-<div style="text-align:center;">
-  <img alt="Screenshot of the InGen Theme Park system" src="https://phosphorusfive.files.wordpress.com/2018/06/ingen-theme-park-kiosk-system.png" />
-</div>
+![alt Screenshot of system](https://phosphorusfive.files.wordpress.com/2018/06/ingen-theme-park-kiosk-system.png)
