@@ -116,6 +116,13 @@ create-widget
                      */
                     micro.evaluate.file:@INGEN/front-end/exhibits/view-exhibits.hl
 
+                    /*
+                     * Evaluating file responsible for toggling Jumbo Buttons.
+                     */
+                    eval-x:x:/+/*
+                    micro.evaluate.file:@INGEN/common/toggle-jumbo-button.hl
+                      button:x:/../*/_event?value
+
             /*
              * Helper container widget, for displaying "view content".
              */

@@ -1,0 +1,55 @@
+/*
+ * Allows the user to add a new exhibit.
+ */
+create-widgets
+  micro.widgets.modal:themepark-add-exhibit-modal
+    widgets
+      h2
+        innerValue:Add new exhibit
+      div
+        class:strip fill
+        widgets
+          label
+            innerValue:Name
+            class:description-9
+          input
+            type:text
+            .data-field:name
+            placeholder:Name ...
+      div
+        class:strip fill
+        widgets
+          label
+            innerValue:Price
+            class:description-9
+          input
+            type:number
+            .data-field:price
+            placeholder:Price ...
+      label
+        innerValue:Name
+      micro.widgets.codemirror
+        mode:markdown
+        .data-field:description
+      div
+        class:right
+        widgets
+          button
+            innerValue:Save
+            onclick
+
+              /*
+               *Serializing form and invoking file responsible for creating a new record in database.
+               */
+              micro.form.serialize:themepark-add-exhibit-modal
+              add:x:/+
+                src:x:/@micro.form.serialize/*
+              micro.evaluate.file:@INGEN/back-end/exhibits/add-exhibit-model.hl
+
+              /*
+               * Deleting widget and re-databinding datagrid.
+               */
+              delete-widget:themepark-add-exhibit-modal
+              micro.widgets.mysql.datagrid.databind:manage-exhibits-datagrid
+              micro.windows.info:Successfully created new exhibit
+                class:micro-windows-info success

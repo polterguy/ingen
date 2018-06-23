@@ -49,6 +49,7 @@ create-widget:view-exhibits-wrapper
           visible:bool:false
         name
         price
+          style:"width:5px;"
 
     /*
      * A simple close button to simply delete view.
@@ -65,3 +66,8 @@ create-widget:view-exhibits-wrapper
              * Simply deletes view.
              */
             delete-widget:view-exhibits-wrapper
+
+            /*
+             * Clearing toggled state of any toggled Jumbo Buttons.
+             */
+            micro.evaluate.file:@INGEN/common/toggle-jumbo-button.hl

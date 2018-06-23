@@ -19,6 +19,10 @@ body {
     text-shadow: 3px 3px 3px rgba(255, 255, 0, .2);
 }
 
+.themepark-jumbo-button-toggled {
+    background: linear-gradient(rgba(180, 180, 0, 1), rgba(120, 120, 0, 1));
+}
+
 .themepark-center-content {
     margin-top: 7rem;
 }

@@ -1,0 +1,29 @@
+
+/*
+ * File responsible for creating a new database entry of type "exhibit".
+ */
+
+
+/*
+ * Signal node, used to separate arguments from the rest of our lambda.
+ */
+.signal
+
+
+/*
+ * Sanity checking arguments.
+ */
+micro.lambda.contract.min:x:/..
+  name:string
+  description:string
+  price:int
+
+
+/*
+ * Connecting to ingen database and inserting new "exhibit" item.
+ */
+p5.mysql.connect:[ingen]
+  p5.mysql.insert:insert into exhibits (name, price, description) value (@name, @price, @description)
+    @name:x:/@.signal/--/name?value
+    @description:x:/@.signal/--/description?value
+    @price:x:/@.signal/--/price?value.int
