@@ -4,7 +4,7 @@
 
 
 /*
- * Checking if "view exhibit" elready exists, at which point we simply
+ * Checking if "view exhibit" widget already exists, at which point we simply
  * return early.
  */
 if
@@ -18,6 +18,18 @@ if
 
 
 /*
+ * Clearing previously create widgets from dynamic content wrapper widget.
+ */
+clear-widget:themepark-dynamic-content
+
+
+/*
+ * Setting header and title of page.
+ */
+themepark.header.set:Browse exhibits
+
+
+/*
  * Creating our "view exhibit" datagrid in a "bg" wrapper div.
  */
 create-widget:view-exhibits-wrapper
@@ -26,7 +38,7 @@ create-widget:view-exhibits-wrapper
   widgets
 
     /*
-     * Our actual datagrid, dynamically databound towards "exhibit" table.
+     * Our actual datagrid, dynamically databound towards "exhibits" table.
      */
     micro.widgets.mysql.datagrid:view-exhibits-datagrid
       class:hover striped themepark-datagrid
@@ -46,7 +58,7 @@ create-widget:view-exhibits-wrapper
       widgets
         button
           class:large
-          innerValue:Close
+          innerValue:@"<span class=""icon-cross""></span>"
           onclick
 
             /*

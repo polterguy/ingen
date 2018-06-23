@@ -61,8 +61,44 @@ create-widget
              * The general toolbar for our app.
              */
             micro.widgets.file
-              class:strip right
+              class:strip themepark-top-buttons
               folder:@INGEN/common/toolbar-buttons/
+
+            /*
+             * Header for app.
+             */
+            literal:themepath-header
+              element:h1
+              class:themepark-header center
+              events
+
+                /*
+                 * Used by different modules when the header should be changed for some reasons.
+                 */
+                themepark.header.set
+
+                  /*
+                   * Checking if caller specified a value, and if not, resetting header to
+                   * original value.
+                   */
+                  if:x:/../*/_arg?value
+                    not
+
+                    /*
+                     * Resetting header and title to default value.
+                     */
+                    set-widget-property:x:/../*/_event?value
+                      innerValue:InGen Theme Park
+                    p5.web.page.set-title:InGen Theme Park
+
+                  else
+
+                    /*
+                     * Setting header and title to specified [_arg] value.
+                     */
+                    set-widget-property:x:/../*/_event?value
+                      innerValue:x:/../*/_arg?value
+                    p5.web.page.set-title:x:/../*/_arg?value
 
             /*
              * Main content surface for our app.
@@ -86,3 +122,9 @@ create-widget
             div:themepark-dynamic-content
               class:center themepark-center-additional-content
               widgets
+
+
+/*
+ * Re-setting initial title.
+ */
+themepark.header.set

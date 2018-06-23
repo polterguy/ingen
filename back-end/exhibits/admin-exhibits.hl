@@ -1,99 +1,76 @@
 
 /*
- * Allows a logged in user to administrate exhibits.
+ * Creates our "admin exhibits" back end widget.
  */
-create-widgets
-  micro.widgets.modal:admin-exhibits
-    class:micro-widgets-modal large
-    widgets
-      h3
-        innerValue:Administrate exhibits
-      micro.widgets.mysql.datagrid:admin-exhibits-grid
-        class:hover striped
-        database:ingen
-        table:exhibits
-        columns
-          id
-            visible:bool:false
-          name
-          price
-          delete
-            .lambda
-              eval-x:x:/+/*/*/*/.id
-              return
-                button
-                  innerValue:@"<span class=""icon-bin""></span>"
-                  onclick
-                    .id:x:/../*/row/*/id?value.long
-                    p5.mysql.connect:[ingen]
-                      p5.mysql.delete:delete from exhibit where id = @id
-                        @id:x:/@.id?value
-                    micro.windows.info:Item deleted successfully ...
-                      class:micro-windows-info success
-                    micro.widgets.mysql.datagrid.databind:admin-exhibits-grid
 
-      /*
-       * Add button.
-       */
-      div
-        class:right
-        widgets
-          button
-            innerValue:+
-            onclick
-              create-widgets
-                micro.widgets.modal:create-new-exhibit
-                  widgets
-                    div
-                      class:strip fill
-                      widgets
-                        label
-                          innerValue:Name
-                          class:description-9
-                        input
-                          type:text
-                          .data-field:name
-                          placeholder:Name ...
-                    div
-                      class:strip fill
-                      widgets
-                        label
-                          innerValue:Date
-                          class:description-9
-                        input
-                          type:date
-                          .data-field:date
-                          placeholder:Date ...
-                    div
-                      class:strip fill
-                      widgets
-                        label
-                          innerValue:Price
-                          class:description-9
-                        input
-                          type:number
-                          .data-field:price
-                          placeholder:Price ...
-                    label
-                      innerValue:Name
-                    micro.widgets.codemirror
-                      mode:markdown
-                      .data-field:description
-                    div
-                      class:right
-                      widgets
-                        button
-                          innerValue:Save
-                          onclick
-                            micro.form.serialize:create-new-exhibit
-                            p5.mysql.connect:[ingen]
-                              p5.mysql.insert:insert into exhibit (name, `when`, description, price) value (@name, @when, @description, @price)
-                                @name:x:/@micro.form.serialize/*/name?value
-                                @when:x:/@micro.form.serialize/*/date?value
-                                @description:x:/@micro.form.serialize/*/description?value
-                                @price:x:/@micro.form.serialize/*/price?value.int
-                            delete-widget:create-new-exhibit
-                            micro.widgets.mysql.datagrid.databind:admin-exhibits-grid
-                            micro.windows.info:Successfully inserted into exhibits ...
-                              class:micro-windows-info success
 
+/*
+ * Checking if "manage exhibit" widget already exists, at which point we simply
+ * return early.
+ */
+if
+  fetch:x:/0/0?value
+    widget-exists:manage-exhibits-wrapper
+
+  /*
+   * Widget is already visible.
+   */
+  return
+
+
+/*
+ * Clearing previously create widgets from dynamic content wrapper widget.
+ */
+clear-widget:themepark-dynamic-content
+
+
+/*
+ * Setting header and title of page.
+ */
+themepark.header.set:Administrate exhibits
+
+
+/*
+ * Creating our "manage exhibit" datagrid in a "bg" wrapper div.
+ */
+create-widget:manage-exhibits-wrapper
+  parent:themepark-dynamic-content
+  class:shaded rounded air air-inner bg
+  widgets
+
+    /*
+     * Our actual datagrid, dynamically databound towards "exhibits" table.
+     */
+    micro.widgets.mysql.datagrid:manage-exhibits-datagrid
+      class:hover striped themepark-datagrid
+      database:ingen
+      table:exhibits
+      columns
+        id
+          visible:bool:false
+        name
+        price
+        edit
+          .lambda
+            return
+              button
+                innerValue:@"<span class=""icon-cog""></span>"
+
+    /*
+     * Toolbar at the bottom for creating new exhibits, and closingmain widget.
+     */
+    div
+      class:right strip
+      widgets
+        button
+          innerValue:@"<span class=""icon-plus""></span>"
+          class:large
+        button
+          class:large
+          innerValue:@"<span class=""icon-cross""></span>"
+          onclick
+
+            /*
+             * Simply deletes view.
+             */
+            delete-widget:manage-exhibits-wrapper
