@@ -44,12 +44,32 @@ create-widget:view-exhibits-wrapper
       class:hover striped themepark-datagrid
       database:ingen
       table:exhibits
+      .row
+        onclick
+
+          /*
+           * Evaluating file responsible for displaying information for exhibit,
+           * and allowing user to purchase ticket(s) to exhibit.
+           */
+          eval-x:x:/+/*
+          micro.evaluate.file:@INGEN/front-end/exhibits/view-single-exhibit.hl
+            id:x:/../*/.row/*/id?value
+
       columns
         id
           visible:bool:false
         name
         price
           style:"width:5px;"
+        children_price
+          visible:bool:false
+        children
+          style:"width:5px;"
+          .lambda
+            eval-x:x:/+/*/*
+            return
+              span
+                innerValue:x:/../*/row/*/children_price?value
 
     /*
      * A simple close button to simply delete view.

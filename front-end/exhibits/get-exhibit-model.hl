@@ -1,0 +1,20 @@
+
+/*
+ * File responsible for retrieving exhibit information from database and returning data to caller.
+ */
+
+
+/*
+ * Sanity checking invocation.
+ */
+micro.lambda.contract.min:x:/..
+  id:long
+
+
+/*
+ * Opening up database connection, selecting item,and returning its data to caller.
+ */
+p5.mysql.connect:[ingen]
+  p5.mysql.select:select * from exhibits where id = @id
+    @id:x:/../*/id?value
+  return:x:/-/*/*

@@ -16,6 +16,7 @@ micro.lambda.contract.min:x:/..
   name:string
   description:string
   price:int
+  children_price:int
 micro.lambda.contract.optional:x:/..
   id:long
 
@@ -35,10 +36,11 @@ p5.mysql.connect:[ingen]
     /*
      * Update operation.
      */
-    p5.mysql.update:update exhibits set name = @name, price = @price, description = @description where id = @id
+    p5.mysql.update:update exhibits set name = @name, price = @price, children_price = @children_price, description = @description where id = @id
       @name:x:/@.signal/--/name?value
       @description:x:/@.signal/--/description?value
       @price:x:/@.signal/--/price?value.int
+      @children_price:x:/@.signal/--/children_price?value.int
       @id:x:/@.signal/--/id?value.long
 
   else
@@ -46,7 +48,8 @@ p5.mysql.connect:[ingen]
     /*
      * Insert operation.
      */
-    p5.mysql.insert:insert into exhibits (name, price, description) value (@name, @price, @description)
+    p5.mysql.insert:insert into exhibits (name, price, children_price, description) value (@name, @price, @children_price, @description)
       @name:x:/@.signal/--/name?value
       @description:x:/@.signal/--/description?value
       @price:x:/@.signal/--/price?value.int
+      @children_price:x:/@.signal/--/children_price?value.int

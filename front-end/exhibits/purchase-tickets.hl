@@ -1,0 +1,31 @@
+
+/*
+ * File responsible for allowing user to purchase tickets to exhibit.
+ */
+
+
+/*
+ * Sanity checking invocation.
+ */
+micro.lambda.contract.min:x:/..
+  id:long
+
+
+/*
+ * Retrieving data for exhibit.
+ */
+eval-x:x:/+/*
+micro.evaluate.file:@INGEN/front-end/exhibits/get-exhibit-model.hl
+  id:x:/../*/id?value
+
+
+/*
+ * Displaying a modal window and allowing user to purchase ticket(s) for exhibit.
+ */
+eval-x:x:/+/**/.id
+create-widgets
+  micro.widgets.modal:order-exhibit-modal
+    widgets
+      h2
+        innerValue:Purchase tickets for '{0}'
+          :x:/@micro.evaluate.file/*/name?value

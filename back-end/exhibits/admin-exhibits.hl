@@ -50,7 +50,6 @@ create-widget:manage-exhibits-wrapper
           /*
            * Invoking file responsible for editing a specific item from database.
            */
-          micro.windows.info:Foo
           eval-x:x:/+/*
           micro.evaluate.file:@INGEN/back-end/exhibits/add-edit-exhibit-view.hl
             id:x:/../*/.row/*/id?value
@@ -61,6 +60,15 @@ create-widget:manage-exhibits-wrapper
         name
         price
           style:"width:5px;"
+        children_price
+          visible:bool:false
+        children
+          style:"width:5px;"
+          .lambda
+            eval-x:x:/+/*/*
+            return
+              span
+                innerValue:x:/../*/row/*/children_price?value
         delete
           style:"width:5px;"
           .lambda
