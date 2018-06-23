@@ -1,0 +1,29 @@
+
+/*
+ * Information button.
+ */
+button
+  innerValue:@"<span class=""icon-question""></span>"
+  onclick
+
+    /*
+     * Loading README.md file, and displaying in a modal window.
+     */
+    load-file:@INGEN/README.md
+    markdown2html:x:/-/*?value
+    create-widgets
+      micro.widgets.modal:themepark-modal-info-widget
+        widgets
+          div
+            innerValue:x:/@markdown2html?value
+          div
+            class:right air-top
+            widgets
+              button
+                innerValue:Close help
+                onclick
+
+                  /*
+                   * Deleting modal widget.
+                   */
+                  delete-widget:themepark-modal-info-widget

@@ -4,10 +4,10 @@
 container
   element:a
   class:jumbo-button
-  title:InGen
+  title:InGen Theme Park system
   widgets
     span
-      innerValue:InGen
+      innerValue:Theme Park
     literal
       element:span
-      class:icon-paper-plane
+      class:icon-happy

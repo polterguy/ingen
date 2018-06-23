@@ -1,0 +1,26 @@
+
+/*
+ * Logout button.
+ */
+button
+  innerValue:@"<span class=""icon-switch""></span>"
+  oninit
+
+    /*
+     * Checking if user is not logged in, at which point we simply delete widget.
+     */
+    whoami
+    if:x:/@whoami/*/default?value
+      =:bool:true
+
+      /*
+       * User is not logged in.
+       */
+      delete-widget:x:/../*/_event?value
+
+  onclick
+
+    /*
+     * Logging user out of system.
+     */
+    desktop.authentication.logout

@@ -1,24 +1,88 @@
 /*
- * Launch file for InGen.
+ * Main launch file for InGen.
+ */
+
+
+/*
+ * Clearing widgets from main "cnt" widget, in case something else has already been
+ * loaded here.
+ */
+clear-widget:cnt
+
+
+/*
+ * Including Magic Forrest skin and Micro's CSS files.
  */
 micro.css.include
   skin:magic-forrest
 
+
 /*
- * Verifying that we're logged in, and if not, displaying customer's frontend part(y!) :D
+ * Including main CSS file for app.
+ */
+p5.web.include-css-file:@INGEN/media/main.css
+
+
+/*
+ * Ensuring we include PayPal's JavaScript file on initial request.
+ */
+micro.widgets.paypal-button.ensure-checkout-js
+
+
+/*
+ * Verifying that we're logged in, and if we are, we dynamically add the backend buttons
+ * to our main wire frame form.
  */
 whoami
 if:x:/@whoami/*/role?value
-  =:guest
+  !=:guest
 
   /*
    * Loading up front end.
    */
-  micro.evaluate.file:@INGEN/helpers/parts/front-end.hl
+  add:x:/../*/create-widget/**/widgets/=main-content-widgets
+    load-file:@INGEN/back-end/admin-jumbo-button.hl
 
-else
 
-  /*
-   * Loading up back end.
-   */
-  micro.evaluate.file:@INGEN/helpers/parts/back-end.hl
+/*
+ * Creating main front end wire frame.
+ */
+create-widget
+  class:container
+  widgets
+    div
+      class:row
+      widgets
+        div:themepark-main-toolbar
+          class:col
+          widgets
+
+            /*
+             * The general toolbar for our app.
+             */
+            micro.widgets.file
+              class:strip right
+              folder:@INGEN/common/toolbar-buttons/
+
+            /*
+             * Main content surface for our app.
+             */
+            div:themepark-main-content
+              class:center themepark-center-content
+              widgets:main-content-widgets
+                button
+                  class:jumbo-button
+                  innerValue:@"<span class=""icon-happy""></span> Exhibits"
+                  onclick
+
+                    /*
+                     * Dynamically loading exhibits.
+                     */
+                    micro.evaluate.file:@INGEN/front-end/exhibits/view-exhibits.hl
+
+            /*
+             * Helper container widget, for displaying "view content".
+             */
+            div:themepark-dynamic-content
+              class:center themepark-center-additional-content
+              widgets

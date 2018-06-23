@@ -1,0 +1,8 @@
+/*
+ * Contains JumboButtons for backend parts of the system.
+ */
+button
+  class:jumbo-button
+  innerValue:@"<span class=""icon-cogs""></span> Admin"
+  onclick
+    micro.evaluate.file:@INGEN/back-end/exhibits/admin-exhibits.hl

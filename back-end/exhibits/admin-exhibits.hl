@@ -1,4 +1,7 @@
 
+/*
+ * Allows a logged in user to administrate exhibits.
+ */
 create-widgets
   micro.widgets.modal:admin-exhibits
     class:micro-widgets-modal large
@@ -8,27 +11,12 @@ create-widgets
       micro.widgets.mysql.datagrid:admin-exhibits-grid
         class:hover striped
         database:ingen
-        table:exhibit
+        table:exhibits
         columns
           id
-            visible:false
-          name
-          when
-          price
-          description
             visible:bool:false
-          description
-            .lambda
-
-              /*
-               * Transforming description to markdown and creating a pre widget.
-               */
-              p5.markdown.markdown2html:x:/../*/row/*/description?value
-              eval-x:x:/+/*/*/*/.name
-              eval-x:x:/+/*/*
-              return
-                pre
-                  innerValue:x:/@p5.markdown.markdown2html?value
+          name
+          price
           delete
             .lambda
               eval-x:x:/+/*/*/*/.id

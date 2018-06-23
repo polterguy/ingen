@@ -1,0 +1,28 @@
+html, body{
+    height: 100%;
+}
+
+body {
+    background: url(main-background.jpg);
+    background-size: cover;
+}
+
+.themepark-center-content {
+    margin-top: 7rem;
+}
+
+.themepark-center-additional-content {
+    margin-top: 3rem;
+}
+
+.bg {
+    background: linear-gradient(rgba(255,255, 255, .75), rgba(128, 128,128, .75));
+}
+
+.themepark-datagrid {
+    font-size: 1.5rem;
+}
+
+.themepark-datagrid tr td {
+    cursor: pointer;
+}

@@ -1,0 +1,26 @@
+
+/*
+ * Login button.
+ */
+button
+  innerValue:@"<span class=""icon-key""></span>"
+  oninit
+
+    /*
+     * Checking if user is already logged in, at which point we simply delete widget.
+     */
+    whoami
+    if:x:/@whoami/*/default?value
+      !=:bool:true
+
+      /*
+       * User is already logged in.
+       */
+      delete-widget:x:/../*/_event?value
+
+  onclick
+
+    /*
+     * Displaying login window.
+     */
+    desktop.authentication.login

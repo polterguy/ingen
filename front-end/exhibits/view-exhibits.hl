@@ -1,0 +1,55 @@
+/*
+ * Creates our "view exhibits" front end widget.
+ */
+
+
+/*
+ * Checking if "view exhibit" elready exists, at which point we simply
+ * return early.
+ */
+if
+  fetch:x:/0/0?value
+    widget-exists:view-exhibits-wrapper
+
+  /*
+   * Widget is already visible.
+   */
+  return
+
+
+/*
+ * Creating our "view exhibit" datagrid in a "bg" wrapper div.
+ */
+create-widget:view-exhibits-wrapper
+  parent:themepark-dynamic-content
+  class:shaded rounded air air-inner bg
+  widgets
+
+    /*
+     * Our actual datagrid, dynamically databound towards "exhibit" table.
+     */
+    micro.widgets.mysql.datagrid:view-exhibits-datagrid
+      class:hover striped themepark-datagrid
+      database:ingen
+      table:exhibits
+      columns
+        id
+          visible:bool:false
+        name
+        price
+
+    /*
+     * A simple close button to simply delete view.
+     */
+    div
+      class:right
+      widgets
+        button
+          class:large
+          innerValue:Close
+          onclick
+
+            /*
+             * Simply deletes view.
+             */
+            delete-widget:view-exhibits-wrapper
