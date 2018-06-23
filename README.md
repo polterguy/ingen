@@ -37,7 +37,14 @@ When the user has purchased a ticket, he needs to take a photo of the screen, wh
 which he can show to the guy in the desk accepting tickets. And actual record will be inserted into
 the MySQL database table called _"ticket"_.
 
+If I had had another hour, I'd probably be able to send an email to the guest, with an actual ticket
+instead of this silly _"take a photo of your ticket"_ thingie ...
+
 ### The admin backend
+
+The system determines if you're an admin or just a visitor based upon whether or not you're logged
+in or not. The entire system then loads it forms dynamically, using Ajax. Belowis how it looks
+like when an admin visits the system.
 
 ![alt screenshot 5](https://phosphorusfive.files.wordpress.com/2018/06/screen-shot-2018-06-23-at-06-23-10.png)
 
@@ -73,9 +80,12 @@ interrupted too to speak with CalSosta, the admin and moderator of the whole con
 
 * [Try out the system's front end](https://home.gaiasoul.com/programming-contest)
 
-The _"Kiosk"_ parts of the system I was not even ableto start on. However, I kind of did a wrong
-design decision early on, trying to separate these into two distinct parts, which they shouldn't
-have been.
+The _"Kiosk"_ parts of the system I was not even able to seriously start on. However, I kind of
+did a wrong design decision early on, trying to separate these into two distinct parts, which
+they shouldn't have been.
+
+Below is the specification we were given, which is basically to implement a better datasystem for
+a Jurassic park kind of theme park, where security was key.
 
 ## Specification
 
