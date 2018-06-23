@@ -16,6 +16,11 @@ After 3 hours and 23 minutes, I had the following features.
 3. Front end part (for guest visitors and _"kiosks"_) allowing a user to view exhibits and purchase tickets to exhibits.
 4. PayPal integration for purchasing tickets.
 
+The system used a real MySQL database, and real (and secure) logins, with the ability to create
+multiple administrator accounts, allowing an admin user to _"administrate"_ it easily, creating
+new _"exhibits"_, and delete existing exhibits. Of course, what you can do in 3 hours is limited,
+but I don't think my results was below pair in any ways.
+
 ### What a guest sees when he visits the URL of the system.
 
 ![alt screenshot 1](https://phosphorusfive.files.wordpress.com/2018/06/screen-shot-2018-06-23-at-06-22-48.png)
