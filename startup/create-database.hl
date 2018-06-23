@@ -1,7 +1,6 @@
 
 
 
-
 /*
  * Creating database schema for snippets if it doesn't exist.
  */
@@ -27,14 +26,17 @@ try
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `when` datetime NOT NULL,
+  `price` int(10) unsigned not null,
   `description` longtext collate utf8mb4_unicode_ci not null,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `ticket` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `ticket_unique_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `exhibit_id` int(10) unsigned not null,
-  FOREIGN KEY (exhibit_id) REFERENCES exhibit(id),
+  `used` bit not null,
+  FOREIGN KEY (exhibit_id) REFERENCES exhibit(id) ON DELETE CASCADE,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;"
 

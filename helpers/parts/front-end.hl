@@ -1,7 +1,9 @@
 
+
 /*
  * Creating main wire frame.
  */
+micro.widgets.paypal-button.ensure-checkout-js
 create-widget
   class:container
   widgets

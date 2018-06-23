@@ -1,4 +1,3 @@
-
 /*
  * Creating modal widget to show user exhibits.
  */
@@ -7,6 +6,21 @@ create-widgets
     widgets
       h3
         innerValue:Kiosk
+      micro.widgets.paypal-button
+        price:400
+        .onok
+          create-widgets
+            micro.widgets.modal
+              h3
+                innerValue:Ticket
+              p
+                innerValue:Please take a photo of this screen with your phone.
+              literal
+                element:h4
+                oninit
+                  p5.types.guid.new
+                  set-widget-property:x:/../*/_event?value
+                    innerValue:x:/@p5.types.guid.new?value
       div
         class:right
         widgets
