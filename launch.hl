@@ -2,7 +2,7 @@
  * Launch file for InGen.
  */
 micro.css.include
-  skin:aztec
+  skin:magic-forrest
 
 /*
  * Verifying that we're logged in, and if not, displaying customer's frontend part(y!) :D

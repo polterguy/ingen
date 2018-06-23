@@ -37,29 +37,63 @@ think we both had a nice time doing this :)
 
 ![alt screenshot 3](https://phosphorusfive.files.wordpress.com/2018/06/screen-shot-2018-06-23-at-06-27-21.png)
 
+Notice, the guest can immediately purchase a ticket, which will use PayPal's API to placean
+actual order, and allow the guest to pay using his PayPal account.
+
 ### Ourchasing a ticket
 
 ![alt screenshot 4](https://phosphorusfive.files.wordpress.com/2018/06/screen-shot-2018-06-23-at-06-27-31.png)
 
 Notice, the above is actual PayPal integration, and the system is already ready to accept payments.
 When the user has purchased a ticket, he needs to take a photo of the screen, which will be his _"ticket"_,
-which he can show to the guy in the desk accepting tickets. And actual record will be inserted into
-the MySQL database table called _"ticket"_.
+which he can show to the guy in the desk accepting tickets. When a _"ticket"_ is purchased, an
+actual record will be inserted into the MySQL database table called _"ticket"_. Below is the entire
+create schema for the database.
 
-If I had had another hour, I'd probably be able to send an email to the guest, with an actual ticket
+If I had had another hour, I'd probably be able to send an email to the guest, with an actual ticket,
 instead of this silly _"take a photo of your ticket"_ thingie ...
+
+**MySQL schema for the system's database**
+
+```sql
+CREATE DATABASE `ingen` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */
+
+CREATE TABLE `exhibit` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `when` datetime NOT NULL,
+  `price` int(10) unsigned NOT NULL,
+  `description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+
+CREATE TABLE `ticket` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `ticket_unique_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `exhibit_id` int(10) unsigned NOT NULL,
+  `used` bit(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `exhibit_id` (`exhibit_id`),
+  CONSTRAINT `ticket_ibfk_1` FOREIGN KEY (`exhibit_id`) REFERENCES `exhibit` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+
+```
+
+The system will also create its own database when it is initially installed on a server, facilitating
+for a _"zero configuration"_ type of system.
 
 ### The admin backend
 
 The system determines if you're an admin or just a visitor based upon whether or not you're logged
-in or not. The entire system then loads it forms dynamically, using Ajax. Belowis how it looks
-like when an admin visits the system.
+in or not. The entire system then loads it forms dynamically, using Ajax. If you're not loggedin,
+you can click the _"key"_ button to login. Below is how it looks like when an admin visits the
+system.
 
 ![alt screenshot 5](https://phosphorusfive.files.wordpress.com/2018/06/screen-shot-2018-06-23-at-06-23-10.png)
 
 The above is how it looks if the user is logged in, and hence are accessing the _"backend"_ system.
 
-### Admin editing the exhibits
+### Admin editing exhibits
 
 ![alt screenshot 6](https://phosphorusfive.files.wordpress.com/2018/06/screen-shot-2018-06-23-at-06-24-22.png)
 
@@ -81,6 +115,20 @@ The above is how it looks like when a user is logging into the system. This will
 highly secured password file, from inside of it will use a Blowfish based (_slow hashing_) to store
 the passwords. The system also has authorisation features, and allows the admin user to control
 access to it.
+
+The user is persisted in a cookie, which is only accessible over HTTP, and not from JavaScript. In
+addition the system automatically sets itself up using SSL, creating a new Let's Encrypt SSL keypair
+during installation, so it should be 100% bullet proof in regards to security in all ways.
+
+### Skinning the system
+
+By changing the skin file used to any of the pre-defined skins from Micro, you can
+completely change its appearance. Below is how it looks like when using the _"magic-forrest"_
+skin.
+
+![alt green skin](https://phosphorusfive.files.wordpress.com/2018/06/screen-shot-2018-06-23-at-07-02-23.png)
+
+### Test the system as it was after 3 hours of coding
 
 At the end of the contest, I uploaded the system below, such that you can try out its front end.
 
