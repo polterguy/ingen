@@ -38,15 +38,30 @@ p5.mysql.connect:[ingen]
   primary key (id)
 ) engine=InnoDB auto_increment=1 default charset=utf8mb4 collate=utf8mb4_unicode_ci;
 
-create table tickets (
+create table tickets_collection (
   id int(10) unsigned not null auto_increment,
-  exhibit_id int(10) unsigned not null,
-  ticket_bunch_id varchar(100) character set utf8mb4 collate utf8mb4_unicode_ci not null,
-  purchased datetime not null default now(),
   purchaser_name varchar(200) character set utf8mb4 collate utf8mb4_unicode_ci not null,
   purchaser_email varchar(200) character set utf8mb4 collate utf8mb4_unicode_ci not null,
   used bit not null default 0,
-  constraint fk_tickets_exhibits foreign key (exhibit_id) references exhibits(id) on delete cascade,
+  exhibit_id int(10) unsigned not null,
+  purchased datetime not null default now(),
+  constraint fk_tickets_collection_exhibits foreign key (exhibit_id) references exhibits(id) on delete cascade,
   primary key (id)
-) engine=InnoDB auto_increment=1 default charset=utf8mb4 collate=utf8mb4_unicode_ci;"
+) engine=InnoDB auto_increment=1 default charset=utf8mb4 collate=utf8mb4_unicode_ci;
+
+create table tickets (
+  id int(10) unsigned not null auto_increment,
+  is_child bit not null default 0,
+  tickets_collection_id int(10) unsigned not null,
+  constraint fk_tickets_tickets_collection foreign key (tickets_collection_id) references tickets_collection(id) on delete cascade,
+  primary key (id)
+) engine=InnoDB auto_increment=1 default charset=utf8mb4 collate=utf8mb4_unicode_ci;
+
+create table subscribers (
+  id int(10) unsigned not null auto_increment,
+  name varchar(200) character set utf8mb4 collate utf8mb4_unicode_ci not null,
+  email varchar(200) character set utf8mb4 collate utf8mb4_unicode_ci not null,
+  primary key (id)
+) engine=InnoDB auto_increment=1 default charset=utf8mb4 collate=utf8mb4_unicode_ci;
+"
 

@@ -49,6 +49,33 @@ if:x:/@whoami/*/role?value
  */
 create-widget
   class:container
+  oninit
+
+    /*
+     * starting pingback loop.
+     */
+    themepark.pingback.keep-alive
+
+  events
+
+    /*
+     * Pingback event to keep session alive on server, in case app is in kiosk mode.
+     */
+    themepark.pingback.keep-alive
+
+      /*
+       * In case app is in "kiosk mode", we create a pingback to server ever 10 minutes, to avoid
+       * destroying session, and keeping the client "alive".
+       */
+      micro.lambda.create-timeout
+        milliseconds:600000
+        onfinish
+
+          /*
+           * Recursively invoking event creating new timer.
+           */
+          themepark.pingback.keep-alive
+
   widgets
     div
       class:row

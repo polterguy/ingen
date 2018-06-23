@@ -1,0 +1,96 @@
+
+/*
+ * Inserts a purchase into database.
+ */
+
+
+/*
+ * Sanity checking invocation.
+ */
+micro.lambda.contract.min:x:/..
+  purchaser_name:string
+  purchaser_email:string
+  subscribe:bool
+  no_adults:int
+  no_children:int
+  exhibit-id:long
+
+
+/*
+ * Opening up database connection and doing insert into relevant tables.
+ */
+p5.mysql.connect:[ingen]
+
+  /*
+   * Creating a database transaction.
+   */
+  p5.mysql.transaction.begin
+
+    /*
+     * Checking if customer wants tosubscribe, and if so, creating a subscribers record.
+     */
+    if:x:/../*/subscribe?value
+      =:bool:true
+
+      /*
+       * Caller wants to subscribe to newsletter.
+       */
+      p5.mysql.insert:insert into subscribers (name, email) values (@name, @email)
+        @name:x:/../*/purchaser_name?value
+        @email:x:/../*/purchaser_email?value
+
+    /*
+     * Creating our tickets_collection record.
+     */
+    p5.mysql.insert:insert into tickets_collection (purchaser_name, purchaser_email, used, exhibit_id) values (@purchaser_name, @purchaser_email, @used, @exhibit_id)
+      @purchaser_name:x:/../*/purchaser_name?value
+      @purchaser_email:x:/../*/purchaser_email?value
+      @used:int:0
+      @exhibit_id:x:/../*/exhibit-id?value.long
+
+    /*
+     * Creating our adult tickets records.
+     */
+    eval-x:x:/+
+    .no:x:/../*/no_adults?value.int
+    while:x:/@.no?value
+      !=:int:0
+
+      /*
+       * Inserting one adult tickets record.
+       */
+      p5.mysql.insert:insert into tickets (is_child, tickets_collection_id) values (0, @tickets_collection_id)
+        @tickets_collection_id:x:/..while/@p5.mysql.insert/*/id?value.long
+
+      /*
+       * Decrementing [.no]
+       */
+      set:x:/@.no?value
+        -:x:/@.no?value
+          _:1
+
+    /*
+     * Creating our adult tickets records.
+     */
+    eval-x:x:/+
+    .no:x:/../*/no_children?value.int
+    while:x:/@.no?value
+      !=:int:0
+
+      /*
+       * Inserting one adult tickets record.
+       */
+      p5.mysql.insert:insert into tickets (is_child, tickets_collection_id) values (1, @tickets_collection_id)
+        @tickets_collection_id:x:/..while/@p5.mysql.insert/*/id?value.long
+
+      /*
+       * Decrementing [.no]
+       */
+      set:x:/@.no?value
+        -:x:/@.no?value
+          _:1
+
+    /*
+     * Committing database transaction.
+     */
+    p5.mysql.transaction.commit

@@ -43,3 +43,7 @@ body {
 .themepark-datagrid tr td {
     cursor: pointer;
 }
+
+.themepark-email-disclaimer {
+    color:#444;
+}
