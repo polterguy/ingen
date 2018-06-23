@@ -7,6 +7,75 @@ and the contest will last for some 2-3 hours, streamed in front of a live audien
 
 [Read more about its details here](https://gaiasoul.com/2018/06/22/shitty-programming-death-match-tonight/).
 
+## What I did
+
+After 3 hours and 23 minutes, I had the following features.
+
+1. Login, logout, securely.
+2. Backend administration system, for creating and deleting (not editing) new _"exhibits"_.
+3. Front end part (for guest visitors and _"kiosks"_) allowing a user to view exhibits and purchase tickets to exhibits.
+4. PayPal integration for purchasing tickets.
+
+### What a guest sees when he visits the URL of the system.
+
+![alt screenshot 1](https://phosphorusfive.files.wordpress.com/2018/06/screen-shot-2018-06-23-at-06-22-48.png)
+
+### What a guest sees when he clicks the _"exhibit"_
+
+![alt screenshot 2](https://phosphorusfive.files.wordpress.com/2018/06/screen-shot-2018-06-23-at-06-27-13.png)
+
+### When a guest clicks a specific _"exhibit"_
+
+![alt screenshot 3](https://phosphorusfive.files.wordpress.com/2018/06/screen-shot-2018-06-23-at-06-27-21.png)
+
+### Ourchasing a ticket
+
+![alt screenshot 4](https://phosphorusfive.files.wordpress.com/2018/06/screen-shot-2018-06-23-at-06-27-31.png)
+
+Notice, the above is actual PayPal integration, and the system is already ready to accept payments.
+When the user has purchased a ticket, he needs to take a photo of the screen, which will be his _"ticket"_,
+which he can show to the guy in the desk accepting tickets. And actual record will be inserted into
+the MySQL database table called _"ticket"_.
+
+### The admin backend
+
+![alt screenshot 5](https://phosphorusfive.files.wordpress.com/2018/06/screen-shot-2018-06-23-at-06-23-10.png)
+
+The above is how it looks if the user is logged in, and hence are accessing the _"backend"_ system.
+
+### Admin editing the exhibits
+
+![alt screenshot 6](https://phosphorusfive.files.wordpress.com/2018/06/screen-shot-2018-06-23-at-06-24-22.png)
+
+The above is a datagrid dynamically databound towards the MySQL _"ingen"_ database, and its table
+called _"exhibit"_. I implemented deletion and adding new exhibits, but didn't have the time to
+implement editing of records.
+
+### Adding a new exhibit
+
+![alt screenshot 7](https://phosphorusfive.files.wordpress.com/2018/06/screen-shot-2018-06-23-at-06-26-18.png)
+
+The above is how it looks like when the (admin) user is creating new exhibits.
+
+### Logging in
+
+![alt screenshot 8](https://phosphorusfive.files.wordpress.com/2018/06/screen-shot-2018-06-23-at-06-23-00.png)
+
+The above is how it looks like when a user is logging into the system. This will use a privately and
+highly secured password file, from inside of it will use a Blowfish based (_slow hashing_) to store
+the passwords. The system also has authorisation features, and allows the admin user to control
+access to it.
+
+At the end of the contest, I uploaded the system below, such that you can try out its front end.
+
+I want to emphasize that I literally spent **3 hours implementing this**, and was quite often
+interrupted too to speak with CalSosta, the admin and moderator of the whole contest.
+
+* [Try out the system's front end](https://home.gaiasoul.com/programming-contest)
+
+The _"Kiosk"_ parts of the system I was not even ableto start on. However, I kind of did a wrong
+design decision early on, trying to separate these into two distinct parts, which they shouldn't
+have been.
 
 ## Specification
 
