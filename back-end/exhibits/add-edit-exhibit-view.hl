@@ -1,0 +1,118 @@
+
+/*
+ * Allows the user to add a new exhibit.
+ */
+micro.lambda.contract.optional:x:/..
+  id:long
+
+
+/*
+ * Checking if caller supplied an [id] argument, at which point we populate the widget
+ * with the existing values from that record.
+ */
+.data
+if:x:/../*/id?value
+
+  /*
+   * Edit mode.
+   */
+  eval-x:x:/+/*/*
+  add:x:/@.data
+    micro.evaluate.file:@INGEN/back-end/exhibits/get-exhibit-model.hl
+      id:x:/../*/id?value
+
+
+/*
+ * Creating modal widget for creating or editing an existing exhibit.
+ */
+create-widgets
+  micro.widgets.modal:themepark-add-exhibit-modal
+    widgets
+      h2
+        innerValue:Add new exhibit
+      div
+        class:strip fill
+        widgets
+          label
+            innerValue:Name
+            class:description-9
+          input
+            type:text
+            .data-field:name
+            placeholder:Name ...
+            value:x:/@.data/*/name?value
+            onkeydown:@"if (event.keyCode == 13) {p5.$('add-edit-exhibit-save-button').raise('onclick');return false;} else if (event.keyCode == 27) {p5.$('add-edit-exhibit-save-button').raise('.onclose');return false;}"
+            oninit
+
+              /*
+               * Setting initial focus to name widget.
+               */
+              micro.page.set-focus:x:/../*/_event?value
+
+      div
+        class:strip fill
+        widgets
+          label
+            innerValue:Price
+            class:description-9
+            value:x:/@.data/*/price?value
+          input
+            type:number
+            .data-field:price
+            placeholder:Price ...
+            value:x:/@.data/*/price?value
+            onkeydown:@"if (event.keyCode == 13) {p5.$('add-edit-exhibit-save-button').raise('onclick');return false;} else if (event.keyCode == 27) {p5.$('add-edit-exhibit-save-button').raise('.onclose');return false;}"
+      input
+        type:hidden
+        value:x:/@.data/*/id?value
+        .data-field:id
+      label
+        innerValue:Name
+      micro.widgets.codemirror
+        mode:markdown
+        .data-field:description
+        value:x:/@.data/*/description?value
+      div
+        class:right
+        widgets
+          button:add-edit-exhibit-save-button
+            innerValue:Save
+            .onclose
+
+              /*
+               * HelperAjax callback to simply delete modal widget without saving anything.
+               */
+              delete-widget:themepark-add-exhibit-modal
+
+            onclick
+
+              /*
+               * Serializing form and invoking file responsible for creating a new record in database.
+               */
+              micro.form.serialize:themepark-add-exhibit-modal
+              if:x:/@micro.form.serialize/*/id?value
+                =:
+
+                /*
+                 * Removing [id].
+                 */
+                set:x:/@micro.form.serialize/*/id
+
+              /*
+               * Invoking file responsible for creating/editing exhibit.
+               */
+              add:x:/+
+                src:x:/@micro.form.serialize/*
+              micro.evaluate.file:@INGEN/back-end/exhibits/add-edit-exhibit-model.hl
+
+              /*
+               * Deleting widget and re-databinding datagrid.
+               */
+              delete-widget:themepark-add-exhibit-modal
+              micro.widgets.mysql.datagrid.databind:manage-exhibits-datagrid
+
+              /*
+               * Provding some visual feedback to user.
+               */
+              micro.windows.info:Successfully updated exhibits
+                class:micro-windows-info success

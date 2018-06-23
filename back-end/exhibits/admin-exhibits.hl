@@ -44,12 +44,54 @@ create-widget:manage-exhibits-wrapper
       class:hover striped themepark-datagrid
       database:ingen
       table:exhibits
+      .row
+        onclick
+
+          /*
+           * Invoking file responsible for editing a specific item from database.
+           */
+          micro.windows.info:Foo
+          eval-x:x:/+/*
+          micro.evaluate.file:@INGEN/back-end/exhibits/add-edit-exhibit-view.hl
+            id:x:/../*/.row/*/id?value
+
       columns
         id
           visible:bool:false
         name
         price
           style:"width:5px;"
+        delete
+          style:"width:5px;"
+          .lambda
+            eval-x:x:/+/*/*/onclick/*/.id
+            return
+              button
+                innerValue:@"<span class=""icon-bin""></span>"
+                onclick
+
+                  /*
+                   * Forward evaluated above.
+                   */
+                  .id:x:/../*/row/*/id?value
+
+                  /*
+                   * Invoking file responsible for deleting exhibit.
+                   */
+                  eval-x:x:/+/*
+                  micro.evaluate.file:@INGEN/back-end/exhibits/delete-exhibit-model.hl
+                    id:x:/@.id?value
+
+                  /*
+                   * Re-databinding datagrid.
+                   */
+                  micro.widgets.mysql.datagrid.databind:manage-exhibits-datagrid
+
+                  /*
+                   * Provding some visual feedback to user.
+                   */
+                  micro.windows.info:Successfully updated exhibits
+                    class:micro-windows-info success
 
     /*
      * Toolbar at the bottom for creating new exhibits, and closingmain widget.
@@ -65,13 +107,7 @@ create-widget:manage-exhibits-wrapper
             /*
              * Invokes file responsible for creating a new exhibit.
              */
-            micro.evaluate.file:@INGEN/back-end/exhibits/add-exhibit-view.hl
-              .ondone
-
-                /*
-                 * Re-databinding datagrid.
-                 */
-                micro.widgets.mysql.datagrid.databind:manage-exhibits-datagrid
+            micro.evaluate.file:@INGEN/back-end/exhibits/add-edit-exhibit-view.hl
 
         button
           class:large
