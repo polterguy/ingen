@@ -9,17 +9,17 @@ the system was named _"InGen"_ for copyright reasons. We were supposed to code f
 Since I thought it was a nice specification and use case for [Phosphorus Five](https://github.com/polterguy/phosphorusfive),
 I chose to finish it after the contest was done, and implement a working example of a Theme Park
 _"kiosk"_ system, intended to run on either fullscreen touch screen _"kiosks"_, and/or be launched
-through usage of QR code. The system is created with the intentions of not being publicly
+through usage of QR codes inside a Theme Park. The system is created with the intentions of not being publicly
 available on the general internet, but rather accessible through the LAN of some Theme Park.
 It allows you to view the exhibits, and order tickets for such exhibits - In addition to that
 it features a backend administrative dashboard, where an administrator can edit and manage
 the exhibits and the system's parameters in general.
 
-The original specification was heavily centered around _"Jurassic Park"_ problems, which if probably
+The original specification was heavily centered around _"Jurassic Park"_ problems, which is probably
 not that useful for an actual system. So I chose to implement it after the contest was finished,
-as a more general _"Theme Park"_ type of system. It features PayPal integrationfor accepting
+as a more general _"Theme Park"_ type of system. It features PayPal integration for accepting
 payments, and allowing public visitors to browse the exhibitions of the theme park, to see what
-type of exhibits they can join.
+type of exhibits they can sign up for.
 
 The system hence functions as a use case for what you can expect to be able to create with Phosphorus
 Five and Hyperlambda. The system is rendered responsively, and runs just as well on phones and tablets,
