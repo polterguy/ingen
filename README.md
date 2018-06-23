@@ -17,9 +17,13 @@ After 3 hours and 23 minutes, I had the following features.
 4. PayPal integration for purchasing tickets.
 
 The system used a real MySQL database, and real (and secure) logins, with the ability to create
-multiple administrator accounts, allowing an admin user to _"administrate"_ it easily, creating
-new _"exhibits"_, and delete existing exhibits. Of course, what you can do in 3 hours is limited,
-but I don't think my results was below pair in any ways.
+multiple administrator accounts, and finegrained access control to the system - Allowing an admin
+user to _"administrate"_ it easily, creating new _"exhibits"_, and delete existing exhibits.
+Of course, what you can do in 3 hours is limited, but I don't think my results was below pair
+in any ways.
+
+I think it was sporty of [FascinatedBox](https://github.com/fascinatedBox/) to show up, and I
+think we both had a nice time doing this :)
 
 ### What a guest sees when he visits the URL of the system.
 
