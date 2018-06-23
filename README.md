@@ -144,6 +144,12 @@ they shouldn't have been.
 Below is the specification we were given, which is basically to implement a better datasystem for
 a Jurassic park kind of theme park, where security was key.
 
+### It was for fun ;)
+
+Although I must confess I am highly competetive of nature, this was something we did for
+**fun** - And I think FascinatedBox was a good sport to join in, and I believe we both had
+a lot of fun!
+
 ## Specification
 
 Introduction
