@@ -6,6 +6,14 @@ The idea was to implement a better IT system for a _"Jurassic Park"_ type of the
 the system was named _"InGen"_ for copyright reasons. We were supposed to code for three hours, and
 [here is how my implementation looked like when when we were finished](https://github.com/polterguy/programming-contest/tree/v1.1).
 
+
+<p align="center">
+<a href="https://www.youtube.com/watch?v=zo1-5ETRTaw">
+<img alt="The InGen Dinosaur Theme Park Software System" title="The InGen Dinosaur Theme Park Software System" src="https://phosphorusfive.files.wordpress.com/2018/06/screen-shot-2018-06-23-at-21-37-22.png" />
+</a>
+</p>
+
+
 Since I thought it was a nice specification and use case for [Phosphorus Five](https://github.com/polterguy/phosphorusfive),
 I chose to finish it after the contest was done, and implement a working example of a Theme Park
 _"kiosk"_ system, intended to run on either fullscreen touch screen _"kiosks"_, and/or be launched
@@ -25,4 +33,4 @@ The system hence functions as a use case for what you can expect to be able to c
 Five and Hyperlambda. The system is rendered responsively, and runs just as well on phones and tablets,
 as it does on Windows, Linux and OS X machines. Below is a screenshot of the system.
 
-![alt Screenshot of system](https://phosphorusfive.files.wordpress.com/2018/06/ingen-theme-park-kiosk-system.png)
+![alt Screenshot of system](https://phosphorusfive.files.wordpress.com/2018/06/ingen-theme-park-dinosaurs-screenshot.png)
