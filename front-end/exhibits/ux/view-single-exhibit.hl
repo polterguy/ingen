@@ -14,7 +14,7 @@ micro.lambda.contract.min:x:/..
  * Retrieving exhibit from data layer.
  */
 eval-x:x:/+/*
-micro.evaluate.file:@INGEN/front-end/exhibits/get-exhibit-model.hl
+micro.evaluate.file:@INGEN/common/exhibits/model/get-exhibit.hl
   id:x:/../*/id?value
 
 
@@ -62,7 +62,7 @@ create-widgets
                * Evaluating file responsible for allowing the user to order ticket(s) for the exhibit.
                */
               eval-x:x:/+/*
-              micro.evaluate.file:@INGEN/front-end/exhibits/purchase-tickets.hl
+              micro.evaluate.file:@INGEN/front-end/exhibits/ux/purchase-tickets.hl
                 id:x:/@.id?value
 
       /*

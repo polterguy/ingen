@@ -24,7 +24,8 @@ p5.web.include-css-file:@INGEN/media/main.css
 
 
 /*
- * Ensuring we include PayPal's JavaScript file on initial request.
+ * Ensuring we include PayPal's JavaScript file on initial request,
+ * since we might need to accept payments in app.
  */
 micro.widgets.paypal-button.ensure-checkout-js
 
@@ -38,10 +39,11 @@ if:x:/@whoami/*/role?value
   !=:guest
 
   /*
-   * Loading up front end.
+   * Loading up back end buttons.
    */
-  add:x:/../*/create-widget/**/widgets/=main-content-widgets
-    load-file:@INGEN/back-end/admin-jumbo-button.hl
+  add:x:/../*/create-widget/**/micro.widgets.file/=themepark-main-content
+    src
+      folder:@INGEN/back-end/jumbo-buttons/
 
 
 /*
@@ -52,7 +54,7 @@ create-widget
   oninit
 
     /*
-     * starting pingback loop.
+     * Starting pingback loop.
      */
     themepark.pingback.keep-alive
 
@@ -64,8 +66,8 @@ create-widget
     themepark.pingback.keep-alive
 
       /*
-       * In case app is in "kiosk mode", we create a pingback to server ever 10 minutes, to avoid
-       * destroying session, and keeping the client "alive".
+       * In case app is in "kiosk mode", we create a pingback to server ever 10 minutes,
+       * to avoid destroying session, and keeping the client "alive".
        */
       micro.lambda.create-timeout
         milliseconds:600000
@@ -130,25 +132,9 @@ create-widget
             /*
              * Main content surface for our app.
              */
-            div:themepark-main-content
+            micro.widgets.file:themepark-main-content
               class:center themepark-center-content
-              widgets:main-content-widgets
-                button
-                  class:jumbo-button
-                  innerValue:@"<span class=""icon-happy""></span> Exhibits"
-                  onclick
-
-                    /*
-                     * Dynamically loading exhibits.
-                     */
-                    micro.evaluate.file:@INGEN/front-end/exhibits/view-exhibits.hl
-
-                    /*
-                     * Evaluating file responsible for toggling Jumbo Buttons.
-                     */
-                    eval-x:x:/+/*
-                    micro.evaluate.file:@INGEN/common/toggle-jumbo-button.hl
-                      button:x:/../*/_event?value
+              folder:@INGEN/front-end/jumbo-buttons/
 
             /*
              * Helper container widget, for displaying "view content".

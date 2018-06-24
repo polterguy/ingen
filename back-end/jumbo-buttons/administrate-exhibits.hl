@@ -1,15 +1,15 @@
 /*
- * Contains JumboButtons for backend parts of the system.
+ * JumboButton for allowing admin to administrate exhibits.
  */
 button
   class:jumbo-button
-  innerValue:@"<span class=""icon-cogs""></span> Admin"
+  innerValue:@"<span>Exhibits</span><span class=""icon-cogs""></span>"
   onclick
 
     /*
      * Evaluating file responsible for administrating exhibits.
      */
-    micro.evaluate.file:@INGEN/back-end/exhibits/admin-exhibits.hl
+    micro.evaluate.file:@INGEN/back-end/exhibits/ux/admin-exhibits.hl
 
     /*
      * Evaluating file responsible for toggling Jumbo Buttons.

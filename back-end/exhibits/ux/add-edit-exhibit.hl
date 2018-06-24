@@ -17,7 +17,7 @@ if:x:/../*/id?value
    */
   eval-x:x:/+/*/*
   add:x:/@.data
-    micro.evaluate.file:@INGEN/back-end/exhibits/get-exhibit-model.hl
+    micro.evaluate.file:@INGEN/common/exhibits/model/get-exhibit.hl
       id:x:/../*/id?value
 
 
@@ -112,7 +112,7 @@ create-widgets
                */
               add:x:/+
                 src:x:/@micro.form.serialize/*
-              micro.evaluate.file:@INGEN/back-end/exhibits/add-edit-exhibit-model.hl
+              micro.evaluate.file:@INGEN/back-end/exhibits/model/add-edit-exhibit.hl
 
               /*
                * Deleting widget and re-databinding datagrid.

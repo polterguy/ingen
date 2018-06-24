@@ -52,7 +52,7 @@ create-widget:view-exhibits-wrapper
            * and allowing user to purchase ticket(s) to exhibit.
            */
           eval-x:x:/+/*
-          micro.evaluate.file:@INGEN/front-end/exhibits/view-single-exhibit.hl
+          micro.evaluate.file:@INGEN/front-end/exhibits/ux/view-single-exhibit.hl
             id:x:/../*/.row/*/id?value
 
       columns

@@ -14,7 +14,7 @@ micro.lambda.contract.min:x:/..
  * Retrieving data for exhibit.
  */
 eval-x:x:/+/*
-micro.evaluate.file:@INGEN/front-end/exhibits/get-exhibit-model.hl
+micro.evaluate.file:@INGEN/common/exhibits/model/get-exhibit.hl
   id:x:/../*/id?value
 
 
@@ -175,7 +175,7 @@ If you do not want to subscribe to our newsletter, you'll have to explicitly tur
                    */
                   micro.form.serialize:purchase-tickets-wrapper
                   eval-x:x:/+/*
-                  micro.evaluate.file:@INGEN/front-end/exhibits/calculate-sum-of-purchase.hl
+                  micro.evaluate.file:@INGEN/front-end/exhibits/model/calculate-sum-of-purchase.hl
                     no_adults:x:/@micro.form.serialize/*/no_adults?value.int
                     no_children:x:/@micro.form.serialize/*/no_children?value.int
                     exhibit-id:x:/@.id?value
@@ -218,7 +218,7 @@ If you do not want to subscribe to our newsletter, you'll have to explicitly tur
                         add:x:/+2
                           src:x:/@.data/*
                         eval-x:x:/+/*/exhibit-id
-                        micro.evaluate.file:@INGEN/front-end/exhibits/create-purchase.hl
+                        micro.evaluate.file:@INGEN/front-end/exhibits/model/create-purchase.hl
                           exhibit-id:x:/@.id?value
 
                         /*
@@ -226,6 +226,7 @@ If you do not want to subscribe to our newsletter, you'll have to explicitly tur
                          */
                         create-widgets
                           micro.widgets.modal:confirm-ticket-purchase
+                            class:micro-widgets-modal larger-text
                             widgets
                               h2
                                 innerValue:Purchase complete
@@ -257,7 +258,7 @@ If you do not want to subscribe to our newsletter, you'll have to explicitly tur
                              */
                             if
                               fetch:x:/0/0?value
-                              widget-exists:confirm-ticket-purchase
+                                widget-exists:confirm-ticket-purchase
 
                               /*
                                * Widget exists, deleting it.

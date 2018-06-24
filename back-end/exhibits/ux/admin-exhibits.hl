@@ -51,7 +51,7 @@ create-widget:manage-exhibits-wrapper
            * Invoking file responsible for editing a specific item from database.
            */
           eval-x:x:/+/*
-          micro.evaluate.file:@INGEN/back-end/exhibits/add-edit-exhibit-view.hl
+          micro.evaluate.file:@INGEN/back-end/exhibits/ux/add-edit-exhibit.hl
             id:x:/../*/.row/*/id?value
 
       columns
@@ -87,7 +87,7 @@ create-widget:manage-exhibits-wrapper
                    * Invoking file responsible for deleting exhibit.
                    */
                   eval-x:x:/+/*
-                  micro.evaluate.file:@INGEN/back-end/exhibits/delete-exhibit-model.hl
+                  micro.evaluate.file:@INGEN/back-end/exhibits/model/delete-exhibit.hl
                     id:x:/@.id?value
 
                   /*
@@ -115,7 +115,7 @@ create-widget:manage-exhibits-wrapper
             /*
              * Invokes file responsible for creating a new exhibit.
              */
-            micro.evaluate.file:@INGEN/back-end/exhibits/add-edit-exhibit-view.hl
+            micro.evaluate.file:@INGEN/back-end/exhibits/ux/add-edit-exhibit.hl
 
         button
           class:large

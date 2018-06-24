@@ -1,0 +1,19 @@
+/*
+ * JumboButton for browsing exhibits.
+ */
+button
+  class:jumbo-button
+  innerValue:@"<span>Exhibits</span><span class=""icon-happy""></span>"
+  onclick
+
+    /*
+     * Dynamically loading exhibits.
+     */
+    micro.evaluate.file:@INGEN/front-end/exhibits/ux/view-exhibits.hl
+
+    /*
+     * Evaluating file responsible for toggling Jumbo Buttons.
+     */
+    eval-x:x:/+/*
+    micro.evaluate.file:@INGEN/common/toggle-jumbo-button.hl
+      button:x:/../*/_event?value
