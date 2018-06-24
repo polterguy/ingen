@@ -1,4 +1,3 @@
-
 /*
  * Inserts a purchase into database.
  */
@@ -27,17 +26,27 @@ p5.mysql.connect:[ingen]
   p5.mysql.transaction.begin
 
     /*
-     * Checking if customer wants tosubscribe, and if so, creating a subscribers record.
+     * Checking if customer wants to subscribe, and if so, creating a subscribers record,
+     * unless we already have user's email address from before.
      */
     if:x:/../*/subscribe?value
       =:bool:true
 
       /*
-       * Caller wants to subscribe to newsletter.
+       * Caller wants to subscribe to newsletter, now checking if we have him in the
+       * system from before.
        */
-      p5.mysql.insert:insert into subscribers (name, email) values (@name, @email)
-        @name:x:/../*/purchaser_name?value
+      p5.mysql.scalar:select count(*) from subscribers where email = @email
         @email:x:/../*/purchaser_email?value
+      if:x:/@p5.mysql.scalar?value.int
+        =:int:0
+
+        /*
+         * Email address does not exist in the system from before.
+         */
+        p5.mysql.insert:insert into subscribers (name, email) values (@name, @email)
+          @name:x:/../*/purchaser_name?value
+          @email:x:/../*/purchaser_email?value
 
     /*
      * Creating our tickets_collection record.

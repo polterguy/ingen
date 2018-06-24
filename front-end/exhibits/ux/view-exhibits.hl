@@ -26,7 +26,7 @@ clear-widget:themepark-dynamic-content
 /*
  * Setting header and title of page.
  */
-themepark.header.set:Browse exhibits
+themepark.header.set:Exhibits
 
 
 /*
@@ -70,24 +70,3 @@ create-widget:view-exhibits-wrapper
             return
               span
                 innerValue:x:/../*/row/*/children_price?value
-
-    /*
-     * A simple close button to simply delete view.
-     */
-    div
-      class:right
-      widgets
-        button
-          class:large
-          innerValue:@"<span class=""icon-cross""></span>"
-          onclick
-
-            /*
-             * Simply deletes view.
-             */
-            delete-widget:view-exhibits-wrapper
-
-            /*
-             * Clearing toggled state of any toggled Jumbo Buttons.
-             */
-            micro.evaluate.file:@INGEN/common/toggle-jumbo-button.hl

@@ -31,14 +31,14 @@ eval-x:x:/+/**/.id
 create-widgets
   micro.widgets.modal:view-exhibit-modal
     widgets
-      h2
-        innerValue:x:/@micro.evaluate.file/*/name?value
-      label
-        style:"display:block;"
-        class:right
-        innerValue:Price; {0} EURO - Children; {1} EURO
-          :x:/@micro.evaluate.file/*/price?value
-          :x:/@micro.evaluate.file/*/children_price?value
+      h1
+        widgets
+          span
+            innerValue:x:/@micro.evaluate.file/*/name?value
+          small
+            innerValue:@" - Price; {0} EURO - Children; {1} EURO"
+              :x:/@micro.evaluate.file/*/price?value
+              :x:/@micro.evaluate.file/*/children_price?value
       div
         innerValue:x:/@micro.markdown.markdown2html?value
 

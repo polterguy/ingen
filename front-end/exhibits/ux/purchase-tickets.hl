@@ -181,6 +181,11 @@ If you do not want to subscribe to our newsletter, you'll have to explicitly tur
                     exhibit-id:x:/@.id?value
 
                   /*
+                   * Deleting purchase view exhibit info modal window.
+                   */
+                  delete-widget:view-exhibit-modal
+
+                  /*
                    * Making sure we display PayPal wrapper widget, and give user a notification that
                    * he'll have to click the button.
                    */
@@ -207,10 +212,9 @@ If you do not want to subscribe to our newsletter, you'll have to explicitly tur
                         .data
 
                         /*
-                         * Deleting purchase window, and exhibit info modal window.
+                         * Deleting order exhibit info modal window.
                          */
                         delete-widget:order-exhibit-modal
-                        delete-widget:view-exhibit-modal
 
                         /*
                          * Invoking file responsible for inserting a purchase into database.

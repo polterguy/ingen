@@ -28,7 +28,7 @@ create-widgets
   micro.widgets.modal:themepark-add-exhibit-modal
     widgets
       h2
-        innerValue:Add new exhibit
+        innerValue:Exhibit data
       div
         class:strip fill
         widgets

@@ -116,18 +116,3 @@ create-widget:manage-exhibits-wrapper
              * Invokes file responsible for creating a new exhibit.
              */
             micro.evaluate.file:@INGEN/back-end/exhibits/ux/add-edit-exhibit.hl
-
-        button
-          class:large
-          innerValue:@"<span class=""icon-cross""></span>"
-          onclick
-
-            /*
-             * Simply deletes view.
-             */
-            delete-widget:manage-exhibits-wrapper
-
-            /*
-             * Clearing toggled state of any toggled Jumbo Buttons.
-             */
-            micro.evaluate.file:@INGEN/common/toggle-jumbo-button.hl
