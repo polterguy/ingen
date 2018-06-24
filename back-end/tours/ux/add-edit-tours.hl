@@ -1,4 +1,3 @@
-
 /*
  * Allows the user to add or edit a new tour.
  */
@@ -25,78 +24,120 @@ if:x:/../*/id?value
 /*
  * Creating modal widget for creating or editing an existing tour.
  */
-eval-x:x:/+/**/.exhibit-id
+eval-x:x:/+/**(/.exhibit-id|/.id)
 create-widgets
   micro.widgets.modal:themepark-add-tour-modal
     widgets
       h2
         innerValue:Tour data
       div
-        class:strip fill
+        class:row
         widgets
-          label
-            innerValue:Exhibit
-            class:description-9
-          container
-            element:select
-            .data-field:exhibit_id
-            oninit
+          div
+            class:col-70
+            widgets
+              div
+                class:strip fill
+                widgets
+                  label
+                    innerValue:Exhibit
+                    class:description-9
+                  container
+                    element:select
+                    .data-field:exhibit_id
+                    oninit
 
-              /*
-               * Poulating select dropdown with all exhibits.
-               */
-              .exhibit-id:x:/@.data/*/exhibit_id?value
-              micro.evaluate.file:@INGEN/back-end/exhibits/model/get-exhibits.hl
-              for-each:x:/-/*/exhibit
+                      /*
+                       * Poulating select dropdown with all exhibits.
+                       */
+                      .exhibit-id:x:/@.data/*/exhibit_id?value
+                      micro.evaluate.file:@INGEN/back-end/exhibits/model/get-exhibits.hl
+                      for-each:x:/-/*/exhibit
 
-                /*
-                 * Checking if this is the selected tour.
-                 */
-                if:x:/@_dp/#/*/id?value.string
-                  =:x:/@.exhibit-id?value.string
-                  add:x:/..for-each/*/create-widget
-                    src:selected
+                        /*
+                         * Checking if this is the selected tour.
+                         */
+                        if:x:/@_dp/#/*/id?value.string
+                          =:x:/@.exhibit-id?value.string
+                          add:x:/..for-each/*/create-widget
+                            src:selected
 
-                /*
-                 * Creating option element.
-                 */
-                create-widget
-                  parent:x:/../*/_event?value
-                  element:option
-                  innerValue:x:/@_dp/#/*/name?value
-                  value:x:/@_dp/#/*/id?value
+                        /*
+                         * Creating option element.
+                         */
+                        create-widget
+                          parent:x:/../*/_event?value
+                          element:option
+                          innerValue:x:/@_dp/#/*/name?value
+                          value:x:/@_dp/#/*/id?value
 
-      div
-        class:strip fill
-        widgets
-          label
-            innerValue:Name
-            class:description-9
-          input
-            type:text
-            .data-field:name
-            placeholder:Name ...
-            value:x:/@.data/*/name?value
-            onkeydown:@"if (event.keyCode == 13) {p5.$('add-edit-tour-save-button').raise('onclick');return false;} else if (event.keyCode == 27) {p5.$('close-add-edit-tour-save-button').raise('onclick');return false;}"
-            oninit
+              div
+                class:strip fill
+                widgets
+                  label
+                    innerValue:Name
+                    class:description-9
+                  input
+                    type:text
+                    .data-field:name
+                    placeholder:Name ...
+                    value:x:/@.data/*/name?value
+                    onkeydown:@"if (event.keyCode == 13) {p5.$('add-edit-tour-save-button').raise('onclick');return false;} else if (event.keyCode == 27) {p5.$('close-add-edit-tour-save-button').raise('onclick');return false;}"
+                    oninit
 
-              /*
-               * Setting initial focus to name widget.
-               */
-              micro.page.set-focus:x:/../*/_event?value
+                      /*
+                       * Setting initial focus to name widget.
+                       */
+                      micro.page.set-focus:x:/../*/_event?value
 
-      input
-        type:hidden
-        value:x:/@.data/*/id?value
-        .data-field:id
-      label
-        innerValue:Content
-      literal
-        element:textarea
-        class:fill
-        rows:15
-        .data-field:content
-        value:x:/@.data/*/content?value
+              input
+                type:hidden
+                value:x:/@.data/*/id?value
+                .data-field:id
+              label
+                innerValue:Content
+              literal
+                element:textarea
+                class:fill
+                rows:10
+                .data-field:content
+                value:x:/@.data/*/content?value
+          div
+            class:col-30
+            widgets
+              void
+                element:img
+                style:"width:100%;"
+                alt:QR code leading directly to tour
+                oninit
+
+                  /*
+                   * Forward evaluated above.
+                   */
+                  .id:x:/../*/id?value
+
+                  /*
+                   * Figuring out direct URL to tour.
+                   */
+                  p5.io.unroll-path:@INGEN/
+                  split:x:/-?value
+                    =:/
+                  .url
+                  p5.web.get-root-location
+                  set:x:/@.url?value
+                    src:{0}{1}/tour/{2}
+                      :x:/@p5.web.get-root-location?value
+                      :x:/@split/0/-?name
+                      :x:/@.id?value
+
+                  /*
+                   * Setting href of image to Google's QR code generator's result.
+                   */
+                  p5.html.url-encode:x:/@.url?value
+                  set-widget-property:x:/../*/_event?value
+                    src:"https://chart.googleapis.com/chart?cht=qr&chl={0}&chs=250x250&chld=L|0"
+                      :x:/@p5.html.url-encode?value
+
       div
         class:right strip
         widgets
