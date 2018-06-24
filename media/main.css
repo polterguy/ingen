@@ -37,7 +37,7 @@ body {
 }
 
 .strip.themepark-large-strip {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
 }
 
 .themepark-datagrid {
@@ -60,4 +60,10 @@ body {
 
 .micro-widgets-modal.larger-text .micro-widgets-modal-content {
     font-size: 1.5rem;
+}
+
+.themepark-flag-button {
+    width: 150px;
+    margin: .5rem;
+    cursor: pointer;
 }

@@ -1,0 +1,108 @@
+
+/*
+ * Creates our "admin tours" back end widget.
+ */
+
+
+/*
+ * Checking if "manage tours" widget already exists, at which point we simply
+ * return early.
+ */
+if
+  fetch:x:/0/0?value
+    widget-exists:manage-tours-wrapper
+
+  /*
+   * Widget is already visible.
+   */
+  return
+
+
+/*
+ * Clearing previously create widgets from dynamic content wrapper widget.
+ */
+clear-widget:themepark-dynamic-content
+
+
+/*
+ * Setting header and title of page.
+ */
+themepark.header.set:Administrate tours
+
+
+/*
+ * Creating our "manage tours" datagrid in a "bg" wrapper div.
+ */
+create-widget:manage-tours-wrapper
+  parent:themepark-dynamic-content
+  class:shaded rounded air air-inner bg
+  widgets
+
+    /*
+     * Our actual datagrid, dynamically databound towards "tours" table.
+     */
+    micro.widgets.mysql.datagrid:manage-tours-datagrid
+      class:hover themepark-datagrid
+      database:ingen
+      table:tours
+      .row
+        onclick
+
+          /*
+           * Invoking file responsible for editing a specific item from database.
+           */
+          eval-x:x:/+/*
+          micro.evaluate.file:@INGEN/back-end/tours/ux/add-edit-tours.hl
+            id:x:/../*/.row/*/id?value
+
+      columns
+        id
+          visible:bool:false
+        Name
+        Delete
+          style:"width:5px;"
+          .lambda
+            eval-x:x:/+/*/*/onclick/*/.id
+            return
+              button
+                innerValue:@"<span class=""icon-bin""></span>"
+                onclick
+
+                  /*
+                   * Forward evaluated above.
+                   */
+                  .id:x:/../*/row/*/id?value
+
+                  /*
+                   * Invoking file responsible for deleting tours.
+                   */
+                  eval-x:x:/+/*
+                  micro.evaluate.file:@INGEN/back-end/tours/model/delete-tour.hl
+                    id:x:/@.id?value
+
+                  /*
+                   * Re-databinding datagrid.
+                   */
+                  micro.widgets.mysql.datagrid.databind:manage-tours-datagrid
+
+                  /*
+                   * Provding some visual feedback to user.
+                   */
+                  micro.windows.info:Successfully updated tours
+                    class:micro-windows-info success
+
+    /*
+     * Toolbar at the bottom for creating new tours, and closingmain widget.
+     */
+    div
+      class:right strip
+      widgets
+        button
+          innerValue:@"<span class=""icon-plus""></span>"
+          class:large
+          onclick
+
+            /*
+             * Invokes file responsible for creating a new tours.
+             */
+            micro.evaluate.file:@INGEN/back-end/tours/ux/add-edit-tours.hl

@@ -64,5 +64,14 @@ create table subscribers (
   constraint uc_email unique (email),
   primary key (id)
 ) engine=InnoDB auto_increment=1 default charset=utf8mb4 collate=utf8mb4_unicode_ci;
+
+create table tours (
+  id int(10) unsigned not null auto_increment,
+  name varchar(200) character set utf8mb4 collate utf8mb4_unicode_ci not null,
+  content longtext collate utf8mb4_unicode_ci not null,
+  exhibit_id int(10) unsigned not null,
+  constraint fk_tours_exhibits foreign key (exhibit_id) references exhibits(id) on delete cascade,
+  primary key (id)
+) engine=InnoDB auto_increment=1 default charset=utf8mb4 collate=utf8mb4_unicode_ci;
 "
 

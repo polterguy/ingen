@@ -1,0 +1,20 @@
+
+/*
+ * JumboButton for browsing tours.
+ */
+button
+  class:jumbo-button
+  innerValue:@"<span>Tours</span><span class=""icon-headphones""></span>"
+  onclick
+
+    /*
+     * Dynamically loading exhibits.
+     */
+    micro.evaluate.file:@INGEN/front-end/tours/ux/view-tours.hl
+
+    /*
+     * Evaluating file responsible for toggling Jumbo Buttons.
+     */
+    eval-x:x:/+/*
+    micro.evaluate.file:@INGEN/common/toggle-jumbo-button.hl
+      button:x:/../*/_event?value

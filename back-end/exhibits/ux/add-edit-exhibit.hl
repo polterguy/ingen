@@ -1,5 +1,5 @@
 /*
- * Allows the user to add a new exhibit.
+ * Allows the user to add or edit a new exhibit.
  */
 micro.lambda.contract.optional:x:/..
   id:long
@@ -79,7 +79,7 @@ create-widgets
         value:x:/@.data/*/id?value
         .data-field:id
       label
-        innerValue:Name
+        innerValue:Description
       micro.widgets.codemirror
         mode:markdown
         .data-field:description
@@ -131,7 +131,7 @@ create-widgets
             onclick
 
               /*
-               * HelperAjax callback to simply delete modal widget without saving anything.
+               * Helper Ajax callback to simply delete modal widget without saving anything.
                */
               delete-widget:themepark-add-exhibit-modal
 

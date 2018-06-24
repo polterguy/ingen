@@ -87,7 +87,6 @@ create-widget:manage-tickets-wrapper
       eval-x:x:/+/*/filter
       micro.widgets.mysql.datagrid.databind:manage-tickets-datagrid
         order-by:purchased
-        order-dir:desc
         filter:exists (select * from tickets where used = 0 and tickets.tickets_collection_id = tickets_collection.id) {0} {1}
           :x:/@.exhibit-filter?value
           :x:/@.custom-filter?value
@@ -157,10 +156,18 @@ create-widget:manage-tickets-wrapper
       class:hover themepark-datagrid
       database:ingen
       table:tickets_collection
-      databind:bool:true
-        order-by:purchased
-        order-dir:desc
-        filter:exists (select * from tickets where used = 0 and tickets.tickets_collection_id = tickets_collection.id)
+
+      /*
+       * Avoiding databinding to use same filtering logic in all databind invocations.
+       */
+      databind:bool:false
+      oninit
+
+        /*
+         * Invoking event responsible for databinding grid.
+         */
+        themepark.tickets.re-databind
+
       .row
         onclick
 

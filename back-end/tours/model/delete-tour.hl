@@ -1,0 +1,19 @@
+
+/*
+ * File responsible for deleting a tour from database.
+ */
+
+
+/*
+ * Sanity checking invocation.
+ */
+micro.lambda.contract.min:x:/..
+  id:long
+
+
+/*
+ * Actually deleting item.
+ */
+p5.mysql.connect:[ingen]
+  p5.mysql.delete:delete from tours where id = @id
+    @id:x:/../*/id?value

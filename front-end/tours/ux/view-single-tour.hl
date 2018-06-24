@@ -1,0 +1,86 @@
+/*
+ * File responsible for letting the user see a single tour.
+ */
+
+
+/*
+ * Sanity checking invocation.
+ */
+micro.lambda.contract.min:x:/..
+  id:long
+
+
+/*
+ * Creating one image button for each language we support.
+ */
+list-files:@INGEN/media/languages/
+eval-x:x:/+/**/.id
+for-each:x:/@list-files/*?name
+  eval-x:x:/+/*/*/*
+  add:x:/../*/create-widgets/**/widgets/=languages
+    src
+      img
+        role:button
+        class:themepark-flag-button jumbo-button
+        src:x:/@_dp?value
+        onclick
+
+          /*
+           * Forward evaluated above.
+           */
+          .id:x:/../*/id?value
+
+          /*
+           * Figuring out which language user selected.
+           */
+          get-widget-property:x:/../*/_event?value
+            src
+          split:x:/@get-widget-property/*/*?value
+            =:/
+            =:.
+
+          /*
+           * Retrieves tour in user's specified language.
+           */
+          eval-x:x:/+/*
+          micro.evaluate.file:@INGEN/front-end/tours/model/get-tour.hl
+            id:x:/@.id?value
+            lang:x:/@split/0/-2?name
+
+          /*
+           * Starting speech synthesis and making sure we enable the pause button.
+           */
+          eval-x:x:/+/*
+          micro.speech.speak:x:/@micro.evaluate.file?value
+            voice:x:/@split/0/-2?name
+          delete-widget-property:themepark-tour-pause-button
+            disabled
+
+
+/*
+ * Creating a modal window displaying all languages we support, to let user select
+ * which language he wants to take the tour in.
+ */
+create-widgets
+  micro.widgets.modal:view-tour-modal
+    widgets
+      h2
+        innerValue:Take the tour
+      div
+        class:air
+        widgets:languages
+      div
+        class:right
+        widgets
+          button:themepark-tour-pause-button
+            class:large
+            disabled
+            innerValue:@"<span class=""icon-pause2""></span>"
+            onclick
+
+              /*
+               * Pausing speech synthesis, and disabling button.
+               */
+              micro.speech.stop
+              set-widget-property:x:/../*/_event?value
+                disabled

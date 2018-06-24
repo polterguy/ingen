@@ -1,0 +1,65 @@
+
+/*
+ * Returns specified [id] tour's content to caller, in the specified [lang].
+ */
+
+
+/*
+ * Sanity checking invocation.
+ */
+micro.lambda.contract.min:x:/..
+  id:long
+  lang:string
+
+
+/*
+ * Checking if [lang] is anything but English, and whether or not we have tour already cached.
+ */
+if:x:/../*/lang?value
+  !=:en
+
+  /*
+   * Checking cache.
+   */
+  p5.web.cache.get:themepark-tour-{0}-{1}
+    :x:/../*/id?value
+    :x:/../*/lang?value
+  if:x:/-/*?value
+
+    /*
+     * We found our translation in our cache.
+     */
+    return:x:/@p5.web.cache.get/*?value
+
+
+/*
+ * Opening database connection.
+ */
+p5.mysql.connect:[ingen]
+
+  /*
+   * Selecting tour from database.
+   */
+  p5.mysql.scalar:select content from tours where id = @id
+    @id:x:/../*/id?value
+
+  /*
+   * Running it through Google Translate for user's selected language.
+   */
+  eval-x:x:/+/*/dest-lang
+  micro.google.translate:x:/@p5.mysql.scalar?value
+    src-lang:en
+    dest-lang:x:/../*/lang?value
+
+  /*
+   * Storing translation in web cache.
+   */
+  p5.web.cache.set:themepark-tour-{0}-{1}
+    :x:/../*/id?value
+    :x:/../*/lang?value
+    src:x:/@micro.google.translate?value
+
+  /*
+   * Returning translation to caller.
+   */
+  return:x:/@micro.google.translate?value
