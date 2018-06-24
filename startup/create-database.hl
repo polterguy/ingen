@@ -42,7 +42,6 @@ create table tickets_collection (
   id int(10) unsigned not null auto_increment,
   purchaser_name varchar(200) character set utf8mb4 collate utf8mb4_unicode_ci not null,
   purchaser_email varchar(200) character set utf8mb4 collate utf8mb4_unicode_ci not null,
-  used bit not null default 0,
   exhibit_id int(10) unsigned not null,
   purchased datetime not null default now(),
   constraint fk_tickets_collection_exhibits foreign key (exhibit_id) references exhibits(id) on delete cascade,
@@ -51,6 +50,7 @@ create table tickets_collection (
 
 create table tickets (
   id int(10) unsigned not null auto_increment,
+  used bit not null default 0,
   is_child bit not null default 0,
   tickets_collection_id int(10) unsigned not null,
   constraint fk_tickets_tickets_collection foreign key (tickets_collection_id) references tickets_collection(id) on delete cascade,

@@ -1,0 +1,19 @@
+/*
+ * JumboButton for allowing admin to administrate tickets.
+ */
+button
+  class:jumbo-button
+  innerValue:@"<span>Tickets</span><span class=""icon-cart""></span>"
+  onclick
+
+    /*
+     * Evaluating file responsible for administrating tickets.
+     */
+    micro.evaluate.file:@INGEN/back-end/exhibits/ux/admin-tickets.hl
+
+    /*
+     * Evaluating file responsible for toggling Jumbo Buttons.
+     */
+    eval-x:x:/+/*
+    micro.evaluate.file:@INGEN/common/toggle-jumbo-button.hl
+      button:x:/../*/_event?value

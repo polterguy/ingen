@@ -41,7 +41,7 @@ create-widget:view-exhibits-wrapper
      * Our actual datagrid, dynamically databound towards "exhibits" table.
      */
     micro.widgets.mysql.datagrid:view-exhibits-datagrid
-      class:hover striped themepark-datagrid
+      class:hover themepark-datagrid
       database:ingen
       table:exhibits
       .row
@@ -58,15 +58,28 @@ create-widget:view-exhibits-wrapper
       columns
         id
           visible:bool:false
-        name
+        Name
         price
-          style:"width:5px;"
-        children_price
           visible:bool:false
-        children
+        price
           style:"width:5px;"
           .lambda
             eval-x:x:/+/*/*
             return
               span
-                innerValue:x:/../*/row/*/children_price?value
+                innerValue:€{0}
+                  :x:/../*/row/*/price?value
+          .header
+            innerValue:Adults
+        children_price
+          visible:bool:false
+        children_price
+          style:"width:5px;"
+          .lambda
+            eval-x:x:/+/*/*
+            return
+              span
+                innerValue:€{0}
+                  :x:/../*/row/*/children_price?value
+          .header
+            innerValue:Children

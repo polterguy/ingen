@@ -1,0 +1,30 @@
+
+/*
+ * Sets all tickets in given tickets_collection to "used".
+ */
+
+
+/*
+ * Sanity checking invocation.
+ */
+micro.lambda.contract.min:x:/..
+  id:long
+
+
+/*
+ * Opening databas, and updating all tickets in specified tickets_collection.
+ */
+p5.mysql.connect:[ingen]
+
+  /*
+   * Updating all tickets.
+   */
+  p5.mysql.update:update tickets set used = 1 where tickets_collection_id = @id
+    @id:x:/../*/id?value
+  if:x:/-?value.int
+    =:int:0
+
+    /*
+     * No such ticket.
+     */
+    throw:No such ticket!

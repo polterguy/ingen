@@ -42,6 +42,8 @@ body {
 
 .themepark-datagrid tr td {
     cursor: pointer;
+    padding: 1rem;
+    border-color: rgba(0,0,0,.1);
 }
 
 .themepark-email-disclaimer {

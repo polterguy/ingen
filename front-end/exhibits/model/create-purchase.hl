@@ -51,10 +51,9 @@ p5.mysql.connect:[ingen]
     /*
      * Creating our tickets_collection record.
      */
-    p5.mysql.insert:insert into tickets_collection (purchaser_name, purchaser_email, used, exhibit_id) values (@purchaser_name, @purchaser_email, @used, @exhibit_id)
+    p5.mysql.insert:insert into tickets_collection (purchaser_name, purchaser_email, exhibit_id) values (@purchaser_name, @purchaser_email, @exhibit_id)
       @purchaser_name:x:/../*/purchaser_name?value
       @purchaser_email:x:/../*/purchaser_email?value
-      @used:int:0
       @exhibit_id:x:/../*/exhibit-id?value.long
 
     /*
@@ -68,7 +67,7 @@ p5.mysql.connect:[ingen]
       /*
        * Inserting one adult tickets record.
        */
-      p5.mysql.insert:insert into tickets (is_child, tickets_collection_id) values (0, @tickets_collection_id)
+      p5.mysql.insert:insert into tickets (is_child, used, tickets_collection_id) values (0, 0, @tickets_collection_id)
         @tickets_collection_id:x:/..while/@p5.mysql.insert/*/id?value.long
 
       /*
@@ -89,7 +88,7 @@ p5.mysql.connect:[ingen]
       /*
        * Inserting one adult tickets record.
        */
-      p5.mysql.insert:insert into tickets (is_child, tickets_collection_id) values (1, @tickets_collection_id)
+      p5.mysql.insert:insert into tickets (is_child, used, tickets_collection_id) values (1, 0, @tickets_collection_id)
         @tickets_collection_id:x:/..while/@p5.mysql.insert/*/id?value.long
 
       /*
