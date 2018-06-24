@@ -36,8 +36,16 @@ body {
     background: linear-gradient(rgba(255,255, 255, .75), rgba(128, 128,128, .75));
 }
 
+.strip.themepark-large-strip {
+    font-size: 1.8rem;
+}
+
 .themepark-datagrid {
     font-size: 1.5rem;
+}
+
+.themepark-datagrid tr th {
+    padding: 1rem 1rem 0 1rem;
 }
 
 .themepark-datagrid tr td {

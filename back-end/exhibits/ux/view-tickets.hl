@@ -29,7 +29,7 @@ create-widgets
     class:micro-widgets-modal larger-text
     widgets
       h2
-        innerValue:Ticket information
+        innerValue:x:/@micro.evaluate.file/*/exhibit?value
       p
         innerValue:"Name: {0}"
           :x:/@micro.evaluate.file/*/name?value
@@ -47,6 +47,13 @@ create-widgets
         widgets
           button
             innerValue:Mark as used
+            oninit
+
+              /*
+               * Setting initial focus to "mark as used" button.
+               */
+              micro.page.set-focus:x:/../*/_event?value
+
             onclick
 
               /*
