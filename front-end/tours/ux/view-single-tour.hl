@@ -48,6 +48,12 @@ for-each:x:/@list-files/*?name
             lang:x:/@split/0/-2?name
 
           /*
+           * In case something else is already using speech synthesis, we turn it off
+           * before we start tour.
+           */
+          micro.speech.stop
+
+          /*
            * Starting speech synthesis and making sure we enable the pause button.
            */
           eval-x:x:/+/*

@@ -148,3 +148,19 @@ create-widget
  * Re-setting initial title.
  */
 themepark.header.set
+
+
+/*
+ * Checking if this is a request for a tour.
+ */
+micro.url.get-entities
+if:x:/@micro.url.get-entities/1?name
+  =:tour
+
+  /*
+   * Automatically launching tour.
+   */
+  micro.evaluate.file:@INGEN/front-end/tours/ux/view-tours.hl
+  eval-x:x:/+/*
+  micro.evaluate.file:@INGEN/front-end/tours/ux/view-single-tour.hl
+    id:x:/@micro.url.get-entities/2?name.long
