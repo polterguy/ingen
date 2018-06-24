@@ -20,7 +20,7 @@ button
             class:right air-top
             widgets
               button
-                innerValue:Close help
+                innerValue:Close
                 onclick
 
                   /*

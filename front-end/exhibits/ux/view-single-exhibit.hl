@@ -72,7 +72,7 @@ create-widgets
         class:right
         widgets
           button
-            innerValue:@"<span class=""icon-cross""></span>"
+            innerValue:Close
             class:large
             onclick
 

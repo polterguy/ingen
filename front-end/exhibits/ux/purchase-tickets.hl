@@ -25,7 +25,7 @@ eval-x:x:/+/**/.id
 create-widgets
   micro.widgets.modal:order-exhibit-modal
     widgets
-      h2
+      h2:purchase-header
         innerValue:Purchase tickets for '{0}'
           :x:/@micro.evaluate.file/*/name?value
       div:purchase-tickets-wrapper
@@ -40,6 +40,7 @@ create-widgets
                 type:text
                 placeholder:Purchaser's name ...
                 .data-field:purchaser_name
+                onkeydown:@"if (event.keyCode == 13) {p5.$('confirm-purchase').raise('onclick');return false;} else if (event.keyCode == 27) {p5.$('close-purchase').raise('onclick');return false;}"
                 oninit
 
                   /*
@@ -57,6 +58,7 @@ create-widgets
                 type:text
                 placeholder:Purchaser's email ...
                 .data-field:purchaser_email
+                onkeydown:@"if (event.keyCode == 13) {p5.$('confirm-purchase').raise('onclick');return false;} else if (event.keyCode == 27) {p5.$('close-purchase').raise('onclick');return false;}"
               label
                 widgets
                   span
@@ -76,6 +78,7 @@ create-widgets
                 placeholder:Number of adults ...
                 .data-field:no_adults
                 value:1
+                onkeydown:@"if (event.keyCode == 13) {p5.$('confirm-purchase').raise('onclick');return false;} else if (event.keyCode == 27) {p5.$('close-purchase').raise('onclick');return false;}"
           div
             class:strip fill
             widgets
@@ -86,15 +89,16 @@ create-widgets
                 type:number
                 placeholder:Number of children ...
                 .data-field:no_children
-                value:1
+                value:0
+                onkeydown:@"if (event.keyCode == 13) {p5.$('confirm-purchase').raise('onclick');return false;} else if (event.keyCode == 27) {p5.$('close-purchase').raise('onclick');return false;}"
           p
             class:themepark-email-disclaimer
             innerValue:@"<strong>Disclaimer</strong> - If you leave the above checkbox as it is, you will sign up for our newsletter.
 If you do not want to subscribe to our newsletter, you'll have to explicitly turn OFF the above checkbox!"
           div
-            class:right
+            class:right strip
             widgets
-              button
+              button:confirm-purchase
                 innerValue:Done
                 events
 
@@ -186,6 +190,13 @@ If you do not want to subscribe to our newsletter, you'll have to explicitly tur
                   delete-widget:view-exhibit-modal
 
                   /*
+                   * Changing header of modal widget.
+                   */
+                  set-widget-property:purchase-header
+                    innerValue:Total sum €{0}
+                      :x:/@micro.evaluate.file?value
+
+                  /*
                    * Making sure we display PayPal wrapper widget, and give user a notification that
                    * he'll have to click the button.
                    */
@@ -235,7 +246,7 @@ If you do not want to subscribe to our newsletter, you'll have to explicitly tur
                               h2
                                 innerValue:Purchase complete
                               p
-                                innerValue:Please just provide your name and email address at the gate for the exhibit.
+                                innerValue:Please provide your name and email address at the gate for the exhibit.
                               div
                                 class:right
                                 widgets
@@ -280,6 +291,15 @@ If you do not want to subscribe to our newsletter, you'll have to explicitly tur
                    */
                   set-widget-property:purchase-tickets-wrapper
                     visible:false
+
+              button:close-purchase
+                innerValue:Close
+                onclick
+
+                  /*
+                   * Deleting purchase modal widget.
+                   */
+                  delete-widget:order-exhibit-modal
 
       container:paypal-wrapper
         class:air-bottom center
