@@ -1,0 +1,190 @@
+/*
+ * Creates our "admin tickets" back end widget.
+ */
+
+
+/*
+ * Checking if "manage exhibit" widget already exists, at which point we simply
+ * return early.
+ */
+if
+  fetch:x:/0/0?value
+    widget-exists:manage-tickets-wrapper
+
+  /*
+   * Widget is already visible.
+   */
+  return
+
+
+/*
+ * Clearing previously create widgets from dynamic content wrapper widget.
+ */
+clear-widget:themepark-dynamic-content
+
+
+/*
+ * Setting header and title of page.
+ */
+themepark.header.set:Administrate tickets
+
+
+/*
+ * Creating our "manage tickets" datagrid in a "bg" wrapper div.
+ */
+create-widget:manage-tickets-wrapper
+  parent:themepark-dynamic-content
+  class:shaded rounded air air-inner bg
+  events
+
+    /*
+     * Invoked when datagrid for some reasons is supposed to be re-databound.
+     */
+    themepark.tickets.re-databind
+
+      /*
+       * Checking if operators has filtered according to exhibits.
+       */
+      .exhibit-filter
+      get-widget-property:manage-tickets-exhibit-filter
+        value
+      if:x:/@get-widget-property/*/*?value
+        !=:_default
+
+        /*
+         * Adding exhibit filtering condition.
+         */
+        set:x:/@.exhibit-filter?value
+          src:and exhibit_id = @exhibit_id
+        eval-x:x:/+/*/*
+        add:x:/../*/micro.widgets.mysql.datagrid.databind/*/filter
+          src
+            @exhibit_id:x:/@get-widget-property/*/*?value.long
+
+      /*
+       * Checking if operator has filtered with some text input.
+       */
+      .custom-filter
+      get-widget-property:tickets-custom-filter
+        value
+      if:x:/@get-widget-property/*/*?value
+        !=:
+
+        /*
+         * Adding additional free text filtering condition.
+         */
+        set:x:/@.custom-filter?value
+          src:and (purchaser_name like @custom or purchaser_email like @custom)
+        eval-x:x:/+/*/*
+        add:x:/../*/micro.widgets.mysql.datagrid.databind/*/filter
+          src
+            @custom:%{0}%
+              :x:/@get-widget-property/*/*?value
+
+      /*
+       * Making sure we only display open tickets by default.
+       */
+      eval-x:x:/+/*/filter
+      micro.widgets.mysql.datagrid.databind:manage-tickets-datagrid
+        order-by:purchased
+        filter:exists (select * from tickets where used = 0 and tickets.tickets_collection_id = tickets_collection.id) {0} {1}
+          :x:/@.exhibit-filter?value
+          :x:/@.custom-filter?value
+
+  widgets
+
+    /*
+     * This is the "exhibit filter" select dropdown widget.
+     */
+    div
+      class:strip fill themepark-large-strip
+      widgets
+        container:manage-tickets-exhibit-filter
+          element:select
+          oninit
+
+            /*
+             * Poulating select dropdown with all exhibits, and adding a "no filter"
+             * option at the top.
+             */
+            create-widget
+              parent:x:/../*/_event?value
+              element:option
+              innerValue:Filter exhibits ...
+              value:_default
+
+            /*
+             * Retrieving all exhibits.
+             */
+            micro.evaluate.file:@INGEN/imp/backend/exhibits/model/get-exhibits.hl
+            for-each:x:/-/*/exhibit
+              create-widget
+                parent:x:/../*/_event?value
+                element:option
+                innerValue:x:/@_dp/#/*/name?value
+                value:x:/@_dp/#/*/id?value
+
+          onchange
+
+            /*
+             * Re-databinding datagrid.
+             */
+            themepark.tickets.re-databind
+
+        input:tickets-custom-filter
+          type:text
+          placeholder:Filter ...
+          onkeydown:@"if (event.keyCode == 13) {p5.$('tickets-filter-button').raise('onclick');return false;}"
+        button:tickets-filter-button
+          innerValue:@"<span style=""font-size:1.3rem;"" class=""icon-search""></span>"
+          onclick
+
+            /*
+             * Re-databinding tickets.
+             */
+            themepark.tickets.re-databind
+
+            /*
+             * Setting focus to filter textbox again, to make it easily removed.
+             */
+            micro.page.set-focus:tickets-custom-filter
+
+    /*
+     * Our actual datagrid, dynamically databound towards "exhibits" table.
+     */
+    micro.widgets.mysql.datagrid:manage-tickets-datagrid
+      class:hover themepark-datagrid
+      database:ingen
+      table:tickets_collection
+
+      /*
+       * Avoiding databinding to use same filtering logic in all databind invocations.
+       */
+      databind:bool:false
+      oninit
+
+        /*
+         * Invoking event responsible for databinding grid.
+         */
+        themepark.tickets.re-databind
+
+      .row
+        onclick
+
+          /*
+           * Invoking file responsible for displaying and editing a specific
+           * tickets_collection item from database.
+           */
+          eval-x:x:/+/*
+          micro.evaluate.file:@INGEN/imp/backend/tickets/ui/view-tickets.hl
+            id:x:/../*/.row/*/id?value
+
+      columns
+        id
+          visible:bool:false
+        purchaser_name
+          .header
+            innerValue:Name
+        purchaser_email
+          .header
+            innerValue:Email

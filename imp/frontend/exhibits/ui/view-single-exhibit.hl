@@ -1,0 +1,82 @@
+/*
+ * File responsible for viewing a single exhibit.
+ */
+
+
+/*
+ * Sanity checking invocation.
+ */
+micro.lambda.contract.min:x:/..
+  id:long
+
+
+/*
+ * Retrieving exhibit from data layer.
+ */
+eval-x:x:/+/*
+micro.evaluate.file:@INGEN/imp/common/exhibits/model/get-exhibit.hl
+  id:x:/../*/id?value
+
+
+/*
+ * Transforming description markdownto HTML.
+ */
+micro.markdown.markdown2html:x:/@micro.evaluate.file/*/description?value
+
+
+/*
+ * Displaying exhibit information in a modal widget, and allowing user to purchase ticket(s) for exhibit.
+ */
+eval-x:x:/+/**/.id
+create-widgets
+  micro.widgets.modal:view-exhibit-modal
+    widgets
+      h1
+        widgets
+          span
+            innerValue:x:/@micro.evaluate.file/*/name?value
+          small
+            innerValue:@" - Price; {0} EURO - Children; {1} EURO"
+              :x:/@micro.evaluate.file/*/price?value
+              :x:/@micro.evaluate.file/*/children_price?value
+      div
+        innerValue:x:/@micro.markdown.markdown2html?value
+
+      /*
+       * Purchase ticket(s) jumbo button.
+       */
+      div
+        class:center
+        widgets
+          button
+            class:jumbo-button
+            innerValue:@"<span class=""icon-cart""></span> Tickets"
+            onclick
+
+              /*
+               * Forward evaluated above.
+               */
+              .id:x:/../*/id?value
+
+              /*
+               * Evaluating file responsible for allowing the user to order ticket(s) for the exhibit.
+               */
+              eval-x:x:/+/*
+              micro.evaluate.file:@INGEN/imp/frontend/tickets/ui/purchase-tickets.hl
+                id:x:/@.id?value
+
+      /*
+       * Close button wrapper.
+       */
+      div
+        class:right
+        widgets
+          button
+            innerValue:Close
+            class:large
+            onclick
+
+              /*
+               * Deleting modal widget.
+               */
+              delete-widget:view-exhibit-modal

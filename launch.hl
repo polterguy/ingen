@@ -31,19 +31,102 @@ micro.widgets.paypal-button.ensure-checkout-js
 
 
 /*
- * Verifying that we're logged in, and if we are, we dynamically add the backend buttons
- * to our main wire frame form.
+ * Adding all Jumbo Buttons according to whether or not user has access to module
+ * or not. First all frontend Jumbo Buttons. Notice, we default access to "true"
+ * for the frontend buttons.
  */
-whoami
-if:x:/@whoami/*/role?value
-  !=:guest
+list-folders:@INGEN/imp/frontend/
+for-each:x:/@list-folders/*?name
 
   /*
-   * Loading up back end buttons.
+   * Figuring out if currently iterated frontend module has a "/jumbo-buttons/"
+   * folder or not.
    */
-  add:x:/../*/create-widget/**/micro.widgets.file/=themepark-main-content
-    src
-      folder:@INGEN/back-end/jumbo-buttons/
+  if
+    fetch:x:/0/0?value
+      folder-exists:{0}jumbo-buttons/
+        :x:/@_dp?value
+    not
+
+    /*
+     * No Jumbo Buttons for module, continue next iteration.
+     */
+    continue
+
+  /*
+   * Figuring out if user has access to InGen module or not.
+   */
+  split:x:/@_dp?value
+    =:/
+  set:x:/@split(/0|/1|/2)
+  join:x:/@split/*?name
+    sep:/
+  set:x:/@join?value
+    src:/{0}/
+      :x:/@join?value
+  p5.auth.has-access:true
+    filter:ingen.module
+    path:x:/@join?value
+  if:x:/@p5.auth.has-access?value
+    =:bool:true
+
+    /*
+     * User has access to module.
+     */
+    eval-x:x:/+/*/*
+    add:x:/../*/create-widget/**/micro.widgets.file/=themepark-jumbo-buttons
+      src
+        folder:{0}jumbo-buttons/
+          :x:/@_dp?value
+
+
+/*
+ * Then iterating through each backend module, and doing the same as above, except
+ * this time we default access to "false".
+ */
+list-folders:@INGEN/imp/backend/
+for-each:x:/@list-folders/*?name
+
+  /*
+   * Figuring out if currently iterated frontend module has a "/jumbo-buttons/"
+   * folder or not.
+   */
+  if
+    fetch:x:/0/0?value
+      folder-exists:{0}jumbo-buttons/
+        :x:/@_dp?value
+    not
+
+    /*
+     * No Jumbo Buttons for module, continue next iteration.
+     */
+    continue
+
+  /*
+   * Figuring out if user has access to InGen module or not.
+   */
+  split:x:/@_dp?value
+    =:/
+  set:x:/@split(/0|/1|/2)
+  join:x:/@split/*?name
+    sep:/
+  set:x:/@join?value
+    src:/{0}/
+      :x:/@join?value
+  p5.auth.has-access:false
+    filter:ingen.module
+    path:x:/@join?value
+  if:x:/@p5.auth.has-access?value
+    =:bool:true
+
+    /*
+     * User has access to module.
+     */
+    eval-x:x:/+/*/*
+    add:x:/../*/create-widget/**/micro.widgets.file/=themepark-jumbo-buttons
+      src
+        folder:{0}jumbo-buttons/
+          :x:/@_dp?value
 
 
 /*
@@ -91,7 +174,7 @@ create-widget
              */
             micro.widgets.file
               class:strip themepark-top-buttons
-              folder:@INGEN/common/toolbar-buttons/
+              folder:@INGEN/imp/common/toolbar-buttons/
 
             /*
              * Header for app.
@@ -132,9 +215,8 @@ create-widget
             /*
              * Main content surface for our app.
              */
-            micro.widgets.file:themepark-main-content
+            micro.widgets.file:themepark-jumbo-buttons
               class:center themepark-center-content
-              folder:@INGEN/front-end/jumbo-buttons/
 
             /*
              * Helper container widget, for displaying "view content".
@@ -160,7 +242,6 @@ if:x:/@micro.url.get-entities/1?name
   /*
    * Automatically launching tour.
    */
-  micro.evaluate.file:@INGEN/front-end/tours/ux/view-tours.hl
   eval-x:x:/+/*
-  micro.evaluate.file:@INGEN/front-end/tours/ux/view-single-tour.hl
+  micro.evaluate.file:@INGEN/imp/frontend/tours/ui/view-single-tour.hl
     id:x:/@micro.url.get-entities/2?name.long

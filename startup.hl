@@ -18,4 +18,4 @@ create-event:p5.io.unroll-path.@INGEN
 /*
  * Evaluating all other startup files.
  */
-micro.evaluate.folder:@INGEN/startup/
+micro.evaluate.folder:@INGEN/imp/startup/
