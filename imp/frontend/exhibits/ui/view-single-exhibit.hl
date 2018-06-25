@@ -42,6 +42,9 @@ micro.markdown.markdown2html:x:/@micro.evaluate.file/*/description?value
 /*
  * Verifying access to ticket module, and if access is not granted, we
  * delete the "purchase ticket" wrapper.
+ *
+ * This make it easy to create a system where there are no tickets requirements, to only
+ * let the guests view the exhibits, and take the tours, etc.
  */
 p5.auth.has-access:true
   filter:ingen.module
@@ -50,7 +53,7 @@ if:x:/-?value
   =:bool:false
 
   /*
-   * Oops, access deniedto ticket purchasing module!
+   * Oops, access denied to ticket purchasing module!
    */
   set:x:/../*/create-widgets/**/div/=purchase-ticket-wrapper
 
