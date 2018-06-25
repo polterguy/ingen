@@ -1,4 +1,3 @@
-
 /*
  * Displays ticket information in a modal window and allows operator
  * to mark tickets as used.
@@ -10,6 +9,21 @@
  */
 micro.lambda.contract.min:x:/..
   id:long
+
+
+/*
+ * Verifying access.
+ */
+p5.auth.has-access:false
+  filter:ingen.module
+  path:/backend/tickets/
+if:x:/-?value
+  =:bool:false
+
+  /*
+   * Oops, access denied!
+   */
+  throw:Access denied!
 
 
 /*

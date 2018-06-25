@@ -5,16 +5,25 @@
  *
  * If it finds such a folder, it will invoke **[p5.auth.has-access]**, passing in **[default-access]**
  * as the default access value, to determine if the user has access to the module or not.
- * This allows you to create access objects looking like the following to grant or deny access to
- * specific roles accordingly.
+ * This allows you to create access objects resembling the following to grant or deny access to
+ * specific roles accordingly. The example below will grant access to the _"exhibits"_ backend module
+ * to all users belonging to the role of _"super-user"_.
  *
  * ```hyperlambda
  * super-user
  *   ingen.module.allow:/backend/exhibits/
  * ```
  *
+ * The namespace for the access objects you create can be either **[ingen.module.allow]**, or
+ * **[ingen.module.deny]**, and the path should be either _"/backend/some-backend-module/"_,
+ * _"/frontend/some-frontend-module/"_, or _"/common/some-common-module/"_.
+ *
  * Only if the user has access it will add any widgets it finds beneath the _"/jumbo-buttons/"_ folder
  * to the main _"desktop launcher"_ of the InGen system.
+ *
+ * The system will also verify access to modules when a module is loaded, to safeguard against buggy
+ * implementations that for some reasons accidentally evaluates a Hyperlambda file/Active Event it shouldn't
+ * have done.
  */
 
 

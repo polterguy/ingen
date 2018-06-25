@@ -1,8 +1,28 @@
 /*
  * Allows the user to add or edit a new tour.
  */
+
+
+/*
+ * Sanity checking invocation.
+ */
 micro.lambda.contract.optional:x:/..
   id:long
+
+
+/*
+ * Verifying access.
+ */
+p5.auth.has-access:false
+  filter:ingen.module
+  path:/backend/tours/
+if:x:/-?value
+  =:bool:false
+
+  /*
+   * Oops, access denied!
+   */
+  throw:Access denied!
 
 
 /*

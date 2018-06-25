@@ -4,6 +4,21 @@
 
 
 /*
+ * Verifying access.
+ */
+p5.auth.has-access:true
+  filter:ingen.module
+  path:/frontend/exhibits/
+if:x:/-?value
+  =:bool:false
+
+  /*
+   * Oops, access denied!
+   */
+  throw:Access denied!
+
+
+/*
  * Checking if "view exhibit" widget already exists, at which point we simply
  * return early.
  */

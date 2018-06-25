@@ -31,6 +31,21 @@ micro.widgets.paypal-button.ensure-checkout-js
 
 
 /*
+ * The next two pieces of code might need some explanation, since this is the "access control"
+ * of the system.
+ *
+ * It invokes the "get-jumbo-buttons.hl" file inside of the "/imp/" folder, and adds the result
+ * of the invocation to that file into the Jumbo Buttons widget below on page. This file internally
+ * invokes [p5.auth.has-access], passing in the [default-access] argument as the default argument.
+ * This results in that by default all users, insluding guest visitors, have access to all "frontend"
+ * modules - While only a root account has access to the "backend" modules.
+ *
+ * This can be overridden by creating access objects in your installation using e.g. "Peeples" to
+ * associate such access objects with the access object list of the system.
+ */
+
+
+/*
  * Adding all Jumbo Buttons for frontend modules according to whether or not
  * user has access to the modules or not.
  *
@@ -96,6 +111,7 @@ create-widget
 
             /*
              * The general toolbar for our app.
+             * This is the "toolbar" displayed at the top/right corner of InGen app.
              */
             micro.widgets.file
               class:strip themepark-top-buttons
@@ -139,6 +155,14 @@ create-widget
 
             /*
              * Main content surface for Jumbo Buttons in our app.
+             *
+             * These are our "launch modules" buttons, that allows the user to interact with
+             * the app in general, and launches modules, such as "front end exhibit module", etc.
+             *
+             * This widget is dynamically populated according to the access control objects in P5, using
+             * [p5.auth.has-access]. This occurs in the "get-jumbo-buttons.hl" file which is invoked twice
+             * further up on page, passing in frontend module (default to access granted) and backend
+             * modules (default to access denied).
              */
             micro.widgets.file:themepark-jumbo-buttons
               class:center themepark-center-content

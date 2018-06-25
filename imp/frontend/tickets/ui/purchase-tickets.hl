@@ -11,6 +11,21 @@ micro.lambda.contract.min:x:/..
 
 
 /*
+ * Verifying access.
+ */
+p5.auth.has-access:true
+  filter:ingen.module
+  path:/frontend/tickets/
+if:x:/-?value
+  =:bool:false
+
+  /*
+   * Oops, access denied!
+   */
+  throw:Access denied!
+
+
+/*
  * Retrieving data for exhibit.
  */
 eval-x:x:/+/*

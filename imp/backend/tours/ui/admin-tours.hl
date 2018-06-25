@@ -1,7 +1,21 @@
-
 /*
  * Creates our "admin tours" back end widget.
  */
+
+
+/*
+ * Verifying access.
+ */
+p5.auth.has-access:false
+  filter:ingen.module
+  path:/backend/tours/
+if:x:/-?value
+  =:bool:false
+
+  /*
+   * Oops, access denied!
+   */
+  throw:Access denied!
 
 
 /*

@@ -1,7 +1,21 @@
-
 /*
  * Creates our "view tours" front end widget.
  */
+
+
+/*
+ * Verifying access.
+ */
+p5.auth.has-access:true
+  filter:ingen.module
+  path:/frontend/tours/
+if:x:/-?value
+  =:bool:false
+
+  /*
+   * Oops, access denied!
+   */
+  throw:Access denied!
 
 
 /*
