@@ -10,8 +10,8 @@ create-event:ingen.settings.has-ticket-module
    * setting hasn't been changed.
    */
   select-data:x:/*/*/ingen.settings.has-ticket-module
-  if:x:/@select-data/*
-    return:x:/@select-data/*?value.bool
+  if:x:/@select-data/*/*
+    return:x:/@select-data/*/*?value.bool
 
   /*
    * Defaulting to true.

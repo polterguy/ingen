@@ -70,6 +70,12 @@ create-widgets
             innerValue:Price
             class:description-9
             value:x:/@.data/*/price?value
+          input
+            type:number
+            .data-field:price
+            placeholder:Price ...
+            value:x:/@.data/*/price?value
+            onkeydown:@"if (event.keyCode == 13) {p5.$('add-edit-exhibit-save-button').raise('onclick');return false;} else if (event.keyCode == 27) {p5.$('close-add-edit-exhibit-save-button').raise('onclick');return false;}"
             oninit
 
               /*
@@ -86,12 +92,6 @@ create-widgets
                 set-widget-property:x:/-/*/*?value
                   style:"display:none;"
 
-          input
-            type:number
-            .data-field:price
-            placeholder:Price ...
-            value:x:/@.data/*/price?value
-            onkeydown:@"if (event.keyCode == 13) {p5.$('add-edit-exhibit-save-button').raise('onclick');return false;} else if (event.keyCode == 27) {p5.$('close-add-edit-exhibit-save-button').raise('onclick');return false;}"
       div
         class:strip fill
         widgets

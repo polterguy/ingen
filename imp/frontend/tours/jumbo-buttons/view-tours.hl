@@ -4,6 +4,16 @@
 button
   class:jumbo-button
   innerValue:@"<span>Tours</span><span class=""icon-headphones""></span>"
+  oninit
+
+    /*
+     * Checking if we should display "browse tours" button, and if not, deleting it.
+     */
+    if
+      ingen-settings.browse-tours-button
+      =:bool:false
+      delete-widget:x:/../*/_event?value
+
   onclick
 
     /*

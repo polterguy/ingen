@@ -19,6 +19,12 @@ if:x:/-?value
 
 
 /*
+ * Clearing previously create widgets from dynamic content wrapper widget.
+ */
+clear-widget:themepark-dynamic-content
+
+
+/*
  * Creating our main widget for allowing admin to modify settings of app.
  */
 create-widgets
@@ -44,6 +50,24 @@ create-widgets
 
           span
             innerValue:Ticket module
+      label
+        widgets
+          input
+            type:checkbox
+            .data-field:ingen.settings.display-tours-jumbo-button
+            oninit
+
+              /*
+               * Checking if tickets module is turned on.
+               */
+              if
+                ingen-settings.browse-tours-button
+                =:bool:true
+                set-widget-property:x:/../*/_event?value
+                  checked
+
+          span
+            innerValue:Browse tours
       div
         class:strip right
         widgets
@@ -64,9 +88,10 @@ create-widgets
                   :x:/@_dp/#?name
                 set:x:/+2/*?name
                   src:x:/@_dp/#?name
-                eval-x:x:/+/*
+                eval-x:x:/+/*/*
                 insert-data
-                  foo:x:/@_dp/#?value
+                  foo
+                    value:x:/@_dp/#?value
 
               /*
                * Deleting modal window and providing feedback to caller.
@@ -82,3 +107,13 @@ create-widgets
                * on the page, we do a location reload thing here.
                */
               p5.web.reload-location
+
+          button
+            innerValue:Close
+            onclick
+
+              /*
+               * Simply deleting modal window, and making sure we remove toggled state from Jumbo Button.
+               */
+              delete-widget:ingen-settings-modal
+              micro.evaluate.file:@INGEN/imp/common/toggle-jumbo-button.hl
