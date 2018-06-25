@@ -4,6 +4,17 @@
 button
   class:jumbo-button
   innerValue:@"<span>Tickets</span><span class=""icon-cart""></span>"
+  oninit
+
+    /*
+     * Checking if the system as the "ticket module", and if not, simply deleting
+     * widget.
+     */
+    if
+      ingen.settings.has-ticket-module
+      =:bool:false
+      delete-widget:x:/../*/_event?value
+
   onclick
 
     /*

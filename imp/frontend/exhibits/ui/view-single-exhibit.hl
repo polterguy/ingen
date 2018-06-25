@@ -51,6 +51,9 @@ p5.auth.has-access:true
   path:/frontend/tickets/
 if:x:/-?value
   =:bool:false
+  or
+    ingen.settings.has-ticket-module
+    =:bool:false
 
   /*
    * Oops, access denied to ticket purchasing module.

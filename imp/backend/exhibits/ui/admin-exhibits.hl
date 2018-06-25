@@ -1,5 +1,5 @@
 /*
- * Creates our "admin exhibits" back end widget.
+ * Creates our "admin exhibits" backend widget.
  */
 
 
@@ -42,6 +42,17 @@ clear-widget:themepark-dynamic-content
  * Setting header and title of page.
  */
 themepark.header.set:Administrate exhibits
+
+
+/*
+ * Checking if installation has the "tickets module", and if not, simply deleting all price information
+ * from the datagrid.
+ */
+if
+  ingen.settings.has-ticket-module
+  =:bool:false
+  set:x:/../*/create-widget/*/widgets/*/micro.widgets.mysql.datagrid/=manage-exhibits-datagrid/*/columns/*/price
+  set:x:/../*/create-widget/*/widgets/*/micro.widgets.mysql.datagrid/=manage-exhibits-datagrid/*/columns/*/children_price
 
 
 /*
