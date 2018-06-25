@@ -31,102 +31,27 @@ micro.widgets.paypal-button.ensure-checkout-js
 
 
 /*
- * Adding all Jumbo Buttons according to whether or not user has access to module
- * or not. First all frontend Jumbo Buttons. Notice, we default access to "true"
- * for the frontend buttons.
+ * Adding all Jumbo Buttons for frontend modules according to whether or not
+ * user has access to the modules or not.
+ *
+ * Notice, we default access to "true".
  */
-list-folders:@INGEN/imp/frontend/
-for-each:x:/@list-folders/*?name
-
-  /*
-   * Figuring out if currently iterated frontend module has a "/jumbo-buttons/"
-   * folder or not.
-   */
-  if
-    fetch:x:/0/0?value
-      folder-exists:{0}jumbo-buttons/
-        :x:/@_dp?value
-    not
-
-    /*
-     * No Jumbo Buttons for module, continue next iteration.
-     */
-    continue
-
-  /*
-   * Figuring out if user has access to InGen module or not.
-   */
-  split:x:/@_dp?value
-    =:/
-  set:x:/@split(/0|/1|/2)
-  join:x:/@split/*?name
-    sep:/
-  set:x:/@join?value
-    src:/{0}/
-      :x:/@join?value
-  p5.auth.has-access:true
-    filter:ingen.module
-    path:x:/@join?value
-  if:x:/@p5.auth.has-access?value
-    =:bool:true
-
-    /*
-     * User has access to module.
-     */
-    eval-x:x:/+/*/*
-    add:x:/../*/create-widget/**/micro.widgets.file/=themepark-jumbo-buttons
-      src
-        folder:{0}jumbo-buttons/
-          :x:/@_dp?value
+add:x:/../*/create-widget/**/micro.widgets.file/=themepark-jumbo-buttons
+  micro.evaluate.file:@INGEN/imp/get-jumbo-buttons.hl
+    folder:@INGEN/imp/frontend/
+    default-access:true
 
 
 /*
- * Then iterating through each backend module, and doing the same as above, except
- * this time we default access to "false".
+ * Adding all Jumbo Buttons for backend modules according to whether or not
+ * user has access to the modules or not.
+ *
+ * Notice, we default access to "false".
  */
-list-folders:@INGEN/imp/backend/
-for-each:x:/@list-folders/*?name
-
-  /*
-   * Figuring out if currently iterated frontend module has a "/jumbo-buttons/"
-   * folder or not.
-   */
-  if
-    fetch:x:/0/0?value
-      folder-exists:{0}jumbo-buttons/
-        :x:/@_dp?value
-    not
-
-    /*
-     * No Jumbo Buttons for module, continue next iteration.
-     */
-    continue
-
-  /*
-   * Figuring out if user has access to InGen module or not.
-   */
-  split:x:/@_dp?value
-    =:/
-  set:x:/@split(/0|/1|/2)
-  join:x:/@split/*?name
-    sep:/
-  set:x:/@join?value
-    src:/{0}/
-      :x:/@join?value
-  p5.auth.has-access:false
-    filter:ingen.module
-    path:x:/@join?value
-  if:x:/@p5.auth.has-access?value
-    =:bool:true
-
-    /*
-     * User has access to module.
-     */
-    eval-x:x:/+/*/*
-    add:x:/../*/create-widget/**/micro.widgets.file/=themepark-jumbo-buttons
-      src
-        folder:{0}jumbo-buttons/
-          :x:/@_dp?value
+add:x:/../*/create-widget/**/micro.widgets.file/=themepark-jumbo-buttons
+  micro.evaluate.file:@INGEN/imp/get-jumbo-buttons.hl
+    folder:@INGEN/imp/backend/
+    default-access:false
 
 
 /*
@@ -213,17 +138,16 @@ create-widget
                     p5.web.page.set-title:x:/../*/_arg?value
 
             /*
-             * Main content surface for our app.
+             * Main content surface for Jumbo Buttons in our app.
              */
             micro.widgets.file:themepark-jumbo-buttons
               class:center themepark-center-content
 
             /*
-             * Helper container widget, for displaying "view content".
+             * Container widget, for displaying dynamic "view content" for modules.
              */
-            div:themepark-dynamic-content
+            container:themepark-dynamic-content
               class:center themepark-center-additional-content
-              widgets
 
 
 /*
