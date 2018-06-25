@@ -40,6 +40,22 @@ micro.markdown.markdown2html:x:/@micro.evaluate.file/*/description?value
 
 
 /*
+ * Verifying access to ticket module, and if access is not granted, we
+ * delete the "purchase ticket" wrapper.
+ */
+p5.auth.has-access:true
+  filter:ingen.module
+  path:/frontend/tickets/
+if:x:/-?value
+  =:bool:false
+
+  /*
+   * Oops, access deniedto ticket purchasing module!
+   */
+  set:x:/../*/create-widgets/**/div/=purchase-ticket-wrapper
+
+
+/*
  * Displaying exhibit information in a modal widget, and allowing user to purchase ticket(s) for exhibit.
  */
 eval-x:x:/+/**/.id
@@ -60,7 +76,7 @@ create-widgets
       /*
        * Purchase ticket(s) jumbo button.
        */
-      div
+      div:purchase-ticket-wrapper
         class:center
         widgets
           button

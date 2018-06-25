@@ -4,13 +4,6 @@
 
 
 /*
- * Clearing widgets from main "cnt" widget, in case something else has already been
- * loaded here.
- */
-clear-widget:cnt
-
-
-/*
  * Including Magic Forrest skin and Micro's CSS files.
  */
 micro.css.include
@@ -35,13 +28,14 @@ micro.widgets.paypal-button.ensure-checkout-js
  * of the system.
  *
  * It invokes the "get-jumbo-buttons.hl" file inside of the "/imp/" folder, and adds the result
- * of the invocation to that file into the Jumbo Buttons widget below on page. This file internally
+ * of the invocation to that file into the Jumbo Buttons wrapper widget below on page. This file internally
  * invokes [p5.auth.has-access], passing in the [default-access] argument as the default argument.
  * This results in that by default all users, insluding guest visitors, have access to all "frontend"
  * modules - While only a root account has access to the "backend" modules.
  *
  * This can be overridden by creating access objects in your installation using e.g. "Peeples" to
- * associate such access objects with the access object list of the system.
+ * associate such access objects with the access object list of the system. See the comments in the
+ * "/imp/get-jumbo-buttons.hl" file for details about how to create such access objects.
  */
 
 
@@ -81,6 +75,11 @@ create-widget
      */
     themepark.pingback.keep-alive
 
+    /*
+     * Re-setting initial title.
+     */
+    themepark.header.set
+
   events
 
     /*
@@ -105,7 +104,7 @@ create-widget
     div
       class:row
       widgets
-        div:themepark-main-toolbar
+        div
           class:col
           widgets
 
@@ -120,7 +119,7 @@ create-widget
             /*
              * Header for app.
              */
-            literal:themepath-header
+            literal
               element:h1
               class:themepark-header center
               events
@@ -172,12 +171,6 @@ create-widget
              */
             container:themepark-dynamic-content
               class:center themepark-center-additional-content
-
-
-/*
- * Re-setting initial title.
- */
-themepark.header.set
 
 
 /*
