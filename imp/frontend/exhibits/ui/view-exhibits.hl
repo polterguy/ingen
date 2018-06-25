@@ -45,6 +45,26 @@ themepark.header.set:Exhibits
 
 
 /*
+ * Verifying access to ticket module, and if access is not granted, we
+ * make sure we remove the pricing columns of the datagrid.
+ *
+ * This make it easy to create a system where there are no tickets requirements, to only
+ * let the guests view the exhibits, and take the tours, etc.
+ */
+p5.auth.has-access:true
+  filter:ingen.module
+  path:/frontend/tickets/
+if:x:/-?value
+  =:bool:false
+
+  /*
+   * Removing every trace related to pricing of exhibits from our datagrid.
+   */
+  set:x:/../*/create-widget/*/widgets/*/micro.widgets.mysql.datagrid/=view-exhibits-datagrid/*/columns/*/price
+  set:x:/../*/create-widget/*/widgets/*/micro.widgets.mysql.datagrid/=view-exhibits-datagrid/*/columns/*/children_price
+
+
+/*
  * Creating our "view exhibit" datagrid in a "bg" wrapper div.
  */
 create-widget:view-exhibits-wrapper

@@ -53,9 +53,16 @@ if:x:/-?value
   =:bool:false
 
   /*
-   * Oops, access denied to ticket purchasing module!
+   * Oops, access denied to ticket purchasing module.
+   *
+   * Hence, simply removing the "purchase ticket to exhibit" button.
    */
   set:x:/../*/create-widgets/**/div/=purchase-ticket-wrapper
+
+  /*
+   * Also removing pricing information in header of modal window.
+   */
+  set:x:/../*/create-widgets/**/h1/=exhibit-header/*/widgets/*/small
 
 
 /*
@@ -65,7 +72,7 @@ eval-x:x:/+/**/.id
 create-widgets
   micro.widgets.modal:view-exhibit-modal
     widgets
-      h1
+      h1:exhibit-header
         widgets
           span
             innerValue:x:/@micro.evaluate.file/*/name?value
