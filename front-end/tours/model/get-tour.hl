@@ -1,4 +1,3 @@
-
 /*
  * Returns specified [id] tour's content to caller, in the specified [lang].
  */
@@ -42,6 +41,18 @@ p5.mysql.connect:[ingen]
    */
   p5.mysql.scalar:select content from tours where id = @id
     @id:x:/../*/id?value
+
+  /*
+   * Checking if language was English, at which point we return the SQL result
+   * immediately.
+   */
+  if:x:/../*/lang?value
+    =:en
+
+    /*
+     * Returning English content to caller.
+     */
+    return:x:/@p5.mysql.scalar?value
 
   /*
    * Running it through Google Translate for user's selected language.
