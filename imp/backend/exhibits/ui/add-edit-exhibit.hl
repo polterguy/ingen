@@ -191,8 +191,9 @@ create-widgets
                   trim:x:/@micro.widgets.codemirror.get-value/*?value
                   eval-x:x:/+/*
                   micro.widgets.codemirror.set-value:admin-exhibits-markdown-editor
-                    value:"{0}\r\n\r\n![alt image]({1})"
+                    value:"{0}\r\n\r\n![{1}]({2})"
                       :x:/@micro.widgets.codemirror.get-value/*?value
+                      :x:/../*/float?value
                       :x:/../*/path?value
 
           button:close-add-edit-exhibit-save-button

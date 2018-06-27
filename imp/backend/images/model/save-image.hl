@@ -1,0 +1,56 @@
+/*
+ * This file will save the given **[image]** image according to the rules of the system,
+ * which implies creating three versions.
+ *
+ * 1. Large 800x600 px
+ * 2. Medium 400x300 px
+ * 3. Thumbnail 160x120
+ */
+
+
+/*
+ * Sanity checking invocation.
+ */
+micro.lambda.contract.min::/..
+  _arg:string
+
+
+/*
+ * Figuring out (only) filename of image.
+ */
+split:x:/../*/image?value
+  =:/
+
+
+/*
+ * First resizing the large image.
+ */
+eval-x:x:/+/*/destination
+ingen.imaging.auto-crop-resize:x:/../*/image?value
+  destination:@INGEN/media/images/{0}
+    :x:/@split/0/-?name
+  size
+    width:800
+    height:600
+
+/*
+ * Then resizing the small image.
+ */
+eval-x:x:/+/*/destination
+ingen.imaging.auto-crop-resize:x:/../*/image?value
+  destination:@INGEN/media/images/medium/{0}
+    :x:/@split/0/-?name
+  size
+    width:400
+    height:300
+
+/*
+ * Then resizing the thumbnail image.
+ */
+eval-x:x:/+/*/destination
+ingen.imaging.auto-crop-resize:x:/../*/image?value
+  destination:@INGEN/media/images/thumbs/{0}
+    :x:/@split/0/-?name
+  size
+    width:160
+    height:120

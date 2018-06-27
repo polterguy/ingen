@@ -1,0 +1,9 @@
+
+/*
+ * Returns all thumbnails in system.
+ */
+list-files:@INGEN/media/images/thumbs/
+  filter:.jpg|.jpeg|.png
+add:x:/../*/return
+  src:x:/@list-files/*?name
+return

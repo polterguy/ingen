@@ -54,13 +54,36 @@ body {
     border-color: rgba(0,0,0,.1);
 }
 
+.themepark-view-single-exhibit:after {
+    clear: both;
+    content: "";
+    display: table;
+}
+
+.themepark-view-single-exhibit p {
+    text-align: justify;
+}
+
 .themepark-view-single-exhibit img {
     display: block;
-    max-width: 90%;
-    margin-left: auto;
-    margin-right: auto;
     border-radius: var(--border-radius);
     box-shadow: 3px 3px 5px var(--shadow-color);
+}
+
+.themepark-view-single-exhibit img[alt=none] {
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.themepark-view-single-exhibit img[alt=left] {
+    float: left;
+    margin-right: 1rem;
+}
+
+.themepark-view-single-exhibit img[alt=right] {
+    float: right;
+    margin-left: 1rem;
 }
 
 .themepark-email-disclaimer {
