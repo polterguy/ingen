@@ -78,7 +78,8 @@ create-widget:view-exhibits-wrapper
     /*
      * This is the "exhibit filter" wrapper widget.
      */
-    div
+    div:exhibits-filter-wrapper
+      .page:0
       class:strip fill themepark-large-strip
       widgets
         input:exhibits-filter
@@ -91,14 +92,122 @@ create-widget:view-exhibits-wrapper
           onclick
 
             /*
+             * Setting [.page] to 0, and disabling the previous button.
+             */
+            set-widget-property:exhibits-filter-wrapper
+              .page:0
+            set-widget-property:exhibits-page-previous
+              disabled
+
+            /*
              * Databinding exhibits.
              */
             themepark.exhibits.databind
 
             /*
+             * Checking if we should enabled the next button or not.
+             */
+            if:x:/@themepark.exhibits.databind/*/more-pages?value
+              =:bool:true
+
+              /*
+               * Enabling next button.
+               */
+              delete-widget-property:exhibits-page-next
+                disabled
+
+            else
+
+              /*
+               * Disabling next button.
+               */
+              set-widget-property:exhibits-page-next
+                disabled
+
+            /*
              * Setting focus to filter textbox again, to make it easily removed.
              */
             micro.page.set-focus:exhibits-filter
+
+        button:exhibits-page-previous
+          class:large
+          innerValue:@"<span style=""font-size:1.3rem;"" class=""icon-arrow-left""></span>"
+          disabled
+          onclick
+
+            /*
+             * Retrieving current page, subtracting 10 from it, and re-databinding grid.
+             */
+            get-widget-property:exhibits-filter-wrapper
+              .page
+            if:x:/@get-widget-property/*/*?value.long
+              =:long:0
+
+              /*
+               * Beginning of dataset, returning early.
+               */
+              return
+
+            /*
+             * Subtracting 1 from current [.page] value, and updating attribute.
+             */
+            -:x:/@get-widget-property/*/*?value.long
+              _:1
+            set-widget-property:exhibits-filter-wrapper
+              .page:x:/@-?value
+
+            /*
+             * Checking if we should disabled the previous button.
+             */
+            if:x:/@-?value.long
+              =:long:0
+
+              /*
+               * At the beginning of dataset, hence disabling previous button.
+               */
+              set-widget-property:exhibits-page-previous
+                disabled
+
+            /*
+             * Re-databinding grid and making sure we enable the "next page" button.
+             */
+            themepark.exhibits.databind
+            delete-widget-property:exhibits-page-next
+              disabled
+
+        button:exhibits-page-next
+          class:large
+          innerValue:@"<span style=""font-size:1.3rem;"" class=""icon-arrow-right""></span>"
+          onclick
+
+            /*
+             * Retrieving current page, adding 10 to it, and re-databinding grid.
+             */
+            get-widget-property:exhibits-filter-wrapper
+              .page
+            +:x:/@get-widget-property/*/*?value.long
+              _:1
+            set-widget-property:exhibits-filter-wrapper
+              .page:x:/@+?value
+            themepark.exhibits.databind
+
+            /*
+             * Checking if we should disabled next button.
+             */
+            if:x:/@themepark.exhibits.databind/*/more-pages?value
+              =:bool:false
+
+              /*
+               * Disabling next button since there are no more pages.
+               */
+              set-widget-property:exhibits-page-next
+                disabled
+
+            /*
+             * Enabling previous button.
+             */
+            delete-widget-property:exhibits-page-previous
+              disabled
 
     /*
      * Our actual datagrid, dynamically databound towards "exhibits" table.
@@ -107,12 +216,26 @@ create-widget:view-exhibits-wrapper
       class:hover themepark-datagrid
       database:ingen
       databind:bool:false
+      page-size:10
       oninit
 
         /*
          * Initially databinding exhibits.
          */
         themepark.exhibits.databind
+
+        /*
+         * Checking if there are more than one page in database, and if not,
+         * simply deleting both paging buttons.
+         */
+        if:x:/-/*/more-pages?value
+          =:bool:false
+
+          /*
+           * No reasons to display paging buttons since there's only one page of items in database.
+           */
+          delete-widget:exhibits-page-previous
+          delete-widget:exhibits-page-next
 
       events
 
@@ -127,6 +250,8 @@ create-widget:view-exhibits-wrapper
           get-widget-property:exhibits-filter
             value
           if:x:/@get-widget-property/*/*?value
+            and:x:/@get-widget-property/*/*?value
+              !=:
 
             /*
              * Adding filter to databind invocation.
@@ -141,9 +266,20 @@ create-widget:view-exhibits-wrapper
                   :x:/@get-widget-property/*/*?value
 
           /*
-           * Databinding exhibits grid.
+           * Retrieving page.
+           */
+          get-widget-property:exhibits-filter-wrapper
+            .page
+          eval-x:x:/+/*/*
+          add:x:/../*/micro.widgets.mysql.datagrid.databind
+            src
+              page:x:/@get-widget-property/*/*?value.long
+
+          /*
+           * Databinding exhibits grid, and returning results to caller.
            */
           micro.widgets.mysql.datagrid.databind:view-exhibits-datagrid
+          return:x:/-/*
 
       table:exhibits
       .row
