@@ -1,9 +1,9 @@
-
 /*
  * Information button.
  */
 button
   innerValue:@"<span class=""icon-question""></span>"
+  title:Displays help/information for the system
   onclick
 
     /*

@@ -1,9 +1,9 @@
-
 /*
  * Login button.
  */
 button
   innerValue:@"<span class=""icon-key""></span>"
+  title:Logs you into the system
   oninit
 
     /*

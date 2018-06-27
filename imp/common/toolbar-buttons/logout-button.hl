@@ -1,9 +1,9 @@
-
 /*
  * Logout button.
  */
 button
   innerValue:@"<span class=""icon-switch""></span>"
+  title:Logs you out of the system
   oninit
 
     /*
