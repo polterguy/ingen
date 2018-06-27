@@ -200,9 +200,9 @@ If you do not want to subscribe to our newsletter, you'll have to explicitly tur
                     exhibit-id:x:/@.id?value
 
                   /*
-                   * Deleting purchase view exhibit info modal window.
+                   * Deleting purchase view exhibit info widget.
                    */
-                  delete-widget:view-exhibit-modal
+                  delete-widget:view-exhibit-wrapper
 
                   /*
                    * Changing header of modal widget.

@@ -26,6 +26,12 @@ if:x:/-?value
 
 
 /*
+ * Making sure we remove eny previously created exhibits.
+ */
+clear-widget:exhibits-display-single-exhibit
+
+
+/*
  * Retrieving exhibit from data layer.
  */
 eval-x:x:/+/*
@@ -73,7 +79,8 @@ if:x:/-?value
  */
 eval-x:x:/+/**/.id
 create-widgets
-  micro.widgets.modal:view-exhibit-modal
+  div:view-exhibit-wrapper
+    parent:exhibits-display-single-exhibit
     widgets
       h1:exhibit-header
         widgets
@@ -122,6 +129,12 @@ create-widgets
             onclick
 
               /*
-               * Deleting modal widget.
+               * Deleting exhibit widget.
                */
-              delete-widget:view-exhibit-modal
+              delete-widget:view-exhibit-wrapper
+
+
+/*
+ * Making sure we scroll exhibit into view.
+ */
+micro.page.scroll-into-view:exhibit-header

@@ -121,3 +121,8 @@ create-widget:view-exhibits-wrapper
                   :x:/../*/row/*/children_price?value
           .header
             innerValue:Children
+
+    /*
+     * This is where we display exhibits as the user selects an exhibit to view it.
+     */
+    container:exhibits-display-single-exhibit

@@ -137,15 +137,17 @@ create-widgets
         widgets
           micro.widgets.upload-button
             class:large
+            multiple
             accept:.png,.jpg,.jpeg
             .onupload
 
               /*
-               * Invoking file responsible for saving image.
+               * Looping through each image and invoking file responsible for saving image.
                */
-              eval-x:x:/+/*
-              micro.evaluate.file:@INGEN/imp/backend/images/model/save-image.hl
-                image:x:/../*/files/*?value
+              for-each:x:/../*/files/*?value
+                eval-x:x:/+/*
+                micro.evaluate.file:@INGEN/imp/backend/images/model/save-image.hl
+                  image:x:/@_dp?value
 
               /*
                * Re-databinding thumbnails.
@@ -312,6 +314,7 @@ create-widgets
           button
             innerValue:@"<span class=""icon-paragraph-left""></span>"
             .float:left
+            title:Floats the image to the left of your text
             onclick
 
               /*
@@ -322,6 +325,7 @@ create-widgets
           button
             innerValue:@"<span class=""icon-paragraph-center""></span>"
             .float:none
+            title:Display the image such that text comes above and below the image.
             onclick
 
               /*
@@ -332,6 +336,7 @@ create-widgets
           button
             innerValue:@"<span class=""icon-paragraph-right""></span>"
             .float:right
+            title:Floats the image to the right of your text
             onclick
 
               /*
