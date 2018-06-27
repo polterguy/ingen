@@ -80,7 +80,7 @@ create-widgets
           span
             innerValue:x:/@micro.evaluate.file/*/name?value
           small
-            innerValue:@" - Price; {0} EURO - Children; {1} EURO"
+            innerValue:@" - Aults €{0}, Children €{1}"
               :x:/@micro.evaluate.file/*/price?value
               :x:/@micro.evaluate.file/*/children_price?value
       div

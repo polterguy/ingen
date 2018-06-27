@@ -54,7 +54,7 @@ create-widgets
         class:row
         widgets
           div
-            class:col-70
+            class:col-80
             widgets
               div
                 class:strip fill
@@ -122,8 +122,10 @@ create-widgets
                 rows:10
                 .data-field:content
                 value:x:/@.data/*/content?value
+                placeholder:@"English text content of your tour. This will be translated into
+guest's language of choice automatically, and spoken out loud using speech sythesis ..."
           div
-            class:col-30
+            class:col-20
             widgets
               void
                 element:img
@@ -135,6 +137,35 @@ create-widgets
                    * Forward evaluated above.
                    */
                   .id:x:/../*/id?value
+
+                  /*
+                   * Checking if [.id] is null, at which point we don't yet have a database id
+                   * for our tour, and hence simply need to delete the widget, and return early.
+                   */
+                  if:x:/@.id?value
+                    not
+
+                    /*
+                     * Creating an information widget in current widget's parent collection,
+                     * explaining to the user that he'll need to save his tour, and re-open it
+                     * again to get its QR code.
+                     */
+                    p5.web.widgets.get-parent:x:/../*/_event?value
+                    create-widgets
+                      p
+                        parent:x:/@p5.web.widgets.get-parent/*/*?value
+                        innerValue:@"Save your tour and re-open it to access your tour's QR code,
+which will launch the tour directly."
+                      p
+                        parent:x:/@p5.web.widgets.get-parent/*/*?value
+                        innerValue:@"You can put these QR code around inside your Theme Park to
+allow guests to access the tours directly using their phones."
+
+                    /*
+                     * Deleting widget and returning early.
+                     */
+                    delete-widget:x:/../*/_event?value
+                    return
 
                   /*
                    * Figuring out direct URL to tour.
