@@ -27,7 +27,7 @@ create-widgets
       h2
         innerValue:Select image
       p
-        innerValue:Notice, for optimal quality, and to avoid clipping, make sure your images are 800x600 pixels in size.
+        innerValue:@"Notice, your uploaded images will be automatically clipped and resized to a 4/3 ratio of 800x600 px."
       container
         oninit
 
@@ -113,31 +113,24 @@ create-widgets
               /*
                * First resizing the main image.
                */
-              p5.imaging.transform:x:/../*/files/*?value
+              eval-x:x:/+/*/destination
+              ingen.imaging.auto-crop-resize:x:/../*/files/*?value
                 destination:@INGEN/media/images/{0}
                   :x:/../*/files/*/*?value
-                dest-width:800
-                dest-height:600
-                src-rect
-                  left:0
-                  top:0
+                size
                   width:800
                   height:600
 
               /*
                * Then creating our thumbnail.
                */
-              p5.imaging.transform:@INGEN/media/images/{0}
-                :x:/../*/files/*/*?value
+              eval-x:x:/+/*/destination
+              ingen.imaging.auto-crop-resize:x:/../*/files/*?value
                 destination:@INGEN/media/images/thumbs/{0}
                   :x:/../*/files/*/*?value
-                dest-width:160
-                dest-height:120
-                src-rect
-                  left:0
-                  top:0
-                  width:800
-                  height:600
+                size
+                  width:160
+                  height:120
 
               /*
                * Re-databinding thumbnails.
