@@ -76,11 +76,75 @@ create-widget:view-exhibits-wrapper
   widgets
 
     /*
+     * This is the "exhibit filter" wrapper widget.
+     */
+    div
+      class:strip fill themepark-large-strip
+      widgets
+        input:exhibits-filter
+          type:text
+          placeholder:Search ...
+          onkeydown:@"if (event.keyCode == 13) {p5.$('exhibits-filter-button').raise('onclick');return false;}"
+        button:exhibits-filter-button
+          class:large
+          innerValue:@"<span style=""font-size:1.3rem;"" class=""icon-search""></span>"
+          onclick
+
+            /*
+             * Databinding exhibits.
+             */
+            themepark.exhibits.databind
+
+            /*
+             * Setting focus to filter textbox again, to make it easily removed.
+             */
+            micro.page.set-focus:exhibits-filter
+
+    /*
      * Our actual datagrid, dynamically databound towards "exhibits" table.
      */
     micro.widgets.mysql.datagrid:view-exhibits-datagrid
       class:hover themepark-datagrid
       database:ingen
+      databind:bool:false
+      oninit
+
+        /*
+         * Initially databinding exhibits.
+         */
+        themepark.exhibits.databind
+
+      events
+
+        /*
+         * Databinds exhibits.
+         */
+        themepark.exhibits.databind
+
+          /*
+           * Checking if we have a filter.
+           */
+          get-widget-property:exhibits-filter
+            value
+          if:x:/@get-widget-property/*/*?value
+
+            /*
+             * Adding filter to databind invocation.
+             */
+            add:x:/../*/micro.widgets.mysql.datagrid.databind
+              src
+                filter:name like @name
+            eval-x:x:/+/*/*
+            add:x:/../*/micro.widgets.mysql.datagrid.databind/*/filter
+              src
+                @name:%{0}%
+                  :x:/@get-widget-property/*/*?value
+
+          /*
+           * Databinding exhibits grid.
+           */
+          micro.widgets.mysql.datagrid.databind:view-exhibits-datagrid
+
       table:exhibits
       .row
         onclick
