@@ -1,0 +1,154 @@
+/*
+ * Creates a modal window allowing the user to either upload an image, or use an existing image,
+ * and invokes **[.onok]** with the **[path]** to the image if user selects an image.
+ */
+
+
+/*
+ * Sanity checking invocation.
+ */
+micro.lambda.contract.min:x:/..
+  .onok
+
+
+/*
+ * Adding callback to "elect image" event.
+ */
+add:x:/../*/create-widgets/**/events/*/themepark.images.select/*/.onok
+  src:x:/../*/.onok/*
+
+
+/*
+ * Creates our modal widget.
+ */
+create-widgets
+  micro.widgets.modal:select-image-modal-widget
+    widgets
+      h2
+        innerValue:Select image
+      p
+        innerValue:Notice, for optimal quality, and to avoid clipping, make sure your images are 800x600 pixels in size.
+      container
+        oninit
+
+          /*
+           * Initially databinding thumbnails.
+           */
+          themepark.images.databind
+
+        events
+
+          /*
+           * Databinds each image and displays in widget, such that use can select one.
+           */
+          themepark.images.databind
+
+            /*
+             * Clearing out all old thumbnails from widget.
+             */
+            clear-widget:x:/../*/_event?value
+
+            /*
+             * Listing all thumbnails in the system.
+             */
+            list-files:@INGEN/media/images/thumbs/
+              filter:.jpg|.jpeg|.png
+
+            /*
+             * Looping through each image listed above, and creates one select image widget for each.
+             */
+            for-each:x:/@list-files/*?name
+
+              /*
+               * Creating select image widget.
+               */
+              eval-x:x:/+/**/.path
+              create-widget
+                parent:x:/../*/_event?value
+                element:img
+                role:button
+                class:themepark-thumbnail-image jumbo-button
+                alt:Thumbnail
+                src:x:/@_dp?value
+                onclick
+
+                  /*
+                   * Forward evaluated during creation.
+                   */
+                  .path:x:/@_dp?value
+
+                  /*
+                   * Assuming file has exact same name, except that it's not in the "/thumbs/" folder.
+                   */
+                  replace:x:/@.path?value
+                    src:/thumbs
+                  themepark.images.select:x:/@replace?value
+
+          /*
+           * Invoked when user selects an image.
+           */
+          themepark.images.select
+
+            /*
+             * Contains callback supplied by caller.
+             */
+            .onok
+            eval-x:x:/+/*
+            eval:x:/@.onok
+              path:x:/../*/_arg?value
+
+            /*
+             * Deletes the modal widget.
+             */
+            delete-widget:select-image-modal-widget
+
+      div
+        class:strip right
+        widgets
+          micro.widgets.upload-button
+            class:large
+            accept:.png,.jpg,.jpeg
+            .onupload
+
+              /*
+               * First resizing the main image.
+               */
+              p5.imaging.transform:x:/../*/files/*?value
+                destination:@INGEN/media/images/{0}
+                  :x:/../*/files/*/*?value
+                dest-width:800
+                dest-height:600
+                src-rect
+                  left:0
+                  top:0
+                  width:800
+                  height:600
+
+              /*
+               * Then creating our thumbnail.
+               */
+              p5.imaging.transform:@INGEN/media/images/{0}
+                :x:/../*/files/*/*?value
+                destination:@INGEN/media/images/thumbs/{0}
+                  :x:/../*/files/*/*?value
+                dest-width:160
+                dest-height:120
+                src-rect
+                  left:0
+                  top:0
+                  width:800
+                  height:600
+
+              /*
+               * Re-databinding thumbnails.
+               */
+              themepark.images.databind
+
+          button
+            innerValue:Close
+            onclick
+
+              /*
+               * Simply deletes the modal widget.
+               */
+              delete-widget:select-image-modal-widget

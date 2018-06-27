@@ -127,7 +127,7 @@ create-widgets
         .data-field:id
       label
         innerValue:Description
-      micro.widgets.codemirror
+      micro.widgets.codemirror:admin-exhibits-markdown-editor
         mode:markdown
         .data-field:description
         value:x:/@.data/*/description?value
@@ -172,6 +172,28 @@ create-widgets
                */
               micro.windows.info:Successfully updated exhibits
                 class:micro-windows-info success
+
+          button
+            innerValue:Add image
+            onclick
+
+              /*
+               * Invokes the file responsible for allowing user to insert an image reference
+               * into his Exhibit's content Markdown editor.
+               */
+              micro.evaluate.file:@INGEN/imp/backend/images/ui/select-image.hl
+                .onok
+
+                  /*
+                   * Simply appending image at the end of CodeMirror's Markdown content for simplicity.
+                   */
+                  micro.widgets.codemirror.get-value:admin-exhibits-markdown-editor
+                  trim:x:/@micro.widgets.codemirror.get-value/*?value
+                  eval-x:x:/+/*
+                  micro.widgets.codemirror.set-value:admin-exhibits-markdown-editor
+                    value:"{0}\r\n\r\n![alt image]({1})"
+                      :x:/@micro.widgets.codemirror.get-value/*?value
+                      :x:/../*/path?value
 
           button:close-add-edit-exhibit-save-button
             innerValue:Close

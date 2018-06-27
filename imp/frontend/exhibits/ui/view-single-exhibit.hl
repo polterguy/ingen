@@ -84,6 +84,7 @@ create-widgets
               :x:/@micro.evaluate.file/*/price?value
               :x:/@micro.evaluate.file/*/children_price?value
       div
+        class:themepark-view-single-exhibit
         innerValue:x:/@micro.markdown.markdown2html?value
 
       /*
