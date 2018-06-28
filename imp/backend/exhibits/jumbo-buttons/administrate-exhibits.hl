@@ -1,5 +1,5 @@
 /*
- * JumboButton for allowing admin to administrate exhibits.
+ * Jumbo Button for allowing admin to administrate exhibits.
  */
 button
   class:jumbo-button

@@ -11,7 +11,7 @@ create-event:ingen.access._throw-if-no-access
   eval-x:x:/+
   p5.auth.has-access:x:/../*/_arg?value
     filter:ingen.module
-    path:x:/../*/filter?value
+    path:x:/../*/path?value
   if:x:/-?value
     =:bool:false
 

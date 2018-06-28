@@ -34,8 +34,16 @@ create-widgets
   micro.widgets.modal:view-tickets
     class:micro-widgets-modal larger-text
     widgets
+
+      /*
+       * Descriptive header for modal window.
+       */
       h2
         innerValue:x:/@micro.evaluate.file/*/exhibit?value
+
+      /*
+       * Information about ticket (name, email, etc).
+       */
       p
         innerValue:"Name: {0}"
           :x:/@micro.evaluate.file/*/name?value
@@ -48,9 +56,17 @@ create-widgets
       p
         innerValue:"Children: {0}"
           :x:/@micro.evaluate.file/*/children?value
+
+      /*
+       * Button strip to allow operator to mark tickets as used, and close modal widget.
+       */
       div
         class:right strip
         widgets
+
+          /*
+           * "Mark tickets as used" button.
+           */
           button
             innerValue:Mark as used
             oninit
@@ -85,6 +101,9 @@ create-widgets
                */
               delete-widget:view-tickets
 
+          /*
+           * "Close modal widget" button.
+           */
           button
             innerValue:Close
             onclick

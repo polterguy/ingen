@@ -1,5 +1,5 @@
 /*
- * JumboButton for browsing tours.
+ * Jumbo Button for browsing tours.
  */
 button
   class:jumbo-button

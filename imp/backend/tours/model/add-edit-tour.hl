@@ -5,12 +5,6 @@
 
 
 /*
- * Signal node, used to separate arguments from the rest of our lambda.
- */
-.signal
-
-
-/*
  * Sanity checking arguments.
  */
 micro.lambda.contract.min:x:/..
@@ -37,10 +31,10 @@ p5.mysql.connect:[ingen]
      * Update operation.
      */
     p5.mysql.update:update tours set name = @name, content = @content, exhibit_id = @exhibit_id where id = @id
-      @name:x:/@.signal/--/name?value
-      @content:x:/@.signal/--/content?value
-      @exhibit_id:x:/@.signal/--/exhibit_id?value.long
-      @id:x:/@.signal/--/id?value.long
+      @name:x:/../*/name?value
+      @content:x:/../*/content?value
+      @exhibit_id:x:/../*/exhibit_id?value.long
+      @id:x:/../*/id?value.long
 
   else
 
@@ -48,6 +42,6 @@ p5.mysql.connect:[ingen]
      * Insert operation.
      */
     p5.mysql.insert:insert into tours (name, content, exhibit_id) value (@name, @content, @exhibit_id)
-      @name:x:/@.signal/--/name?value
-      @content:x:/@.signal/--/content?value
-      @exhibit_id:x:/@.signal/--/exhibit_id?value
+      @name:x:/../*/name?value
+      @content:x:/../*/content?value
+      @exhibit_id:x:/../*/exhibit_id?value
