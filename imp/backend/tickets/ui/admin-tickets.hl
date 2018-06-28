@@ -6,16 +6,8 @@
 /*
  * Verifying access.
  */
-p5.auth.has-access:false
-  filter:ingen.module
+ingen.access._throw-if-no-access:false
   path:/backend/tickets/
-if:x:/-?value
-  =:bool:false
-
-  /*
-   * Oops, access denied!
-   */
-  throw:Access denied!
 
 
 /*
@@ -35,7 +27,7 @@ if
 /*
  * Clearing previously create widgets from dynamic content wrapper widget.
  */
-clear-widget:themepark-dynamic-content
+ingen.main-viewport.clear
 
 
 /*
@@ -131,7 +123,7 @@ create-widget:manage-tickets-wrapper
             /*
              * Retrieving all exhibits.
              */
-            micro.evaluate.file:@INGEN/imp/backend/exhibits/model/get-exhibits.hl
+            ingen.exhibits.get
             for-each:x:/-/*/exhibit
               create-widget
                 parent:x:/../*/_event?value

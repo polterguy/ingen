@@ -6,16 +6,8 @@
 /*
  * Verifying access.
  */
-p5.auth.has-access:false
-  filter:ingen.module
+ingen.access._throw-if-no-access:false
   path:/backend/exhibits/
-if:x:/-?value
-  =:bool:false
-
-  /*
-   * Oops, access denied!
-   */
-  throw:Access denied!
 
 
 /*
@@ -35,24 +27,13 @@ if
 /*
  * Clearing previously create widgets from dynamic content wrapper widget.
  */
-clear-widget:themepark-dynamic-content
+ingen.main-viewport.clear
 
 
 /*
  * Setting header and title of page.
  */
 themepark.header.set:Administrate exhibits
-
-
-/*
- * Checking if installation has the "tickets module", and if not, simply deleting all price information
- * from the datagrid.
- */
-if
-  ingen.settings.has-ticket-module
-  =:bool:false
-  set:x:/../*/create-widget/*/widgets/*/micro.widgets.mysql.datagrid/=manage-exhibits-datagrid/*/columns/*/price
-  set:x:/../*/create-widget/*/widgets/*/micro.widgets.mysql.datagrid/=manage-exhibits-datagrid/*/columns/*/children_price
 
 
 /*
@@ -64,89 +45,84 @@ create-widget:manage-exhibits-wrapper
   widgets
 
     /*
-     * Our actual datagrid, dynamically databound towards "exhibits" table.
+     * This is the "exhibit filter" wrapper widget.
+     *
+     * Since we're using this in both the front end and the back end, we've created
+     * an extension widget, to keep our code "DRY".
+     *
+     * If we wanted to further improve upon this logic, we could probably even share the
+     * same filter/paging toolbar between also for instance the administration of tickets.
+     * However, this has been left as an exercise if you want to do this.
      */
-    micro.widgets.mysql.datagrid:manage-exhibits-datagrid
-      class:hover themepark-datagrid
-      database:ingen
-      table:exhibits
-      .row
-        onclick
+    ingen.widgets._exhibits-filter
 
-          /*
-           * Invoking file responsible for editing a specific item from database.
-           */
-          eval-x:x:/+/*
-          micro.evaluate.file:@INGEN/imp/backend/exhibits/ui/add-edit-exhibit.hl
-            id:x:/../*/.row/*/id?value
+    /*
+     * Our actual datagrid, dynamically databound towards "exhibits" table.
+     *
+     * Notice, our [onclick] is what occurs when a row in our datagrid is clicked.
+     * The [columns] declaration as simply appended to the existing common columns
+     * for our datagrid - Which we take advantage of to make it possible to delete items.
+     */
+    ingen.exhibits._datagrid:exhibits-datagrid
+      onclick
+
+        /*
+         * Invoking file responsible for editing a specific item from database.
+         */
+        eval-x:x:/+/*
+        micro.evaluate.file:@INGEN/imp/backend/exhibits/ui/add-edit-exhibit.hl
+          id:x:/../*/.row/*/id?value
 
       columns
-        id
-          visible:bool:false
-        name
-          .header
-            innerValue:Name
-        price
-          visible:bool:false
-        price
-          style:"width:5px;"
-          .lambda
-            eval-x:x:/+/*/*
-            return
-              span
-                innerValue:€{0}
-                  :x:/../*/row/*/price?value
-          .header
-            innerValue:Adults
-        children_price
-          visible:bool:false
-        children_price
-          style:"width:5px;"
-          .lambda
-            eval-x:x:/+/*/*
-            return
-              span
-                innerValue:€{0}
-                  :x:/../*/row/*/children_price?value
-          .header
-            innerValue:Children
+
+        /*
+         * Delete column containing a simple "delete record" button.
+         */
         Delete
           style:"width:5px;"
           .lambda
-            eval-x:x:/+/*/*/onclick/*/.id
+            eval-x:x:/+/*/*/onclick/**/.id
             return
               button
                 innerValue:@"<span class=""icon-bin""></span>"
                 onclick
 
                   /*
-                   * Forward evaluated above.
+                   * Asking user to confirm deletion.
                    */
-                  .id:x:/../*/row/*/id?value
+                  micro.windows.confirm
+                    header:Confirm deletion
+                    body:Are you sure you want to delete this exhibit? This action is permanent, and cannot be undone.
+                    onok
 
-                  /*
-                   * Invoking file responsible for deleting exhibit.
-                   */
-                  eval-x:x:/+/*
-                  micro.evaluate.file:@INGEN/imp/backend/exhibits/model/delete-exhibit.hl
-                    id:x:/@.id?value
+                      /*
+                       * Forward evaluated above.
+                       */
+                      .id:x:/../*/row/*/id?value
 
-                  /*
-                   * Re-databinding datagrid.
-                   */
-                  micro.widgets.mysql.datagrid.databind:manage-exhibits-datagrid
+                      /*
+                       * Invoking file responsible for deleting exhibit.
+                       */
+                      eval-x:x:/+/*
+                      micro.evaluate.file:@INGEN/imp/backend/exhibits/model/delete-exhibit.hl
+                        id:x:/@.id?value
 
-                  /*
-                   * Provding some visual feedback to user.
-                   */
-                  micro.windows.info:Successfully updated exhibits
-                    class:micro-windows-info success
+                      /*
+                       * Re-databinding datagrid.
+                       */
+                      themepark.exhibits.databind
+
+                      /*
+                       * Provding some visual feedback to user.
+                       */
+                      micro.windows.info:Successfully deleted exhibit
+                        class:micro-windows-info success
 
     /*
-     * Toolbar at the bottom for creating new exhibits, and closingmain widget.
+     * Toolbar at the bottom for creating new exhibits.
      */
     div
-      class:right strip
+      class:right
       widgets
         button
           innerValue:@"<span class=""icon-plus""></span>"

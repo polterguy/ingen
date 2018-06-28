@@ -76,7 +76,7 @@ create-widget
     themepark.pingback.keep-alive
 
     /*
-     * Re-setting initial title.
+     * Setting initial title to its default value.
      */
     themepark.header.set
 
@@ -171,6 +171,13 @@ create-widget
              */
             container:themepark-dynamic-content
               class:center themepark-center-additional-content
+              events
+
+                /*
+                 * Clears out all content frommain widget.
+                 */
+                ingen.main-viewport.clear
+                  clear-widget:themepark-dynamic-content
 
 
 /*

@@ -1,0 +1,119 @@
+
+/*
+ * Creates the **[ingen.exhibits._datagrid]** extension widget, to make sure we keep our
+ * code "DRY", since the differences between the frontend version and the backend version are
+ * minimal.
+ *
+ * Expects **[onclick]** lambda callback, which is invoked when a row in datagrid is clicked,
+ * in addition to (optionally) a bunch of additional **[columns]**, which will be appended
+ * into the widget, in addition to its default columns collection.
+ */
+create-event:ingen.exhibits._datagrid
+
+  /*
+   * Sanity checking invocation.
+   */
+  micro.lambda.contract.min:x:/..
+    onclick
+
+  /*
+   * Checking if installation has the "tickets module", and if not, simply deleting all price information
+   * from the datagrid.
+   */
+  if
+    ingen.settings.has-ticket-module
+    =:bool:false
+    set:x:/../*/return/**/micro.widgets.mysql.datagrid/*/columns/*/price
+    set:x:/../*/return/**/micro.widgets.mysql.datagrid/*/columns/*/children_price
+
+  /*
+   * Decorating [onclick] of row.
+   */
+  add:x:/../*/return/*/*/.row
+    src:x:/../*/onclick
+
+  /*
+   * Adding additional columns.
+   */
+  add:x:/../*/return/*/*/columns
+    src:x:/../*/columns/*
+
+  /*
+   * Returning widget to caller.
+   */
+  return
+    micro.widgets.mysql.datagrid
+      class:hover themepark-datagrid
+      database:ingen
+      databind:bool:false
+      page-size:10
+      events
+
+        /*
+         * Databinds exhibits.
+         */
+        themepark.exhibits.databind
+
+          /*
+           * Checking if we have a filter.
+           */
+          ingen.widgets._exhibits-filter.get-filter
+          if:x:/@ingen.widgets._exhibits-filter.get-filter?value
+
+            /*
+             * Adding filter to databind invocation.
+             */
+            add:x:/../*/micro.widgets.mysql.datagrid.databind
+              src
+                filter:name like @name
+            eval-x:x:/+/*/*
+            add:x:/../*/micro.widgets.mysql.datagrid.databind/*/filter
+              src
+                @name:%{0}%
+                  :x:/@ingen.widgets._exhibits-filter.get-filter?value
+
+          /*
+           * Retrieving page.
+           */
+          ingen.widgets._exhibits-filter.get-page
+          eval-x:x:/+/*/*
+          add:x:/../*/micro.widgets.mysql.datagrid.databind
+            src
+              page:x:/@ingen.widgets._exhibits-filter.get-page?value.long
+
+          /*
+           * Databinding exhibits grid, and returning results to caller.
+           */
+          micro.widgets.mysql.datagrid.databind:exhibits-datagrid
+          return:x:/-/*
+
+      table:exhibits
+      .row
+      columns
+        id
+          visible:bool:false
+        Name
+        price
+          visible:bool:false
+        price
+          style:"width:5px;"
+          .lambda
+            eval-x:x:/+/*/*
+            return
+              span
+                innerValue:€{0}
+                  :x:/../*/row/*/price?value
+          .header
+            innerValue:Adults
+        children_price
+          visible:bool:false
+        children_price
+          style:"width:5px;"
+          .lambda
+            eval-x:x:/+/*/*
+            return
+              span
+                innerValue:€{0}
+                  :x:/../*/row/*/children_price?value
+          .header
+            innerValue:Children

@@ -13,16 +13,8 @@ micro.lambda.contract.min:x:/..
 /*
  * Verifying access.
  */
-p5.auth.has-access:true
-  filter:ingen.module
+ingen.access._throw-if-no-access:true
   path:/frontend/tickets/
-if:x:/-?value
-  =:bool:false
-
-  /*
-   * Oops, access denied!
-   */
-  throw:Access denied!
 
 
 /*

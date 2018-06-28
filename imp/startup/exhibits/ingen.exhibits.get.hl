@@ -1,0 +1,55 @@
+
+/*
+ * Creates the **[ingen.exhibits.get]** Active Event that returns the exhibits
+ * in the system, optionally matching the given **[filter]** argument.
+ *
+ * Created as an example of how to expose Active Events intended for being consumed
+ * as a part of your app's "API".
+ */
+create-event:ingen.exhibits.get
+
+  /*
+   * Sanity checking invocation.
+   */
+  micro.lambda.contract.optional:x:/..
+    filter:string
+
+  /*
+   * Returns all exhibits in system to caller.
+   */
+  p5.mysql.connect:[ingen]
+
+    /*
+     * Checking if we have a [filter] argument.
+     */
+    _filter
+    if:x:/../*/filter?value
+
+      /*
+       * Making sure we do a "like" comparison for names matching filter.
+       */
+      set:x:/@_filter?value
+        src:where name like @filter
+      eval-x:x:/+/*/*
+      add:x:/..p5.mysql.connect/*/p5.mysql.select
+        src
+          @filter:%{0}%
+            :x:/../*/filter?value
+
+    /*
+     * Selects exhibits optionally matching [filter].
+     */
+    p5.mysql.select:select * from exhibits {0}
+      :x:/@_filter?value
+
+    /*
+     * Iterating through each result and returning to caller.
+     */
+    for-each:x:/-/*
+      eval-x:x:/+/*/*/*
+      add:x:/..p5.mysql.connect/*/return
+        src
+          exhibit
+            name:x:/@_dp/#/*/name?value
+            id:x:/@_dp/#/*/id?value
+    return

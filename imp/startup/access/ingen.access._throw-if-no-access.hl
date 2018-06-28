@@ -1,0 +1,21 @@
+/*
+ * Creates the **[ingen.access._throw-if-no-access]** Active Event that will throw an
+ * exception if the user does not have access to the given **[path]**. Pass in **[\_arg]**
+ * as the default acess, in case no access object(s) exists.
+ */
+create-event:ingen.access._throw-if-no-access
+
+  /*
+   * TODO: Remove [eval-x] when 8.5 is relased.
+   */
+  eval-x:x:/+
+  p5.auth.has-access:x:/../*/_arg?value
+    filter:ingen.module
+    path:x:/../*/filter?value
+  if:x:/-?value
+    =:bool:false
+
+    /*
+     * Oops, access denied!
+     */
+    throw:Access denied!

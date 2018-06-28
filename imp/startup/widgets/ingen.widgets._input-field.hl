@@ -1,0 +1,48 @@
+
+/*
+ * Creates our **[ingen.widgets._input-field]** which is simply a convenience wrapper widget
+ * for more easily create input widgets, with label, while keeping our code "DRY".
+ *
+ * Pass in **[info]** as the widget's label value, and optionally **[input-id]** as your input
+ * widget's ID. All other arguments are added to the main input widget, allowing you to decorate
+ * your input widget as you see fit.
+ */
+create-event:ingen.widgets._input-field
+
+  /*
+   * Signal element used to separate arguments from the rest of our lambda.
+   */
+  .signal
+
+  /*
+   * Sanity checking invocation.
+   */
+  micro.lambda.contract.min:x:/..
+    info:string
+  micro.lambda.contract.optional:x:/..
+    input-id:string
+
+  /*
+   * Decorating input widget.
+   */
+  add:x:/../*/return/*/*/*/input
+    src:x:/@.signal/--/<-(!/_arg!/info!/input-id)
+
+  /*
+   * Setting input widget's ID
+   */
+  set:x:/../*/return/*/*/*/input?value
+    src:x:/../*/input-id?value
+
+  /*
+   * Returns widget to caller.
+   */
+  eval-x:x:/+/*/*/*/label/*/innerValue
+  return
+    div
+      class:strip fill
+      widgets
+        label
+          innerValue:x:/../*/info?value
+          class:description-9
+        input
