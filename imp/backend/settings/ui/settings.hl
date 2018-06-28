@@ -22,8 +22,16 @@ ingen.main-viewport.clear
 create-widgets
   micro.widgets.modal:ingen-settings-modal
     widgets
+
+      /*
+       * Descriptive header.
+       */
       h2
         innerValue:Settings
+
+      /*
+       * Has tickets module checkbox.
+       */
       label
         widgets
           input
@@ -42,6 +50,10 @@ create-widgets
 
           span
             innerValue:Ticket module
+
+      /*
+       * Browse tours checkbox.
+       */
       label
         widgets
           input
@@ -60,9 +72,17 @@ create-widgets
 
           span
             innerValue:Browse tours
+
+      /*
+       * Button strip to save or close modal widget.
+       */
       div
         class:strip right
         widgets
+
+          /*
+           * Save settings button
+           */
           button
             innerValue:Save
             onclick
@@ -74,10 +94,22 @@ create-widgets
 
               /*
                * Looping through each setting from above and updating value in database.
+               *
+               * Notice, this allows us to create new settings without modifying our logic here,
+               * since what to store to the database is dynamically determined according to what's
+               * returned from our above invocation to [micro.form.serialize].
                */
               for-each:x:/@micro.form.serialize/*
+
+                /*
+                 * Deleting old value.
+                 */
                 delete-data:x:/*/*/{0}
                   :x:/@_dp/#?name
+
+                /*
+                 * Inserting new value.
+                 */
                 set:x:/+2/*?name
                   src:x:/@_dp/#?name
                 eval-x:x:/+/*/*
@@ -87,6 +119,10 @@ create-widgets
 
               /*
                * Deleting modal window and providing feedback to caller.
+               *
+               * Notice, since we reload location when settings are stored, we'll
+               * have to use the [desktop.evaluate.on-next-pageload] Active Event to
+               * make it possible to supply feedback to user.
                */
               delete-widget:ingen-settings-modal
               desktop.evaluate.on-next-pageload
@@ -100,6 +136,9 @@ create-widgets
                */
               p5.web.reload-location
 
+          /*
+           * Close settings button
+           */
           button
             innerValue:Close
             onclick

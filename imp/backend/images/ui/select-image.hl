@@ -1,6 +1,22 @@
 /*
- * Creates a modal window allowing the user to either upload an image, or use an existing image,
- * and invokes **[.onok]** with the **[path]** to the image if user selects an image.
+ * Creates a modal window allowing the user to select an image, and invokes **[.onok]**
+ * with the **[path]** to the image if user selects an image, and a **[float]** argument
+ * being either _"left"_, _"none"_ or _"right"_.
+ *
+ * The user can select an image, its size (thumb, medium or large), in addition to how
+ * he wants to float the image.
+ *
+ * If the user uploads an images, the images will be resized and automatically cropped,
+ * to 3 different sizes 800x600, 400x300 and 160x120.
+ *
+ * Notice, since Markdown doesn't support adding any attributes to image references, except
+ * the _"alt"_ attribute, we use the _"alt"_ attribute as a CSS selector. Which is probably
+ * kind of a _"cowboy trick"_, but still works perfectly fine none the less.
+ *
+ * Notice, during uploading the 3 different sizes will be stored in the main image folder (large),
+ * medium image folder, and thumbs image folder. but the files will have the same name. The
+ * name is not changed when an image is uploaded, which implies that if you upload an image
+ * with a name that already exists, the old image will be overwritten.
  */
 
 
@@ -19,15 +35,28 @@ add:x:/../*/create-widgets/**/events/*/themepark.images.select/*/.onok
 
 
 /*
- * Creates our modal widget.
+ * Creates our modal widget that allows the user to select and/or upload images to use.
  */
 create-widgets
   micro.widgets.modal:select-image-modal-widget
     widgets
+
+      /*
+       * Descriptive header of what widget does.
+       */
       h2
         innerValue:Select image
+
+      /*
+       * Some general information about widget.
+       */
       p
         innerValue:@"Notice, your uploaded images will be automatically clipped and resized to a 4/3 ratio of 800x600 pixels (large), 400x300 (small) and 160x120 pixels (thumbnails)."
+
+      /*
+       * This serves as the container widget, within the images are actually rendered, allowing
+       * the user to select one image.
+       */
       container
         class:air-bottom
         oninit
@@ -61,6 +90,9 @@ create-widgets
 
               /*
                * Creating select image widget.
+               *
+               * This is an "img" widget, acting like a Jumbo Button, which once clicked,
+               * "selects" the image.
                */
               eval-x:x:/+/**/.path
               create-widget
@@ -115,12 +147,14 @@ create-widgets
                 src:x:/@join?value
 
             /*
-             * Making sure we figure out float to use for image.
+             * Making sure we figure out what float to use for the image.
              */
             themepark.images.get-float
 
             /*
-             * Evaluates callback, to do whatever user wants us todo when an image is selected.
+             * Evaluates callback, to do whatever user wants us to do when an image is selected.
+             *
+             * This allows us to reuse the image selector widget for multiple scenarios.
              */
             eval-x:x:/+/*
             eval:x:/@.onok
@@ -132,9 +166,18 @@ create-widgets
              */
             delete-widget:select-image-modal-widget
 
+      /*
+       * The bottom button strip, that allows the user to upload images,
+       * or close modal widget without selecting an image, at which point the [.onok]
+       * will not be invoked.
+       */
       div
         class:strip right
         widgets
+
+          /*
+           * Ajax upload button to allow user to upload images.
+           */
           micro.widgets.upload-button
             class:large
             multiple
@@ -142,7 +185,8 @@ create-widgets
             .onupload
 
               /*
-               * Looping through each image and invoking file responsible for saving image.
+               * Looping through each image that was uploaded and invoking file
+               * responsible for saving image.
                */
               for-each:x:/../*/files/*?value
                 eval-x:x:/+/*
@@ -154,6 +198,9 @@ create-widgets
                */
               themepark.images.databind
 
+          /*
+           * Close modal widget button.
+           */
           button
             innerValue:Close
             onclick
@@ -163,6 +210,9 @@ create-widgets
                */
               delete-widget:select-image-modal-widget
 
+      /*
+       * Button strip that allows the user to select what size to use for his selected image.
+       */
       div:themepark-select-size-buttons
         class:strip right
         oninit
@@ -252,6 +302,9 @@ create-widgets
                */
               themepark.images.set-size-used:thumbs
 
+      /*
+       * Button strip that allows the user to select what float to use for his selected image.
+       */
       div:themepark-select-float-buttons
         class:strip right
         oninit

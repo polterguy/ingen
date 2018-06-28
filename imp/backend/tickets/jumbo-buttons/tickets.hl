@@ -1,5 +1,5 @@
 /*
- * JumboButton for allowing admin to administrate tickets.
+ * Jumbo Button for allowing admin to administrate tickets.
  */
 button
   class:jumbo-button
@@ -7,7 +7,7 @@ button
   oninit
 
     /*
-     * Checking if the system as the "ticket module", and if not, simply deleting
+     * Checking if the system has enabled the "ticket module", and if not, simply deleting
      * widget.
      */
     if

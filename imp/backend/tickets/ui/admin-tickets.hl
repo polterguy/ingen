@@ -89,23 +89,67 @@ create-widget:manage-tickets-wrapper
               :x:/@get-widget-property/*/*?value
 
       /*
-       * Making sure we only display open tickets by default.
+       * Figuring out if we should only return used tickets, or vice versa.
+       */
+      _used:int:0
+      get-widget-property:used-tickets
+        checked
+      if:x:/-/*/*
+        set:x:/@_used?value
+          src:int:1
+
+      /*
+       * Databinding tickets grid.
+       *
+       * Notice, we databind it such that we display the oldest tickets at the top, since it
+       * is likely that the oldest tickets are the first ones to reach the entrance to the exhibit.
        */
       eval-x:x:/+/*/filter
       micro.widgets.mysql.datagrid.databind:manage-tickets-datagrid
         order-by:purchased
-        filter:exists (select * from tickets where used = 0 and tickets.tickets_collection_id = tickets_collection.id) {0} {1}
+        order-dir:desc
+        filter:exists (select * from tickets where used = {2} and tickets.tickets_collection_id = tickets_collection.id) {0} {1}
           :x:/@.exhibit-filter?value
           :x:/@.custom-filter?value
+          :x:/@_used?value
 
   widgets
 
     /*
-     * This is the "exhibit filter" select dropdown widget.
+     * This is the "exhibit filter" wrapper widget.
+     *
+     * We allow for filtering according to whether or not tickets have been used,
+     * what exhibits they are for, in addition to a free text filter supplied by the operator,
+     * to allow for easily searching for tickets matching e.g. an email address or a name.
+     *
+     * Notice, we haven't implemented paging here, since when an operator is to take a guest's
+     * tickets, it's faster and more convenient to simply search. Feel free to look at how we
+     * implemented paging in "exhibits" if you want to add paging here.
      */
     div
       class:strip fill themepark-large-strip
       widgets
+
+        /*
+         * "Used" checkbox filter.
+         */
+        label
+          widgets
+            span
+              innerValue:Used
+            input:used-tickets
+              style:"font-size:1.3rem;"
+              type:checkbox
+              onchange
+
+                /*
+                 * Re-databinding datagrid.
+                 */
+                themepark.tickets.re-databind
+
+        /*
+         * "Exhibit name" select dropdown filter.
+         */
         container:manage-tickets-exhibit-filter
           element:select
           oninit
@@ -138,6 +182,12 @@ create-widget:manage-tickets-wrapper
              */
             themepark.tickets.re-databind
 
+        /*
+         * "Custom filter" textbox filter, and its button.
+         *
+         * Notice, all other filters are automatically re-databinding the grid when the operator is
+         * interacting with the ([onchange] Ajax event).
+         */
         input:tickets-custom-filter
           type:text
           placeholder:Filter ...
@@ -157,7 +207,7 @@ create-widget:manage-tickets-wrapper
             micro.page.set-focus:tickets-custom-filter
 
     /*
-     * Our actual datagrid, dynamically databound towards "exhibits" table.
+     * Our actual datagrid, dynamically databound towards "tickets_collection" table.
      */
     micro.widgets.mysql.datagrid:manage-tickets-datagrid
       class:hover themepark-datagrid
@@ -165,7 +215,7 @@ create-widget:manage-tickets-wrapper
       table:tickets_collection
 
       /*
-       * Avoiding databinding to use same filtering logic in all databind invocations.
+       * Avoiding databinding to use the same filtering logic in all databind invocations.
        */
       databind:bool:false
       oninit
@@ -177,6 +227,20 @@ create-widget:manage-tickets-wrapper
 
       .row
         onclick
+
+          /*
+           * Checking if ticket is used.
+           */
+          get-widget-property:used-tickets
+            checked
+          if:x:/-/*/*
+
+            /*
+             * User can't edit tickets that are already used.
+             */
+            micro.windows.info:You can't edit tickets that are already used
+              class:micro-windows-info warning
+            return
 
           /*
            * Invoking file responsible for displaying and editing a specific
@@ -195,3 +259,13 @@ create-widget:manage-tickets-wrapper
         purchaser_email
           .header
             innerValue:Email
+        purchased
+          visible:bool:false
+        Purchased
+          .lambda
+            p5.types.date.format:x:/../*/row/*/purchased?value
+              format:"dddd dd. MMMM yyyy - HH:mm"
+            eval-x:x:/+/*/*
+            return
+              span
+                innerValue:x:/@p5.types.date.format?value

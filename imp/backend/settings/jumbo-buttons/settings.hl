@@ -1,5 +1,5 @@
 /*
- * JumboButton for allowing admin to administrate settings of installation.
+ * Jumbo Button for allowing admin to administrate settings of installation.
  */
 button
   class:jumbo-button
