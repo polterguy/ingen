@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Creates our "admin settings" backend widget.
  */
 
@@ -17,6 +17,18 @@ ingen.main-viewport.clear
 
 
 /*
+ * Retrieving all plugins for settings module.
+ */
+vocabulary:~ingen.settings.plugins.
+for-each:x:/-/*?value
+  set:x:/+?name
+    src:x:/@_dp?value
+  foo
+  insert-before:x:/../*/create-widgets/*/*/*/div
+    src:x:/./-/*
+
+
+/*
  * Creating our main widget for allowing admin to modify settings of app.
  */
 create-widgets
@@ -28,50 +40,6 @@ create-widgets
        */
       h2
         innerValue:Settings
-
-      /*
-       * Has tickets module checkbox.
-       */
-      label
-        widgets
-          input
-            type:checkbox
-            .data-field:ingen.settings.has-ticket-module
-            oninit
-
-              /*
-               * Checking if tickets module is turned on.
-               */
-              if
-                ingen.settings.has-ticket-module
-                =:bool:true
-                set-widget-property:x:/../*/_event?value
-                  checked
-
-          span
-            innerValue:Ticket module
-
-      /*
-       * Browse tours checkbox.
-       */
-      label
-        widgets
-          input
-            type:checkbox
-            .data-field:ingen.settings.display-tours-jumbo-button
-            oninit
-
-              /*
-               * Checking if tickets module is turned on.
-               */
-              if
-                ingen.settings.browse-tours-button
-                =:bool:true
-                set-widget-property:x:/../*/_event?value
-                  checked
-
-          span
-            innerValue:Browse tours
 
       /*
        * Button strip to save or close modal widget.

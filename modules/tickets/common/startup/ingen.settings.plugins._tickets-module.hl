@@ -1,0 +1,30 @@
+
+/*
+ * Creates the **[ingen.settings.plugins._tickets-module]** plugin Active Event for
+ * the settings module.
+ */
+create-event:ingen.settings.plugins.tickets-module
+
+  /*
+   * Returning widget necessary to include settings for "has ticket module" widget
+   * in the settings module.
+   */
+  return
+    label
+      widgets
+        input
+          type:checkbox
+          .data-field:ingen.settings.has-ticket-module
+          oninit
+
+            /*
+             * Checking if tickets module is turned on.
+             */
+            if
+              ingen.settings.has-ticket-module
+              =:bool:true
+              set-widget-property:x:/../*/_event?value
+                checked
+
+        span
+          innerValue:Ticket module

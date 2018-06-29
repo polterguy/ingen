@@ -50,7 +50,8 @@ an exhibit is being viewed.
 
 Basically, all Active Events in your system that starts with the name
 **[ingen.exhibits.plugins.frontend.]** will be invoked and assumed to be frontend exhibits
-plugins.
+plugins. The last `frontend-plugin` part of your Active Event should be a unique and
+descriptive name for your plugin.
 
 #### Backend exhibits plugins
 
@@ -74,7 +75,8 @@ create-event:ingen.exhibits.plugins.editor.backend-plugin
 
 While the frontend plugin system can actually handle any types of widgets, the backend
 plugin system expects something that fits into a _"button strip"_, which implies a button,
-select dropdown, or a text type of input widget.
+select dropdown, or a text type of input widget. Normally I'd say only a button is an
+adequate plugin type here though, but feel free to experiment if you wish.
 
 ### Tickets module
 
@@ -82,6 +84,11 @@ The tickets module serves as a plugin for the exhibits module, in addition to th
 has an administrative interface, only accessible for administrators of the system by default.
 This module allows the user to purchase tickets to exhibits. The tickets module features
 PayPal support for purchasing tickets, but this can be easily changed as you see fit.
+An administrator can through its backend accept tickets and mark these as _"used"_.
+
+When a guest orders tickets, the system will by default ask the guest to sign up for
+the Theme Park's marketing newsletter, collecting the customer's email address in the
+process.
 
 ### Tours module
 
@@ -89,7 +96,7 @@ This module allows a guest to take tours. Each exhibit in the system can have as
 tours as you wish. When a guest takes a tour, it will be automatically translated to
 his language of choice, using Google Translate, for then to be spoken out loud using
 speech synthesis. The idea with it, it to put QR codes around your Theme Park, for then
-to allow guests to take guided tours using their own smart phones.
+to allow guests to take guided tours using their own smart phones and head phones.
 
 ### Images module
 
@@ -108,5 +115,53 @@ top/bottom sides.
 
 ### Settings module
 
-This is a simple module that allows an administrator to edit his settings.
+This is a simple module that allows an administrator to edit his settings. Also the settings
+module allows you to easily create plugins, which will be automatically injected into the
+settings form, when an administrator chooses to view or edit the settings of the system.
+These Active Event are expected to start out with **[ingen.settings.plugins.]**, for then
+to have some unique and descriptive name at the end of them. Such Active Events are expected
+to return a widget or a collection of widget, that will be injected into the settigns form,
+when the form is loaded. Below is an example that will create a checkbox in the settings
+form for you.
+
+```hyperlambda
+create-event:ingen.settings.plugins.foo-bar
+
+  /*
+   * Returning widget necessary to include settings checkbox for
+   * the "foo bar" widget in the settings module.
+   */
+  return
+    label
+      widgets
+        input
+          type:checkbox
+          .data-field:ingen.settings.foo-bar-module
+          oninit
+
+            /*
+             * Checking if foo bar module is turned on.
+             */
+            select-data:x:/*/*/ingen.settings.foo-bar-module
+            if:x:/-/*/*?value
+              =:bool:true
+              set-widget-property:x:/../*/_event?value
+                checked
+
+        span
+          innerValue:Foo bar
+```
+
+The above will create a checkbox for a _"Foo bar"_ module, allowing an administrator to
+change its value. Notice, all settings will be automatically saved in the p5.data database
+when the settings form is saved, with the name of the node being the **[.data-field]**
+value. The above settings type for instance can be retrieved using the following code
+from within your _"Foo bar"_ module.
+
+```hyperlambda
+/*
+ * Selects the "Foo bar" module's checkbox setting.
+ */
+select-data:x:/*/*/ingen.settings.foo-bar-module
+```
 
