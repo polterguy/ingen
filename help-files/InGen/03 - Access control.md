@@ -34,4 +34,5 @@ modules for examples of how to do this. Basically, there is a helper Active Even
 if a user tries to evaluate a file, in a module, he does not have access to.
 
 When the system loads its Jumbo Buttons, it will check to see if the user
-has access to the module, and only load the jumbo button(s) if access is granted.
+has access to the module, and only load the jumbo button(s) for your modules,
+if access is granted.

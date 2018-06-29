@@ -32,3 +32,9 @@ type of exhibits they can sign up for.
 The system hence functions as a use case for what you can expect to be able to create with Phosphorus
 Five and Hyperlambda. The system is rendered responsively, and runs just as well on phones and tablets,
 as it does on Windows, Linux and OS X machines.
+
+## Installation
+
+1. [Download and install Phosphorus Five](https://github.com/polterguy/phosphorusfive).
+2. [Download InGen's Zip file](https://github.com/polterguy/ingen/releases).
+3. Install the InGen ZIP file through the _"Desktop"_ module of Phosphorus Five, by clicking the upload button.
