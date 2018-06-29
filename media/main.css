@@ -102,4 +102,29 @@ body {
 
 .themepark-thumbnail-image {
     cursor: pointer;
+    border: none;
+    position: relative;
+}
+
+.themepark-thumbnail-image img {
+    border-radius: var(--border-radius);
+}
+
+.themepark-thumbnail-image.jumbo-button span[class*="icon-"] {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 10px;
+    background-color: red;
+    color: black;
+    padding: .5rem;
+    width: auto;
+    border-radius: 5px;
+    border: solid 1px var(--border-color);
+    transition: box-shadow .2s;
+}
+
+.themepark-thumbnail-image.jumbo-button span[class*="icon-"]:hover {
+    box-shadow: 3px 3px 5px var(--shadow-color);
+    transition: box-shadow .2s;
 }

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Creates a modal window allowing the user to select an image, and invokes **[.onok]**
  * with the **[path]** to the image if user selects an image, and a **[float]** argument
  * being either _"left"_, _"none"_ or _"right"_.
@@ -97,24 +97,55 @@ create-widgets
               eval-x:x:/+/**/.path
               create-widget
                 parent:x:/../*/_event?value
-                element:img
-                role:button
                 class:themepark-thumbnail-image jumbo-button
-                alt:Thumbnail of image
-                src:x:/@_dp?value
-                onclick
+                widgets
+                  literal
+                    element:span
+                    role:button
+                    class:icon-cross
+                    onclick
 
-                  /*
-                   * Forward evaluated during creation.
-                   */
-                  .path:x:/@_dp?value
+                      /*
+                       * Forward evaluated above.
+                       */
+                      .path:x:/@_dp?value
 
-                  /*
-                   * Assuming file has exact same name, except that it's not in the "/thumbs/" folder.
-                   */
-                  replace:x:/@.path?value
-                    src:/thumbs
-                  ingen.images.select:x:/@replace?value
+                      /*
+                       * Invoking file responsible for deleting image.
+                       */
+                      eval-x:x:/+/*
+                      micro.evaluate.file:@INGEN/modules/images/backend/model/delete-image.hl
+                        path:x:/@.path?value
+
+                      /*
+                       * Re-databinding datagrid.
+                       */
+                      ingen.images.databind
+
+                      /*
+                       * Provding info to caller.
+                       */
+                      micro.windows.info:Image was deleted
+                        class:micro-windows-info success
+
+                  void
+                    element:img
+                    role:button
+                    alt:Thumbnail of image
+                    src:x:/@_dp?value
+                    onclick
+
+                      /*
+                       * Forward evaluated during creation.
+                       */
+                      .path:x:/@_dp?value
+
+                      /*
+                       * Assuming file has exact same name, except that it's not in the "/thumbs/" folder.
+                       */
+                      replace:x:/@.path?value
+                        src:/thumbs
+                      ingen.images.select:x:/@replace?value
 
           /*
            * Invoked when user selects an image.

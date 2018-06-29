@@ -1,4 +1,4 @@
-﻿/*
+/*
  * File responsible for viewing a single exhibit.
  */
 
@@ -38,32 +38,24 @@ micro.markdown.markdown2html:x:/@micro.evaluate.file/*/description?value
 
 
 /*
- * Verifying access to ticket module, and if access is not granted, we
- * delete the "purchase ticket" wrapper.
- *
- * This make it easy to create a system where there are no tickets requirements, to only
- * let the guests view the exhibits, and take the tours, etc.
+ * Retrieving all "exhibits plugins", which in the core implies only the ticket module's
+ * purchase tickets widget, but can easily be extended by creating an Active Event, who's
+ * name is [ingen.exhibits.plugins.xxx], where "xxx" is some unique name, describing your
+ * exhibits plugin.
  */
-p5.auth.has-access:true
-  filter:ingen.module
-  path:/frontend/tickets/
-if:x:/-?value
-  =:bool:false
-  or
-    ingen.settings.has-ticket-module
-    =:bool:false
+vocabulary:~ingen.exhibits.plugins.frontend.
+for-each:x:/-/*?value
 
   /*
-   * Oops, access denied to ticket purchasing module.
-   *
-   * Hence, simply removing the "purchase ticket to exhibit" button.
+   * Invoking plugin event, and adding its result to our widget collection below.
    */
-  set:x:/../*/create-widgets/**/div/=purchase-ticket-wrapper
-
-  /*
-   * Also removing pricing information in header of modal window.
-   */
-  set:x:/../*/create-widgets/**/h1/=exhibit-header/*/widgets/*/small
+  set:x:/+2?name
+    src:x:/@_dp?value
+  eval-x:x:/+/*
+  foo
+    id:x:/../*/id?value
+  add:x:/../*/create-widgets/*/div/=view-exhibit-wrapper/*/widgets
+    src:x:/./-/*
 
 
 /*
@@ -85,29 +77,6 @@ create-widgets
       div
         class:themepark-view-single-exhibit
         innerValue:x:/@micro.markdown.markdown2html?value
-
-      /*
-       * Purchase ticket(s) jumbo button.
-       */
-      div:purchase-ticket-wrapper
-        class:center air-bottom air-top
-        widgets
-          button
-            class:jumbo-button
-            innerValue:@"<span class=""icon-cart""></span> Tickets"
-            onclick
-
-              /*
-               * Forward evaluated above.
-               */
-              .id:x:/../*/id?value
-
-              /*
-               * Evaluating file responsible for allowing the user to order ticket(s) for the exhibit.
-               */
-              eval-x:x:/+/*
-              micro.evaluate.file:@INGEN/modules/tickets/frontend/ui/purchase-tickets.hl
-                id:x:/@.id?value
 
 
 /*

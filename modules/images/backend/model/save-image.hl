@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file will save the given **[image]** image according to the rules of the system,
  * which implies creating three versions.
  *
@@ -26,7 +26,7 @@ split:x:/../*/image?value
  * First resizing the large image.
  */
 eval-x:x:/+/*/destination
-ingen.imaging.auto-crop-resize:x:/../*/image?value
+ingen.imaging._auto-crop-resize:x:/../*/image?value
   destination:@INGEN/media/images/{0}
     :x:/@split/0/-?name
   size
@@ -37,7 +37,7 @@ ingen.imaging.auto-crop-resize:x:/../*/image?value
  * Then resizing the small image.
  */
 eval-x:x:/+/*/destination
-ingen.imaging.auto-crop-resize:x:/../*/image?value
+ingen.imaging._auto-crop-resize:x:/../*/image?value
   destination:@INGEN/media/images/medium/{0}
     :x:/@split/0/-?name
   size
@@ -48,7 +48,7 @@ ingen.imaging.auto-crop-resize:x:/../*/image?value
  * Then resizing the thumbnail image.
  */
 eval-x:x:/+/*/destination
-ingen.imaging.auto-crop-resize:x:/../*/image?value
+ingen.imaging._auto-crop-resize:x:/../*/image?value
   destination:@INGEN/media/images/thumbs/{0}
     :x:/@split/0/-?name
   size

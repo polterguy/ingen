@@ -1,5 +1,5 @@
-/*
- * Creates the **[ingen.widgets.jumbo-buttons]** extension widget that returns all
+﻿/*
+ * Creates the **[ingen.widgets._jumbo-buttons]** extension widget that returns all
  * Jumbo Buttons to all modules that currently logged in user has access to.
  *
  * The event requires a **[folder]** and a **[default-access]** argument, and will list
@@ -32,7 +32,7 @@
  * If you create your own modules, you should internally invoke **[p5.auth.has-access]** to check if the
  * user has access to the module or not.
  */
-create-event:ingen.widgets.jumbo-buttons
+create-event:ingen.widgets._jumbo-buttons
 
   /*
    * Sanity checking invocation.

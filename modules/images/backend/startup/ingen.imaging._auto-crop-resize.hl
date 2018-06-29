@@ -1,17 +1,17 @@
 /*
  * Resizes an image, and automatically crops it if necessary, according to specified
- * [size] argument.
+ * **[size]** argument.
  *
- * Pass in image to resize as [_arg], and destination file as [destination].
- * Pass in expected new size of image after resizing as [size], with [width] and [height]
- * being integer values.
- *
- * Support image types are png and jpg/jpeg.
- *
- * Will return path to file containing resized image.
- * If no resizing is necessary, the returned value will match the [_arg] value specified by caller.
+ * Pass in image to resize as **[\_arg]**, and destination file as **[destination]**.
+ * Pass in expected new size of image after resizing as **[size]**, with **[width]**
+ * and **[height]** being integer values. Supported image types are png and jpg/jpeg.
+ * If no resizing is necessary, it will simple copy the **[\_arg]** file to the
+ * **[destination]** path. If resizing is necessary, the image will be resized
+ * accordingly, and possibly clipped, either to its left/right or top/bottom,
+ * depending upon how we can find an aspect ration to preserve image, without skewing
+ * it in any of its directions.
  */
-create-event:ingen.imaging.auto-crop-resize
+create-event:ingen.imaging._auto-crop-resize
 
   /*
    * Sanity checking invocation.
@@ -24,16 +24,6 @@ create-event:ingen.imaging.auto-crop-resize
       height:int
 
   /*
-   * Sanity checking image size, which must be at least 800x600 pixels.
-   */
-  p5.imaging.get-size:x:/../*/_arg?value
-  if:x:/@p5.imaging.get-size/*/*/width?value.int
-    <:int:800
-    or:x:/@p5.imaging.get-size/*/*/height?value.int
-      <:int:600
-    throw:Image is too small, it must be at least 800x600 pixels.
-
-  /*
    * Sanity checking image type.
    */
   split:x:/../*/_arg?value
@@ -42,15 +32,21 @@ create-event:ingen.imaging.auto-crop-resize
     case:jpg
     case:jpeg
     case:png
+      // Empty lambda to prevent fall through.
       .foo
     default
-      throw:{0} image types are not supported, only jpg, jpeg, and png images are supported.
+      throw:'{0}' image types are not supported, only jpg, jpeg, and png images are supported.
         :x:/@split/0/-?name
 
   /*
-   * Retrieving original size of image.
+   * Sanity checking image size, which must be at least 800x600 pixels.
    */
   p5.imaging.get-size:x:/../*/_arg?value
+  if:x:/@p5.imaging.get-size/*/*/width?value.int
+    <:int:800
+    or:x:/@p5.imaging.get-size/*/*/height?value.int
+      <:int:600
+    throw:Image is too small, it must be at least 800x600 pixels.
 
   /*
    * Checking if [size] does not match image actual size, and if so, making sure we resize image.
@@ -172,11 +168,12 @@ create-event:ingen.imaging.auto-crop-resize
         height:x:/@_height?value
 
     /*
-     * Returning [destination] to caller.
+     * Returning to avoid evaluating the rest of our lambda.
      */
-    return:x:/../*/destination?value
+    return
 
   /*
-   * No need to resize at all, returning image existing filename.
+   * No need to resize at all, simply copying [_arg] file to [destination].
    */
-  return:x:/../*/_arg?value
+  copy-file:x:/../*/_arg?value
+    src:x:/../*/destination?value

@@ -8,7 +8,7 @@ to your access object list.
 
 ```hyperlambda
 *
-  p5.module.allow:/modules/programming-contest/
+  p5.module.allow:/modules/ingen/
 ```
 
 Then you can open up for additional access to other parts of the system, based upon what

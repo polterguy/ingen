@@ -1,0 +1,61 @@
+/*
+ * Creates the plugin for our exhibits module that allows the user to purchase
+ * tickets to the exhibit.
+ */
+create-event:ingen.exhibits.plugins.frontend.purchase-exhibit-tickets
+
+  /*
+   * Sanity checking invocation.
+   */
+  micro.lambda.contract.min:x:/..
+    id:string
+
+  /*
+   * Verifying access to ticket module, and if access is not granted, we
+   * return early to caller.
+   */
+  p5.auth.has-access:true
+    filter:ingen.module
+    path:/frontend/tickets/
+
+  /*
+   * Checking if above invocation returned false, implying user doesn't have access
+   * to module.
+   */
+  if:x:/-?value
+    =:bool:false
+    or
+      ingen.settings.has-ticket-module
+      =:bool:false
+
+    /*
+     * Returning early
+     */
+    return
+
+  /*
+   * Returning "purchase tickets" widget to caller.
+   *
+   * This is a Jumbo Button, which once clicked, will allow the user topurchase tickets
+   * the the specified exhibit.
+   */
+  return
+    div
+      class:center air-bottom air-top
+      widgets
+        button
+          class:jumbo-button
+          innerValue:@"<span class=""icon-cart""></span> Tickets"
+          onclick
+
+            /*
+             * Forward evaluated above.
+             */
+            .id:x:/../*/id?value
+
+            /*
+             * Evaluating file responsible for allowing the user to order ticket(s) for the exhibit.
+             */
+            eval-x:x:/+/*
+            micro.evaluate.file:@INGEN/modules/tickets/frontend/ui/purchase-tickets.hl
+              id:x:/@.id?value

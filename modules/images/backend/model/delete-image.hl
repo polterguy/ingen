@@ -1,0 +1,46 @@
+
+/*
+ * Deletes the image specified **[path]** image.
+ * Expects **[path]** to point to the thumbnails version of the image.
+ */
+
+
+/*
+ * Sanity checking invocation.
+ */
+micro.lambda.contract.min:x:/..
+  path:string
+
+
+/*
+ * Figuring out root path.
+ */
+split:x:/../*/path?value
+  =:/
+set:x:/@split/0/-2
+
+
+/*
+ * Deleting large image (root path).
+ */
+join:x:/@split/*?name
+  sep:/
+delete-file:/{0}
+  :x:/@join?value
+
+
+/*
+ * Deleting medium image.
+ */
+insert-before:x:/@split/0/-
+  src:medium
+join:x:/@split/*?name
+  sep:/
+delete-file:/{0}
+  :x:/@join?value
+
+
+/*
+ * Deleting thumbs image.
+ */
+delete-file:x:/../*/path?value

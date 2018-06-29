@@ -1,0 +1,49 @@
+
+/*
+ * Creates the event that returns the button that allows a user to select an image
+ * while etiting his exhibits, to include as a Markdown reference into the Markdown
+ * description of the exhibit.
+ */
+create-event:ingen.exhibits.plugins.editor.select-image
+
+  /*
+   * Returns add image button to caller.
+   */
+  return
+    button
+      innerValue:Add image
+      onclick
+
+        /*
+         * Invokes the file responsible for allowing user to insert an image reference
+         * into his Exhibit's content Markdown editor.
+         */
+        micro.evaluate.file:@INGEN/modules/images/backend/ui/select-image.hl
+          .onok
+
+            /*
+             * Simply appending image at the end of CodeMirror's Markdown content for simplicity.
+             *
+             * First we retrieve CodeMirror editor's Markdown.
+             */
+            micro.widgets.codemirror.get-value:admin-exhibits-markdown-editor
+
+            /*
+             * Then we trim the content to make sure we remove additional whitespace characters.
+             */
+            trim:x:/@micro.widgets.codemirror.get-value/*?value
+
+            /*
+             * Then we append the necessary Markdown syntax to embed image into Markdown editor.
+             *
+             * Notice, since Markdown doesn't allow for setting CSS class of images, we simply
+             * use the "alt" tag as a CSS selector, allowing us to create different style
+             * representations, depending upon what alignment the user chose as he selected
+             * an image.
+             */
+            eval-x:x:/+/*
+            micro.widgets.codemirror.set-value:admin-exhibits-markdown-editor
+              value:"{0}\r\n\r\n![{1}]({2})\r\n\r\n"
+                :x:/@trim?value
+                :x:/../*/float?value
+                :x:/../*/path?value

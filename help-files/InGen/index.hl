@@ -7,8 +7,8 @@ h2
 micro.widgets.file
   style:"float:right; margin-left: 1rem; margin-bottom: 1rem;"
   files
-    /modules/programming-contest/desktop.hl
-      href:/programming-contest/
+    /modules/ingen/desktop.hl
+      href:/ingen/
 
 p
   innerValue:@"This is an example implementation of a Theme Park exhibits, ticketing, and tour system.

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Allows the user to add a new exhibit, or edit an existing exhibit.
  */
 micro.lambda.contract.optional:x:/..
@@ -26,6 +26,28 @@ if:x:/../*/id?value
   add:x:/@.data
     micro.evaluate.file:@INGEN/modules/exhibits/common/model/get-exhibit.hl
       id:x:/../*/id?value
+
+
+/*
+ * Retrieving all "exhibits editor plugins", which in the core implies only the image module's
+ * ability to embed images, by browsing the available images in the system. This can easily
+ * be extended by creating an Active Event, who's name is [ingen.exhibits.plugins.editor.xxx],
+ * where "xxx" is some unique name, describing your exhibits editor's plugin.
+ *
+ * These plugins are expected to be buttons of some sort, and will be injected into the button
+ * strip at the bottom of the modal widget, between the save and close button.
+ */
+vocabulary:~ingen.exhibits.plugins.editor.
+for-each:x:/-/*?value
+
+  /*
+   * Invoking plugin event, and adding its result to our widget collection below.
+   */
+  set:x:/+?name
+    src:x:/@_dp?value
+  foo
+  insert-before:x:/../*/create-widgets/**/widgets/=button-strip/0/-
+    src:x:/./-/*
 
 
 /*
@@ -158,7 +180,7 @@ create-widgets
        */
       div
         class:right strip
-        widgets
+        widgets:button-strip
 
           /*
            * Save button.
@@ -201,47 +223,6 @@ create-widgets
                */
               micro.windows.info:Successfully updated exhibits
                 class:micro-windows-info success
-
-          /*
-           * Add image button.
-           */
-          button
-            innerValue:Add image
-            onclick
-
-              /*
-               * Invokes the file responsible for allowing user to insert an image reference
-               * into his Exhibit's content Markdown editor.
-               */
-              micro.evaluate.file:@INGEN/modules/images/backend/ui/select-image.hl
-                .onok
-
-                  /*
-                   * Simply appending image at the end of CodeMirror's Markdown content for simplicity.
-                   *
-                   * First we retrieve CodeMirror editor's Markdown.
-                   */
-                  micro.widgets.codemirror.get-value:admin-exhibits-markdown-editor
-
-                  /*
-                   * Then we trim the content to make sure we remove additional whitespace characters.
-                   */
-                  trim:x:/@micro.widgets.codemirror.get-value/*?value
-
-                  /*
-                   * Then we append the necessary Markdown syntax to embed image into Markdown editor.
-                   *
-                   * Notice, since Markdown doesn't allow for setting CSS class of images, we simply
-                   * use the "alt" tag as a CSS selector, allowing us to create different style
-                   * representations, depending upon what alignment the user chose as he selected
-                   * an image.
-                   */
-                  eval-x:x:/+/*
-                  micro.widgets.codemirror.set-value:admin-exhibits-markdown-editor
-                    value:"{0}\r\n\r\n![{1}]({2})\r\n\r\n"
-                      :x:/@trim?value
-                      :x:/../*/float?value
-                      :x:/../*/path?value
 
           /*
            * Close modal widget button.

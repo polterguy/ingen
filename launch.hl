@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Main launch file for InGen.
  *
  * This file creates the main wire frame for the entire application, both
@@ -186,13 +186,13 @@ create-widget
             div:themepark-jumbo-buttons
               class:center themepark-center-content
               widgets
-                ingen.widgets.jumbo-buttons
+                ingen.widgets._jumbo-buttons
                   folder:frontend
                   default-access:true
-                ingen.widgets.jumbo-buttons
+                ingen.widgets._jumbo-buttons
                   folder:common
                   default-access:true
-                ingen.widgets.jumbo-buttons
+                ingen.widgets._jumbo-buttons
                   folder:backend
                   default-access:false
 
