@@ -26,6 +26,7 @@ create-event:ingen.widgets.tours._datagrid-filter
       class:strip fill themepark-large-strip
       events
 
+
         /*
          * Returns the current page of datagrid.
          */
@@ -38,6 +39,7 @@ create-event:ingen.widgets.tours._datagrid-filter
           get-widget-property:x:/../*/_event?value
             .page
           return:x:/-/*/*?value.long
+
 
         /*
          * Returns the current filter for datagrid.
@@ -53,6 +55,7 @@ create-event:ingen.widgets.tours._datagrid-filter
             and:x:/@get-widget-property/*/*?value
               !=:
             return:x:/@get-widget-property/*/*?value
+
 
       widgets
 

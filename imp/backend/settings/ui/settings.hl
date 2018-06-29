@@ -65,7 +65,7 @@ create-widgets
                * Checking if tickets module is turned on.
                */
               if
-                ingen-settings.browse-tours-button
+                ingen.settings.browse-tours-button
                 =:bool:true
                 set-widget-property:x:/../*/_event?value
                   checked

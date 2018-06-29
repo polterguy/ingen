@@ -10,7 +10,7 @@ button
      * Checking if we should display "browse tours" button, and if not, deleting it.
      */
     if
-      ingen-settings.browse-tours-button
+      ingen.settings.browse-tours-button
       =:bool:false
       delete-widget:x:/../*/_event?value
 

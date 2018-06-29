@@ -1,8 +1,8 @@
 /*
- * Creates the **[ingen-settings.browse-tours-button]** Active Event, that will return boolean "true"
+ * Creates the **[ingen.settings.browse-tours-button]** Active Event, that will return boolean "true"
  * if the system allows for browing tours.
  */
-create-event:ingen-settings.browse-tours-button
+create-event:ingen.settings.browse-tours-button
 
   /*
    * Checking p5.data to see if ticket module is turned on, defaulting to true if

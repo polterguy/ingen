@@ -22,6 +22,10 @@ create-event:ingen.widgets.exhibits._datagrid
   if
     ingen.settings.has-ticket-module
     =:bool:false
+
+    /*
+     * Tickets module is not enabled, hence we remove all tickets columns from datagrid.
+     */
     set:x:/../*/return/**/micro.widgets.mysql.datagrid/*/columns/*/price
     set:x:/../*/return/**/micro.widgets.mysql.datagrid/*/columns/*/children_price
 

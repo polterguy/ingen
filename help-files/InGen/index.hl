@@ -1,0 +1,30 @@
+/*
+ * This is our main _"landing page"_ for our InGen help files.
+ */
+h2
+  innerValue:InGen Theme Park System
+
+micro.widgets.file
+  style:"float:right; margin-left: 1rem; margin-bottom: 1rem;"
+  files
+    /modules/programming-contest/desktop.hl
+      href:/programming-contest/
+
+p
+  innerValue:@"This is an example implementation of a Theme Park exhibits, ticketing, and tour system.
+It was originally my contribution to a programming contest, but was later maintained to create a
+reference implementation for a system to illustrate an example use case for Phosphorus Five."
+
+
+/*
+ * All files at "root" of Camphora Five help folder.
+ */
+desktop.help.widgets.help-index
+  folder:@INGEN/help-files/InGen/
+
+
+/*
+ * Meta information for all files in module.
+ */
+desktop.help.widgets.file-meta
+  folder:@INGEN/

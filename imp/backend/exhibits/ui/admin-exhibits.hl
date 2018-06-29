@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Creates our "admin exhibits" backend widget.
  */
 
@@ -8,20 +8,6 @@
  */
 ingen.access._throw-if-no-access:false
   path:/backend/exhibits/
-
-
-/*
- * Checking if "manage exhibit" widget already exists, at which point we simply
- * return early.
- */
-if
-  fetch:x:/0/0?value
-    widget-exists:manage-exhibits-wrapper
-
-  /*
-   * Widget is already visible.
-   */
-  return
 
 
 /*
@@ -113,7 +99,7 @@ create-widget:manage-exhibits-wrapper
                       ingen.widgets.exhibits._datagrid.databind
 
                       /*
-                       * Provding some visual feedback to user.
+                       * Providing some visual feedback to user.
                        */
                       micro.windows.info:Successfully deleted exhibit
                         class:micro-windows-info success

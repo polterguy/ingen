@@ -35,7 +35,7 @@ micro.widgets.paypal-button.ensure-checkout-js
  *
  * This can be overridden by creating access objects in your installation using e.g. "Peeples" to
  * associate such access objects with the access object list of the system. See the comments in the
- * "/imp/get-jumbo-buttons.hl" file for details about how to create such access objects.
+ * "/imp/common/get-jumbo-buttons.hl" file for details about how to create such access objects.
  */
 
 
@@ -46,7 +46,7 @@ micro.widgets.paypal-button.ensure-checkout-js
  * Notice, we default access to "true".
  */
 add:x:/../*/create-widget/**/micro.widgets.file/=themepark-jumbo-buttons
-  micro.evaluate.file:@INGEN/imp/get-jumbo-buttons.hl
+  micro.evaluate.file:@INGEN/imp/common/get-jumbo-buttons.hl
     folder:@INGEN/imp/frontend/
     default-access:true
 
@@ -58,7 +58,7 @@ add:x:/../*/create-widget/**/micro.widgets.file/=themepark-jumbo-buttons
  * Notice, we default access to "false".
  */
 add:x:/../*/create-widget/**/micro.widgets.file/=themepark-jumbo-buttons
-  micro.evaluate.file:@INGEN/imp/get-jumbo-buttons.hl
+  micro.evaluate.file:@INGEN/imp/common/get-jumbo-buttons.hl
     folder:@INGEN/imp/backend/
     default-access:false
 
@@ -81,6 +81,44 @@ create-widget
     ingen.header.set
 
   events
+
+
+    /*
+     * Help context Active Event.
+     */
+    desktop.help.get-context
+      return:@INGEN/help-files/InGen/index.hl
+
+    /*
+     * Event sink to make sure our help files are injected into the right container.
+     *
+     * Notice, this is simply here as a sink for the help system since our page is using a
+     * background image, to make sure we get a non-transparent bg for our help files, to
+     * make it possible to actually read them.
+     */
+    desktop.help.get-widget-arguments
+
+      /*
+       * Checking if help container exists, and if not, we create it.
+       */
+      if
+        fetch:x:/0/0?value
+          widget-exists:ingen-help-file-sink
+        =:bool:false
+
+        /*
+         * Creating our main help wrapper.
+         */
+        create-container-widget:ingen-help-file-sink
+          class:container-fullscreen
+          style:"background-color:#fafafa;"
+
+      /*
+       * Returning [parent] to caller to make sure we inject help into the correct container.
+       */
+      return
+        parent:ingen-help-file-sink
+
 
     /*
      * Pingback event to keep session alive on server, in case app is in kiosk mode.
@@ -110,11 +148,13 @@ create-widget
 
             /*
              * The general toolbar for our app.
-             * This is the "toolbar" displayed at the top/right corner of InGen app.
+             *
+             * This is the "toolbar" displayed at the top/right corner of the InGen app.
+             * Notice, this bugger is actually not populated by our app, since it simply
+             * allows the main "Desktop" module to populate it with its plugins.
              */
-            micro.widgets.file
-              class:strip themepark-top-buttons
-              folder:@INGEN/imp/common/toolbar-buttons/
+            container
+              class:strip themepark-top-buttons toolbar
 
             /*
              * Header for app.

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Allows the user to add a new exhibit, or edit an existing exhibit.
  */
 micro.lambda.contract.optional:x:/..
@@ -146,7 +146,7 @@ create-widgets
        * Description Markdown widget.
        */
       label
-        innerValue:Description
+        innerValue:Description (Markdown)
       micro.widgets.codemirror:admin-exhibits-markdown-editor
         mode:markdown
         .data-field:description

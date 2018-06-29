@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Creates our "admin tours" back end widget.
  */
 
@@ -8,20 +8,6 @@
  */
 ingen.access._throw-if-no-access:false
   path:/backend/tours/
-
-
-/*
- * Checking if "manage tours" widget already exists, at which point we simply
- * return early.
- */
-if
-  fetch:x:/0/0?value
-    widget-exists:manage-tours-wrapper
-
-  /*
-   * Widget is already visible.
-   */
-  return
 
 
 /*
@@ -113,16 +99,16 @@ create-widget:manage-tours-wrapper
                       ingen.widgets.tours._datagrid.databind
 
                       /*
-                       * Provding some visual feedback to user.
+                       * Providing some visual feedback to user.
                        */
                       micro.windows.info:Successfully deleted tour
                         class:micro-windows-info success
 
     /*
-     * Toolbar at the bottom for creating new tours, and closing main widget.
+     * Toolbar at the bottom for creating new tours.
      */
     div
-      class:right strip
+      class:right
       widgets
         button
           innerValue:@"<span class=""icon-plus""></span>"

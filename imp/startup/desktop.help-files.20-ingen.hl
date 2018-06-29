@@ -1,0 +1,11 @@
+/*
+ * Creates the __[desktop.help-files.20-ingen]__ Active Event.
+ */
+
+/*
+ * This event serves as a sink event for the help system, returning the root
+ * folder path for all help files for Hypereval.
+ */
+create-event:desktop.help-files.20-ingen
+
+  return:@INGEN/help-files/InGen/

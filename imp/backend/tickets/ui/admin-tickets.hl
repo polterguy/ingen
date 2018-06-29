@@ -11,20 +11,6 @@ ingen.access._throw-if-no-access:false
 
 
 /*
- * Checking if "manage exhibit" widget already exists, at which point we simply
- * return early.
- */
-if
-  fetch:x:/0/0?value
-    widget-exists:manage-tickets-wrapper
-
-  /*
-   * Widget is already visible.
-   */
-  return
-
-
-/*
  * Clearing previously create widgets from dynamic content wrapper widget.
  */
 ingen.main-viewport.clear
@@ -127,7 +113,7 @@ create-widget:manage-tickets-wrapper
      * implemented paging in "exhibits" if you want to add paging here.
      */
     div
-      class:strip fill themepark-large-strip
+      class:strip fill
       widgets
 
         /*
@@ -138,7 +124,6 @@ create-widget:manage-tickets-wrapper
             span
               innerValue:Used
             input:used-tickets
-              style:"font-size:1.3rem;"
               type:checkbox
               onchange
 
@@ -193,7 +178,7 @@ create-widget:manage-tickets-wrapper
           placeholder:Filter ...
           onkeydown:@"if (event.keyCode == 13) {p5.$('tickets-filter-button').raise('onclick');return false;}"
         button:tickets-filter-button
-          innerValue:@"<span style=""font-size:1.3rem;"" class=""icon-search""></span>"
+          innerValue:@"<span class=""icon-search""></span>"
           onclick
 
             /*
@@ -263,6 +248,10 @@ create-widget:manage-tickets-wrapper
           visible:bool:false
         Purchased
           .lambda
+
+            /*
+             * Formatting date such that it becomes more readable.
+             */
             p5.types.date.format:x:/../*/row/*/purchased?value
               format:"dddd dd. MMMM yyyy - HH:mm"
             eval-x:x:/+/*/*
