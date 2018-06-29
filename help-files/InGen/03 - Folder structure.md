@@ -1,16 +1,19 @@
-
 ## The folder structure of InGen
 
 Hyperlambda has no OOP mechanisms, which I personally find to be one of its most interesting
-features. This implies that instead of structuring the code into classes, namespaces and
+features. This implies that instead of structuring the code into classes, namespaces, and
 types - Hyperlambda allows you to structure the code into files and folders, and such take
-advantage of the file system to perform encapsulation and create modularity.
+advantage of the file system to apply encapsulation and create modularity. One of the design
+goals of the system, was to illustrate how this is a very good way of structuring your code,
+facilitating for superior plugin capability, and encapsulation, where every aspect of the
+system can be extended, without creating dependencies between your modules and sub-modules -
+Yet still have your modules interact with each other perfectly.
 
 The main folder for InGen hence is the _"modules"_ folder. This folder contains all _"modules"_
 that the system itself contains. An example of such a module can be the _"exhibits"_ module,
 or the _"tours"_ module. This allows you to easily create new modules, by simply creating your
 own module, and put it into the _"modules"_ folder of the main InGen app's folder. Each module
-can have one ormore of the following folders.
+can have one or more of the following folders.
 
 * __backend__ - Intended for backend parts for your module
 * __frontend__ - Intended for the frontend parts of your module
@@ -18,7 +21,7 @@ can have one ormore of the following folders.
 
 The frontend is what a random guest or visitor that is not logged into the system is supposed
 to see, while the backend is for administrators and _"super users"_ in your system - Such
-as employees in your Theme Park. The the common folder is for commonalities between the backend
+as employees in your Theme Park. The common folder is for commonalities between the backend
 and the frontend.
 
 Your backend, frontend, and common folder again, can have a _"startup"_ folder. This folder
@@ -34,7 +37,7 @@ frontend, and common folders, is your own business - But the convention I'm usin
 create one _"ui"_ folder, which is for the user interface parts - And a _"model"_ folder,
 which is for your interaction with your database, and/or your business model. This allows
 me to create a structure for my modules, that are surprisingly similar to a conventional
-OOP structure, without OOP, and with much more easily understood code, while also making
+OOP structure, without OOP, and with much more easily understood code - While also making
 it much easier to add new modules to the app in general. This allows you to (almost)
 create an x-copy deployment for adding new sub-modules to your app.
 

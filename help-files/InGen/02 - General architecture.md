@@ -1,4 +1,3 @@
-
 ## General architecture
 
 Out of the box the system contains 5 core modules, these are listed below.
@@ -16,11 +15,12 @@ if the ticket module is enabled, also allows guests to purchase tickets to speci
 The exhibits module is kind of like a _"micro CMS"_, and allows an administrator or employee
 to edit the exhibits in the system, using a basic Markdown editor, with support for embedding
 YouTube videoes and images. The exhibits module is kind of the _"core"_ of the system, and
-the most important module.
+the most important module. The exhibits module features strong plugin support, both in its
+backend, and in its frontend parts.
 
 #### Frontend exhibits plugins
 
-The exhibit module has basic plugin support, allowing you to either append your own custom
+The exhibit module has strong plugin support, allowing you to either append your own custom
 widgets to an exhibit as it is being viewed by a guest - In addition to that it allows you
 to create your own custom plugin buttons which will be appended into the editor as an
 exhibit is being edited. Both the tickets module and the images module takes advantage of
@@ -39,13 +39,13 @@ create-event:ingen.exhibits.plugins.frontend.frontend-plugin
       innerValue:Click me!
       onclick
         set-widget-property:x:/../*/_event?value
-          src:Clicked!
+          innerValue:Clicked!
 ```
 
 Whenever an exhibit is being viewed in your system, the above Active Event will be automatically
 invoked, and whatever results it returns (if any), will be appended at the bottom of the
 exhibit's main surface. Such frontend exhibits plugins are expected to return one or more
-widget, since the results of such events, will be injected into the widget collection when
+widgets, since the results of such events, will be injected into the widget collection when
 an exhibit is being viewed.
 
 Basically, all Active Events in your system that starts with the name
@@ -70,7 +70,7 @@ create-event:ingen.exhibits.plugins.editor.backend-plugin
       innerValue:Click me!
       onclick
         set-widget-property:x:/../*/_event?value
-          src:Clicked!
+          innerValue:Clicked!
 ```
 
 While the frontend plugin system can actually handle any types of widgets, the backend
@@ -95,8 +95,8 @@ process.
 This module allows a guest to take tours. Each exhibit in the system can have as many
 tours as you wish. When a guest takes a tour, it will be automatically translated to
 his language of choice, using Google Translate, for then to be spoken out loud using
-speech synthesis. The idea with it, it to put QR codes around your Theme Park, for then
-to allow guests to take guided tours using their own smart phones and head phones.
+speech synthesis. The idea with it, is to put QR codes around your Theme Park, for then
+to allow guests to take guided tours, using their own smart phones and headsets.
 
 ### Images module
 
@@ -111,7 +111,11 @@ This event is consumed such that it creates 3 versions of each image you upload.
 
 All images are automatically cropped to the above 4/3 ratio when an image is uploaded. A
 process that might include clipping the image, either at its left/right sides, or at its
-top/bottom sides.
+top/bottom sides. The images can be found in your _"/ingen/media/images/"_ folder in your
+installation. Beneath this folder are the _"medium"_ folder and the _"thumbs"_ folder
+for medium sized images and small images. The large images are stored directly into the main
+_"images"_ folder. However, the system will automatically administrate its images, and
+delete the correct files, if you choose to delete an image.
 
 ### Settings module
 
@@ -120,7 +124,7 @@ module allows you to easily create plugins, which will be automatically injected
 settings form, when an administrator chooses to view or edit the settings of the system.
 These Active Event are expected to start out with **[ingen.settings.plugins.]**, for then
 to have some unique and descriptive name at the end of them. Such Active Events are expected
-to return a widget or a collection of widget, that will be injected into the settigns form,
+to return a widget or a collection of widget, that will be injected into the settings form,
 when the form is loaded. Below is an example that will create a checkbox in the settings
 form for you.
 

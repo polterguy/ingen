@@ -1,10 +1,10 @@
-
 ## Access control
 
 Access to the system, and its sub-modules, can easily be controlled by using for instance
 _"Peeples"_. The most important access object you highly likely want to create, is to
-grant module access to all users. This can be done by adding the following access object
-to your access object list.
+grant module access to all users. This allows anonymous access to a visitor to the
+main module. This can be done by adding the following access object to your access
+object list.
 
 ```hyperlambda
 *
@@ -17,19 +17,26 @@ and you want to grant this role access to the Ticket system's backend parts, you
 that with the following access object.
 
 ```hyperlambda
-superuser
+employee
   ingen.module.allow:/tickets/backend/
 ```
 
 By default, all users, including the _"guest"_ user (randomly visiting user) have access to
 all of your _"frontend"_ parts - While only a _"root"_ account have access to anything else.
-By intelligently creating access objects, following the syntax of _"module-name/xxx-end"_,
-where _"xxx-"_ is either _"frontend"_, _"backend"_ or _"common"_, you can easily grant or
-deny access to specific parts of your system. The system will check if it has access to
-evaluate files before evaluating them when a user tries to evaluate some file in the
-system. If you create your own modules, you'll have to make sure yourself that you check
-if the user has access to your module inside of your own code. See any of the pre-distributed
-modules for examples of how to do this. Basically, there is a helper Active Event called
+By intelligently creating access objects, following the syntax of _"/module-name/xxx-end/"_,
+where _"xxx-end"_ is either _"frontend"_, _"backend"_, or _"common"_, and _"module-name"_ is
+the name of your module - You can easily grant or deny access to specific parts of your
+system. The two different types of objects you can create are as follows.
+
+* __[ingen.module.deny]__ - Denies access to a module's part to the specified role.
+* __[ingen.module.allow]__ - Allows access to a module's part to the specified role.
+
+
+The system will check if it has access to evaluate files before evaluating them
+when a user tries to evaluate most of the files in the system. If you create your own
+modules, you'll have to make sure yourself that you check if the user has access to your
+module inside of your own code. See any of the pre-distributed modules for examples of
+how to do this. Basically, there is a helper Active Event called
 **[ingen.access.\_throw-if-no-access]** for this purpose, which will throw an exception
 if a user tries to evaluate a file, in a module, he does not have access to.
 

@@ -1,6 +1,6 @@
 ## Introduction to InGen
 
-InGen is the name of the software system that the feature movie _"Jurassic Park"_ is using, and
+InGen is the name of the software system that the feature movie _"Jurassic Park"_ was using, and
 this was the Software Requirement Specification (SRS) we were given in a programming contest I
 was participating in. Since I found it to be an interesting use case, providing an example
 implementation for an enterprise software system - I chose to continue working on it after
@@ -9,8 +9,8 @@ the programming contest was over, to refactor it and clean it up.
 The system allows guests to browse exhibits, optionally purchase tickets for exhibits, in
 addition to taking tours, which are guided tours based upon speech synthesis, using Google
 Translate to translate from English to any language you wish to configure the system to use.
-The system is supposed to serve as a _"micro CMS"_ for Theme Parks, and be accessed through
-the LAN, either from kiosk terminals or through customer's smartphones or tablets.
+The system is intended to serve as a _"micro CMS"_ for Theme Parks, and be accessed through
+the LAN, either from kiosk terminals, or through customer's smartphones or tablets.
 
 An employee can administrate tours, exhibits, and tickets. The system features strong support
 for access control, allowing you to easily create access control to any individual parts of
@@ -27,7 +27,7 @@ the following features from Phosphorus Five.
 3. Usage of the help system
 4. Datagrids and other CRUD types of objects
 5. Clean separation between UI and business logic
-6. Modular thinking, allowing you to easily add new modules to the system
+6. Modular architecture, allowing you to easily add new sub-modules to the system
 7. Access control according to user's role
 
 ### DRYness of system
