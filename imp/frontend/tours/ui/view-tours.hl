@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Creates our "view tours" front end widget.
  */
 
@@ -33,7 +33,7 @@ ingen.main-viewport.clear
 /*
  * Setting header and title of page.
  */
-themepark.header.set:Tours
+ingen.header.set:Tours
 
 
 /*
@@ -45,24 +45,30 @@ create-widget:view-tours-wrapper
   widgets
 
     /*
-     * Our actual datagrid, dynamically databound towards "tours" table.
+     * This is the "tours filter" wrapper widget.
+     *
+     * Since we're using this in both the front end and the back end, we've created
+     * an extension widget, to keep our code "DRY".
+     *
+     * If we wanted to further improve upon this logic, we could probably even share the
+     * same filter/paging toolbar between also for instance the administration of tickets.
+     * However, this has been left as an exercise if you want to do this.
      */
-    micro.widgets.mysql.datagrid:view-tours-datagrid
-      class:hover themepark-datagrid
-      database:ingen
-      table:tours
-      .row
-        onclick
+    ingen.widgets.tours._datagrid-filter
 
-          /*
-           * Evaluating file responsible for displaying information for tour,
-           * and allowing user to purchase ticket(s) to tour.
-           */
-          eval-x:x:/+/*
-          micro.evaluate.file:@INGEN/imp/frontend/tours/ui/view-single-tour.hl
-            id:x:/../*/.row/*/id?value
+    /*
+     * Our actual datagrid, dynamically databound towards "exhibits" table.
+     *
+     * Notice, our [onclick] is what occurs when a row in our datagrid is clicked.
+     * The [columns] declaration as simply appended to the existing common columns
+     * for our datagrid - Which we take advantage of to make it possible to delete items.
+     */
+    ingen.widgets.tours._datagrid:tours-datagrid
+      onclick
 
-      columns
-        id
-          visible:bool:false
-        Name
+        /*
+         * Invoking file responsible for editing a specific item from database.
+         */
+        eval-x:x:/+/*
+        micro.evaluate.file:@INGEN/imp/frontend/tours/ui/view-single-tour.hl
+          id:x:/../*/.row/*/id?value

@@ -33,7 +33,7 @@ ingen.main-viewport.clear
 /*
  * Setting header and title of page.
  */
-themepark.header.set:Administrate tickets
+ingen.header.set:Administrate tickets
 
 
 /*
@@ -47,7 +47,7 @@ create-widget:manage-tickets-wrapper
     /*
      * Invoked when datagrid for some reasons is supposed to be re-databound.
      */
-    themepark.tickets.re-databind
+    ingen.tickets.re-databind
 
       /*
        * Checking if operators has filtered according to exhibits.
@@ -145,7 +145,7 @@ create-widget:manage-tickets-wrapper
                 /*
                  * Re-databinding datagrid.
                  */
-                themepark.tickets.re-databind
+                ingen.tickets.re-databind
 
         /*
          * "Exhibit name" select dropdown filter.
@@ -180,7 +180,7 @@ create-widget:manage-tickets-wrapper
             /*
              * Re-databinding datagrid.
              */
-            themepark.tickets.re-databind
+            ingen.tickets.re-databind
 
         /*
          * "Custom filter" textbox filter, and its button.
@@ -199,7 +199,7 @@ create-widget:manage-tickets-wrapper
             /*
              * Re-databinding tickets.
              */
-            themepark.tickets.re-databind
+            ingen.tickets.re-databind
 
             /*
              * Setting focus to filter textbox again, to make it easily removed.
@@ -223,7 +223,7 @@ create-widget:manage-tickets-wrapper
         /*
          * Invoking event responsible for databinding grid.
          */
-        themepark.tickets.re-databind
+        ingen.tickets.re-databind
 
       .row
         onclick

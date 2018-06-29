@@ -1,6 +1,5 @@
-
 /*
- * Creates the **[ingen.exhibits._datagrid]** extension widget, to make sure we keep our
+ * Creates the **[ingen.widgets.exhibits._datagrid]** extension widget, to make sure we keep our
  * code "DRY", since the differences between the frontend version and the backend version are
  * minimal.
  *
@@ -8,7 +7,7 @@
  * in addition to (optionally) a bunch of additional **[columns]**, which will be appended
  * into the widget, in addition to its default columns collection.
  */
-create-event:ingen.exhibits._datagrid
+create-event:ingen.widgets.exhibits._datagrid
 
   /*
    * Sanity checking invocation.
@@ -52,13 +51,13 @@ create-event:ingen.exhibits._datagrid
         /*
          * Databinds exhibits.
          */
-        themepark.exhibits.databind
+        ingen.widgets.exhibits._datagrid.databind
 
           /*
            * Checking if we have a filter.
            */
-          ingen.widgets._exhibits-filter.get-filter
-          if:x:/@ingen.widgets._exhibits-filter.get-filter?value
+          ingen.widgets.exhibits._datagrid-filter.get-filter
+          if:x:/@ingen.widgets.exhibits._datagrid-filter.get-filter?value
 
             /*
              * Adding filter to databind invocation.
@@ -70,22 +69,82 @@ create-event:ingen.exhibits._datagrid
             add:x:/../*/micro.widgets.mysql.datagrid.databind/*/filter
               src
                 @name:%{0}%
-                  :x:/@ingen.widgets._exhibits-filter.get-filter?value
+                  :x:/@ingen.widgets.exhibits._datagrid-filter.get-filter?value
 
           /*
            * Retrieving page.
            */
-          ingen.widgets._exhibits-filter.get-page
+          ingen.widgets.exhibits._datagrid-filter.get-page
           eval-x:x:/+/*/*
           add:x:/../*/micro.widgets.mysql.datagrid.databind
             src
-              page:x:/@ingen.widgets._exhibits-filter.get-page?value.long
+              page:x:/@ingen.widgets.exhibits._datagrid-filter.get-page?value.long
 
           /*
            * Databinding exhibits grid, and returning results to caller.
            */
           micro.widgets.mysql.datagrid.databind:exhibits-datagrid
-          return:x:/-/*
+
+          /*
+           * Checking if we "previous paging buttons" exists, and if it does, checking if
+           * we should enable disable it.
+           */
+          if
+            fetch:x:/0/0?value
+              widget-exists:exhibits-page-previous
+
+            /*
+             * Previous paging button exists, now checking if we should enable or disable it.
+             */
+            if:x:/@ingen.widgets.exhibits._datagrid-filter.get-page?value.long
+              >:long:0
+
+              /*
+               * Enabling previous button.
+               */
+              delete-widget-property:exhibits-page-previous
+                disabled
+
+            else
+
+              /*
+               * Disabling previous button.
+               */
+              set-widget-property:exhibits-page-previous
+                disabled
+
+          /*
+           * Checking if we "next paging buttons" exists, and if it does, checking if
+           * we should enable disable it.
+           */
+          if
+            fetch:x:/0/0?value
+              widget-exists:exhibits-page-next
+
+            /*
+             * Previous paging button exists, now checking if we should enable or disable it.
+             */
+            if:x:/@micro.widgets.mysql.datagrid.databind/*/more-pages?value
+              =:bool:true
+
+              /*
+               * Enabling previous button.
+               */
+              delete-widget-property:exhibits-page-next
+                disabled
+
+            else
+
+              /*
+               * Disabling previous button.
+               */
+              set-widget-property:exhibits-page-next
+                disabled
+
+          /*
+           * Returning results from above invocation to caller.
+           */
+          return:x:/@micro.widgets.mysql.datagrid.databind/*
 
       table:exhibits
       .row

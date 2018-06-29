@@ -30,7 +30,7 @@ micro.lambda.contract.min:x:/..
 /*
  * Adding callback to "elect image" event.
  */
-add:x:/../*/create-widgets/**/events/*/themepark.images.select/*/.onok
+add:x:/../*/create-widgets/**/events/*/ingen.images.select/*/.onok
   src:x:/../*/.onok/*
 
 
@@ -64,14 +64,14 @@ create-widgets
           /*
            * Initially databinding thumbnails.
            */
-          themepark.images.databind
+          ingen.images.databind
 
         events
 
           /*
            * Databinds each image and displays in widget, such that use can select one.
            */
-          themepark.images.databind
+          ingen.images.databind
 
             /*
              * Clearing out all old thumbnails from widget.
@@ -114,12 +114,12 @@ create-widgets
                    */
                   replace:x:/@.path?value
                     src:/thumbs
-                  themepark.images.select:x:/@replace?value
+                  ingen.images.select:x:/@replace?value
 
           /*
            * Invoked when user selects an image.
            */
-          themepark.images.select
+          ingen.images.select
 
             /*
              * Contains callback supplied by caller.
@@ -130,8 +130,8 @@ create-widgets
              * Checking if size preferences is anything but "large", at which point we
              * append the appropriate folder to the filename.
              */
-            themepark.images.get-size-used
-            if:x:/@themepark.images.get-size-used?value
+            ingen.images.get-size-used
+            if:x:/@ingen.images.get-size-used?value
               !=:large
 
               /*
@@ -140,7 +140,7 @@ create-widgets
               split:x:/../*/_arg?value
                 =:/
               insert-before:x:/@split/0/-
-                src:x:/@themepark.images.get-size-used?value
+                src:x:/@ingen.images.get-size-used?value
               join:x:/@split/*?name
                 sep:/
               set:x:/../*/_arg?value
@@ -149,7 +149,7 @@ create-widgets
             /*
              * Making sure we figure out what float to use for the image.
              */
-            themepark.images.get-float
+            ingen.images.get-float
 
             /*
              * Evaluates callback, to do whatever user wants us to do when an image is selected.
@@ -159,7 +159,7 @@ create-widgets
             eval-x:x:/+/*
             eval:x:/@.onok
               path:x:/../*/_arg?value
-              float:x:/@themepark.images.get-float?value
+              float:x:/@ingen.images.get-float?value
 
             /*
              * Deletes the modal widget.
@@ -196,7 +196,7 @@ create-widgets
               /*
                * Re-databinding thumbnails.
                */
-              themepark.images.databind
+              ingen.images.databind
 
           /*
            * Close modal widget button.
@@ -220,32 +220,32 @@ create-widgets
           /*
            * Figuring out if user has previously selected a size.
            */
-          p5.web.session.get:themepark.images.set-size-used
+          p5.web.session.get:ingen.images.set-size-used
           if:x:/@p5.web.session.get/*?value
 
             /*
              * User has previously selected a size to use.
              */
-            themepark.images.set-size-used:x:/@p5.web.session.get/*?value
+            ingen.images.set-size-used:x:/@p5.web.session.get/*?value
 
           else
 
             /*
              * Defaulting to using large size.
              */
-            themepark.images.set-size-used:large
+            ingen.images.set-size-used:large
 
         events
 
           /*
            * Changes the size used during selection of image.
            */
-          themepark.images.set-size-used
+          ingen.images.set-size-used
 
             /*
              * Simply storing in session the user preferences to which image to use.
              */
-            p5.web.session.set:themepark.images.set-size-used
+            p5.web.session.set:ingen.images.set-size-used
               src:x:/../*/_arg?value
 
             /*
@@ -263,12 +263,12 @@ create-widgets
           /*
            * Retrieves the size used during selection of image.
            */
-          themepark.images.get-size-used
+          ingen.images.get-size-used
 
             /*
              * Retrieves the size preferences for user from session.
              */
-            p5.web.session.get:themepark.images.set-size-used
+            p5.web.session.get:ingen.images.set-size-used
             return:x:/-/*?value
 
         widgets
@@ -280,7 +280,7 @@ create-widgets
               /*
                * Changing size used during selection.
                */
-              themepark.images.set-size-used:large
+              ingen.images.set-size-used:large
 
           button
             innerValue:Medium
@@ -290,7 +290,7 @@ create-widgets
               /*
                * Changing size used during selection.
                */
-              themepark.images.set-size-used:medium
+              ingen.images.set-size-used:medium
 
           button
             innerValue:Thumbnail
@@ -300,7 +300,7 @@ create-widgets
               /*
                * Changing size used during selection.
                */
-              themepark.images.set-size-used:thumbs
+              ingen.images.set-size-used:thumbs
 
       /*
        * Button strip that allows the user to select what float to use for his selected image.
@@ -312,32 +312,32 @@ create-widgets
           /*
            * Figuring out if user has previously selected a float.
            */
-          p5.web.session.get:themepark.images.set-float
+          p5.web.session.get:ingen.images.set-float
           if:x:/@p5.web.session.get/*?value
 
             /*
              * User has previously selected a size to use.
              */
-            themepark.images.set-float:x:/@p5.web.session.get/*?value
+            ingen.images.set-float:x:/@p5.web.session.get/*?value
 
           else
 
             /*
              * Defaulting to using no floats.
              */
-            themepark.images.set-float:none
+            ingen.images.set-float:none
 
         events
 
           /*
            * Changes the float used during selection of image.
            */
-          themepark.images.set-float
+          ingen.images.set-float
 
             /*
              * Simply storing in session the user preferences to which image to use.
              */
-            p5.web.session.set:themepark.images.set-float
+            p5.web.session.set:ingen.images.set-float
               src:x:/../*/_arg?value
 
             /*
@@ -355,12 +355,12 @@ create-widgets
           /*
            * Retrieves the size used during selection of image.
            */
-          themepark.images.get-float
+          ingen.images.get-float
 
             /*
              * Retrieves the size preferences for user from session.
              */
-            p5.web.session.get:themepark.images.set-float
+            p5.web.session.get:ingen.images.set-float
             return:x:/-/*?value
 
         widgets
@@ -373,7 +373,7 @@ create-widgets
               /*
                * Changing float used during selection.
                */
-              themepark.images.set-float:left
+              ingen.images.set-float:left
 
           button
             innerValue:@"<span class=""icon-paragraph-center""></span>"
@@ -384,7 +384,7 @@ create-widgets
               /*
                * Changing float used during selection.
                */
-              themepark.images.set-float:none
+              ingen.images.set-float:none
 
           button
             innerValue:@"<span class=""icon-paragraph-right""></span>"
@@ -395,4 +395,4 @@ create-widgets
               /*
                * Changing float used during selection.
                */
-              themepark.images.set-float:right
+              ingen.images.set-float:right

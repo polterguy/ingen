@@ -112,7 +112,7 @@ If you do not want to subscribe to our newsletter, you'll have to explicitly tur
                   /*
                    * Event sanity checking input fields' values supplied by user.
                    */
-                  themepark.purchase.sanity-check-fields
+                  ingen.purchase.sanity-check-fields
 
                     /*
                      * Serialising form, and making sure all fields have sane values.
@@ -173,7 +173,7 @@ If you do not want to subscribe to our newsletter, you'll have to explicitly tur
                    * Sanity checking input fields.
                    */
                   if
-                    themepark.purchase.sanity-check-fields
+                    ingen.purchase.sanity-check-fields
                     =:bool:false
 
                     /*

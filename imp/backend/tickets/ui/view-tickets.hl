@@ -94,7 +94,7 @@ create-widgets
                * If we came this far, all tickets were used, and we can safely re-databind
                * the tickets datagrid.
                */
-              themepark.tickets.re-databind
+              ingen.tickets.re-databind
 
               /*
                * Deleting modal widget.

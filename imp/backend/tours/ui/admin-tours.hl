@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Creates our "admin tours" back end widget.
  */
 
@@ -33,7 +33,7 @@ ingen.main-viewport.clear
 /*
  * Setting header and title of page.
  */
-themepark.header.set:Administrate tours
+ingen.header.set:Administrate tours
 
 
 /*
@@ -45,60 +45,81 @@ create-widget:manage-tours-wrapper
   widgets
 
     /*
-     * Our actual datagrid, dynamically databound towards "tours" table.
+     * This is the "tours filter" wrapper widget.
+     *
+     * Since we're using this in both the front end and the back end, we've created
+     * an extension widget, to keep our code "DRY".
+     *
+     * If we wanted to further improve upon this logic, we could probably even share the
+     * same filter/paging toolbar between also for instance the administration of tickets.
+     * However, this has been left as an exercise if you want to do this.
      */
-    micro.widgets.mysql.datagrid:manage-tours-datagrid
-      class:hover themepark-datagrid
-      database:ingen
-      table:tours
-      .row
-        onclick
+    ingen.widgets.tours._datagrid-filter
 
-          /*
-           * Invoking file responsible for editing a specific item from database.
-           */
-          eval-x:x:/+/*
-          micro.evaluate.file:@INGEN/imp/backend/tours/ui/add-edit-tours.hl
-            id:x:/../*/.row/*/id?value
+    /*
+     * Our actual datagrid, dynamically databound towards "exhibits" table.
+     *
+     * Notice, our [onclick] is what occurs when a row in our datagrid is clicked.
+     * The [columns] declaration as simply appended to the existing common columns
+     * for our datagrid - Which we take advantage of to make it possible to delete items.
+     */
+    ingen.widgets.tours._datagrid:tours-datagrid
+      onclick
+
+        /*
+         * Invoking file responsible for editing a specific item from database.
+         */
+        eval-x:x:/+/*
+        micro.evaluate.file:@INGEN/imp/backend/tours/ui/add-edit-tours.hl
+          id:x:/../*/.row/*/id?value
 
       columns
-        id
-          visible:bool:false
-        Name
+
+        /*
+         * Delete column containing a simple "delete record" button.
+         */
         Delete
           style:"width:5px;"
           .lambda
-            eval-x:x:/+/*/*/onclick/*/.id
+            eval-x:x:/+/*/*/onclick/**/.id
             return
               button
                 innerValue:@"<span class=""icon-bin""></span>"
                 onclick
 
                   /*
-                   * Forward evaluated above.
+                   * Asking user to confirm deletion.
                    */
-                  .id:x:/../*/row/*/id?value
+                  micro.windows.confirm
+                    header:Confirm deletion
+                    body:Are you sure you want to delete this tour? This action is permanent, and cannot be undone.
+                    onok
 
-                  /*
-                   * Invoking file responsible for deleting tours.
-                   */
-                  eval-x:x:/+/*
-                  micro.evaluate.file:@INGEN/imp/backend/tours/model/delete-tour.hl
-                    id:x:/@.id?value
+                      /*
+                       * Forward evaluated above.
+                       */
+                      .id:x:/../*/row/*/id?value
 
-                  /*
-                   * Re-databinding datagrid.
-                   */
-                  micro.widgets.mysql.datagrid.databind:manage-tours-datagrid
+                      /*
+                       * Invoking file responsible for deleting exhibit.
+                       */
+                      eval-x:x:/+/*
+                      micro.evaluate.file:@INGEN/imp/backend/tours/model/delete-tour.hl
+                        id:x:/@.id?value
 
-                  /*
-                   * Provding some visual feedback to user.
-                   */
-                  micro.windows.info:Successfully updated tours
-                    class:micro-windows-info success
+                      /*
+                       * Re-databinding datagrid.
+                       */
+                      ingen.widgets.tours._datagrid.databind
+
+                      /*
+                       * Provding some visual feedback to user.
+                       */
+                      micro.windows.info:Successfully deleted tour
+                        class:micro-windows-info success
 
     /*
-     * Toolbar at the bottom for creating new tours, and closingmain widget.
+     * Toolbar at the bottom for creating new tours, and closing main widget.
      */
     div
       class:right strip

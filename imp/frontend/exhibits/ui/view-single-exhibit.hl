@@ -90,7 +90,7 @@ create-widgets
        * Purchase ticket(s) jumbo button.
        */
       div:purchase-ticket-wrapper
-        class:center
+        class:center air-bottom air-top
         widgets
           button
             class:jumbo-button
@@ -108,22 +108,6 @@ create-widgets
               eval-x:x:/+/*
               micro.evaluate.file:@INGEN/imp/frontend/tickets/ui/purchase-tickets.hl
                 id:x:/@.id?value
-
-      /*
-       * Close button wrapper.
-       */
-      div
-        class:right
-        widgets
-          button
-            innerValue:Close
-            class:large
-            onclick
-
-              /*
-               * Deleting exhibit widget.
-               */
-              delete-widget:view-exhibit-wrapper
 
 
 /*

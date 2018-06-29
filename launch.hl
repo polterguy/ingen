@@ -73,19 +73,19 @@ create-widget
     /*
      * Starting pingback loop.
      */
-    themepark.pingback.keep-alive
+    ingen.pingback.keep-alive
 
     /*
      * Setting initial title to its default value.
      */
-    themepark.header.set
+    ingen.header.set
 
   events
 
     /*
      * Pingback event to keep session alive on server, in case app is in kiosk mode.
      */
-    themepark.pingback.keep-alive
+    ingen.pingback.keep-alive
 
       /*
        * In case app is in "kiosk mode", we create a pingback to server ever 10 minutes,
@@ -98,7 +98,7 @@ create-widget
           /*
            * Recursively invoking event creating new timer.
            */
-          themepark.pingback.keep-alive
+          ingen.pingback.keep-alive
 
   widgets
     div
@@ -127,7 +127,7 @@ create-widget
                 /*
                  * Used by different modules when the header should be changed for some reasons.
                  */
-                themepark.header.set
+                ingen.header.set
 
                   /*
                    * Checking if caller specified a value, and if not, resetting header to

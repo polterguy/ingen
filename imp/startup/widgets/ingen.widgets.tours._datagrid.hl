@@ -1,0 +1,144 @@
+/*
+ * Creates the **[ingen.widgets.tours._datagrid]** extension widget, to make sure we keep our
+ * code "DRY", since the differences between the frontend version and the backend version are
+ * minimal.
+ *
+ * Expects **[onclick]** lambda callback, which is invoked when a row in datagrid is clicked,
+ * in addition to (optionally) a bunch of additional **[columns]**, which will be appended
+ * into the widget, in addition to its default columns collection.
+ */
+create-event:ingen.widgets.tours._datagrid
+
+  /*
+   * Sanity checking invocation.
+   */
+  micro.lambda.contract.min:x:/..
+    onclick
+
+  /*
+   * Decorating [onclick] of row.
+   */
+  add:x:/../*/return/*/*/.row
+    src:x:/../*/onclick
+
+  /*
+   * Adding additional columns.
+   */
+  add:x:/../*/return/*/*/columns
+    src:x:/../*/columns/*
+
+  /*
+   * Returning widget to caller.
+   */
+  return
+    micro.widgets.mysql.datagrid
+      class:hover themepark-datagrid
+      database:ingen
+      databind:bool:false
+      page-size:10
+      events
+
+        /*
+         * Databinds tours.
+         */
+        ingen.widgets.tours._datagrid.databind
+
+          /*
+           * Checking if we have a filter.
+           */
+          ingen.widgets.tours._datagrid-filter.get-filter
+          if:x:/@ingen.widgets.tours._datagrid-filter.get-filter?value
+
+            /*
+             * Adding filter to databind invocation.
+             */
+            add:x:/../*/micro.widgets.mysql.datagrid.databind
+              src
+                filter:name like @name
+            eval-x:x:/+/*/*
+            add:x:/../*/micro.widgets.mysql.datagrid.databind/*/filter
+              src
+                @name:%{0}%
+                  :x:/@ingen.widgets.tours._datagrid-filter.get-filter?value
+
+          /*
+           * Retrieving page.
+           */
+          ingen.widgets.tours._datagrid-filter.get-page
+          eval-x:x:/+/*/*
+          add:x:/../*/micro.widgets.mysql.datagrid.databind
+            src
+              page:x:/@ingen.widgets.tours._datagrid-filter.get-page?value.long
+
+          /*
+           * Databinding tours grid, and returning results to caller.
+           */
+          micro.widgets.mysql.datagrid.databind:tours-datagrid
+
+          /*
+           * Checking if we "previous paging buttons" exists, and if it does, checking if
+           * we should enable disable it.
+           */
+          if
+            fetch:x:/0/0?value
+              widget-exists:tours-page-previous
+
+            /*
+             * Previous paging button exists, now checking if we should enable or disable it.
+             */
+            if:x:/@ingen.widgets.tours._datagrid-filter.get-page?value.long
+              >:long:0
+
+              /*
+               * Enabling previous button.
+               */
+              delete-widget-property:tours-page-previous
+                disabled
+
+            else
+
+              /*
+               * Disabling previous button.
+               */
+              set-widget-property:tours-page-previous
+                disabled
+
+          /*
+           * Checking if we "next paging buttons" exists, and if it does, checking if
+           * we should enable disable it.
+           */
+          if
+            fetch:x:/0/0?value
+              widget-exists:tours-page-next
+
+            /*
+             * Previous paging button exists, now checking if we should enable or disable it.
+             */
+            if:x:/@micro.widgets.mysql.datagrid.databind/*/more-pages?value
+              =:bool:true
+
+              /*
+               * Enabling previous button.
+               */
+              delete-widget-property:tours-page-next
+                disabled
+
+            else
+
+              /*
+               * Disabling previous button.
+               */
+              set-widget-property:tours-page-next
+                disabled
+
+          /*
+           * Returning results from above invocation to caller.
+           */
+          return:x:/@micro.widgets.mysql.datagrid.databind/*
+
+      table:tours
+      .row
+      columns
+        id
+          visible:bool:false
+        Name

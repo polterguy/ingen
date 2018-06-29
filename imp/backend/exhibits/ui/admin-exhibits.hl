@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Creates our "admin exhibits" backend widget.
  */
 
@@ -33,7 +33,7 @@ ingen.main-viewport.clear
 /*
  * Setting header and title of page.
  */
-themepark.header.set:Administrate exhibits
+ingen.header.set:Administrate exhibits
 
 
 /*
@@ -54,7 +54,7 @@ create-widget:manage-exhibits-wrapper
      * same filter/paging toolbar between also for instance the administration of tickets.
      * However, this has been left as an exercise if you want to do this.
      */
-    ingen.widgets._exhibits-filter
+    ingen.widgets.exhibits._datagrid-filter
 
     /*
      * Our actual datagrid, dynamically databound towards "exhibits" table.
@@ -63,7 +63,7 @@ create-widget:manage-exhibits-wrapper
      * The [columns] declaration as simply appended to the existing common columns
      * for our datagrid - Which we take advantage of to make it possible to delete items.
      */
-    ingen.exhibits._datagrid:exhibits-datagrid
+    ingen.widgets.exhibits._datagrid:exhibits-datagrid
       onclick
 
         /*
@@ -110,7 +110,7 @@ create-widget:manage-exhibits-wrapper
                       /*
                        * Re-databinding datagrid.
                        */
-                      themepark.exhibits.databind
+                      ingen.widgets.exhibits._datagrid.databind
 
                       /*
                        * Provding some visual feedback to user.

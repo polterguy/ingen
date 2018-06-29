@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Allows the user to add a new exhibit, or edit an existing exhibit.
  */
 micro.lambda.contract.optional:x:/..
@@ -194,7 +194,7 @@ create-widgets
                * Deleting widget and re-databinding datagrid.
                */
               delete-widget:themepark-add-exhibit-modal
-              themepark.exhibits.databind
+              ingen.widgets.exhibits._datagrid.databind
 
               /*
                * Provding some visual feedback to user.
@@ -238,8 +238,8 @@ create-widgets
                    */
                   eval-x:x:/+/*
                   micro.widgets.codemirror.set-value:admin-exhibits-markdown-editor
-                    value:"{0}\r\n\r\n![{1}]({2})"
-                      :x:/@micro.widgets.codemirror.get-value/*?value
+                    value:"{0}\r\n\r\n![{1}]({2})\r\n\r\n"
+                      :x:/@trim?value
                       :x:/../*/float?value
                       :x:/../*/path?value
 

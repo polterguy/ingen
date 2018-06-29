@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Allows the user to add or edit a new tour.
  */
 
@@ -215,7 +215,7 @@ allow guests to access the tours directly using their phones."
                * Deleting widget and re-databinding datagrid.
                */
               delete-widget:themepark-add-tour-modal
-              micro.widgets.mysql.datagrid.databind:manage-tours-datagrid
+              ingen.widgets.tours._datagrid.databind
 
               /*
                * Provding some visual feedback to user.

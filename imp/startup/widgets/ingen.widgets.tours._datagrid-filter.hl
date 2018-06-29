@@ -1,0 +1,142 @@
+/*
+ * Creates our **[ingen.widgets.tours._datagrid-filter]** extension widget.
+ *
+ * This serves as a common filter/paging widget for the places where we
+ * have datagrids displaying tours. Notice, its name contains "._",
+ * which implies it's an _"invisible"_ Active Event, not visible in the
+ * vocabulary of the server. This is because we don't want to expose it
+ * as a general extension widget, for other apps to consume. Hence, we
+ * keep it _"hidden"_.
+ */
+create-event:ingen.widgets.tours._datagrid-filter
+
+  /*
+   * Returning widget to caller.
+   */
+  return
+    div
+      oninit
+
+        /*
+         * Initially databinding tours.
+         */
+        ingen.widgets.tours._datagrid.databind
+
+      .page:0
+      class:strip fill themepark-large-strip
+      events
+
+        /*
+         * Returns the current page of datagrid.
+         */
+        ingen.widgets.tours._datagrid-filter.get-page
+
+          /*
+           * Since we store the page as a hidden attribute of main root widget,
+           * we return that value to caller.
+           */
+          get-widget-property:x:/../*/_event?value
+            .page
+          return:x:/-/*/*?value.long
+
+        /*
+         * Returns the current filter for datagrid.
+         */
+        ingen.widgets.tours._datagrid-filter.get-filter
+
+          /*
+           * Returning the value of our textbox, if is has any value.
+           */
+          get-widget-property:tours-filter
+            value
+          if:x:/@get-widget-property/*/*?value
+            and:x:/@get-widget-property/*/*?value
+              !=:
+            return:x:/@get-widget-property/*/*?value
+
+      widgets
+
+        /*
+         * These are our filter textbox and the search button widgets.
+         */
+        input:tours-filter
+          type:text
+          placeholder:Search ...
+          onkeydown:@"if (event.keyCode == 13) {p5.$('tours-filter-button').raise('onclick');return false;}"
+        button:tours-filter-button
+          class:large
+          innerValue:@"<span style=""font-size:1.3rem;"" class=""icon-search""></span>"
+          onclick
+
+            /*
+             * Setting [.page] to 0.
+             */
+            p5.web.widgets.find-first-ancestor:x:/../*/_event?value
+              .page
+            set-widget-property:x:/-/*/*?value
+              .page:0
+
+            /*
+             * Databinding tours.
+             */
+            ingen.widgets.tours._datagrid.databind
+
+            /*
+             * Setting focus to filter textbox again, to make it easily removed.
+             */
+            micro.page.set-focus:tours-filter
+
+        /*
+         * These two are our page buttons, previous and next.
+         */
+        button:tours-page-previous
+          class:large
+          innerValue:@"<span style=""font-size:1.3rem;"" class=""icon-arrow-left""></span>"
+          disabled
+          onclick
+
+            /*
+             * Retrieving current page, subtracting 1 from it, and re-databinding grid.
+             */
+            p5.web.widgets.find-first-ancestor:x:/../*/_event?value
+              .page
+            get-widget-property:x:/-/*/*?value
+              .page
+            if:x:/@get-widget-property/*/*?value.long
+              =:long:0
+
+              /*
+               * Beginning of dataset, returning early.
+               */
+              return
+
+            /*
+             * Subtracting 1 from current [.page] value, and updating attribute.
+             */
+            -:x:/@get-widget-property/*/*?value.long
+              _:1
+            set-widget-property:x:/@p5.web.widgets.find-first-ancestor/*/*?value
+              .page:x:/@-?value
+
+            /*
+             * Re-databinding grid and making sure we enable the "next page" button.
+             */
+            ingen.widgets.tours._datagrid.databind
+
+        button:tours-page-next
+          class:large
+          innerValue:@"<span style=""font-size:1.3rem;"" class=""icon-arrow-right""></span>"
+          onclick
+
+            /*
+             * Retrieving current page, adding 1 to it, and re-databinding grid.
+             */
+            p5.web.widgets.find-first-ancestor:x:/../*/_event?value
+              .page
+            get-widget-property:x:/-/*/*?value
+              .page
+            +:x:/@get-widget-property/*/*?value.long
+              _:1
+            set-widget-property:x:/@p5.web.widgets.find-first-ancestor/*/*?value
+              .page:x:/@+?value
+            ingen.widgets.tours._datagrid.databind

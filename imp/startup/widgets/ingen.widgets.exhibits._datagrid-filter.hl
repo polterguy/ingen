@@ -1,6 +1,5 @@
-
 /*
- * Creates our **[ingen.widgets._exhibits-filter]** extension widget.
+ * Creates our **[ingen.widgets.exhibits._datagrid-filter]** extension widget.
  *
  * This serves as a common filter/paging widget for the places where we
  * have datagrids displaying exhibits. Notice, its name contains "._",
@@ -9,7 +8,7 @@
  * as a general extension widget, for other apps to consume. Hence, we
  * keep it _"hidden"_.
  */
-create-event:ingen.widgets._exhibits-filter
+create-event:ingen.widgets.exhibits._datagrid-filter
 
   /*
    * Returning widget to caller.
@@ -21,45 +20,42 @@ create-event:ingen.widgets._exhibits-filter
         /*
          * Initially databinding exhibits.
          */
-        themepark.exhibits.databind
-
-        /*
-         * Checking if there are more than one page in database, and if not,
-         * simply hiding both paging buttons.
-         */
-        if:x:/-/*/more-pages?value
-          =:bool:false
-
-          /*
-           * No reasons to display paging buttons since there's only one page of items in database.
-           */
-          set-widget-property:exhibits-page-previous
-            style:"display:none;"
-          set-widget-property:exhibits-page-next
-            style:"display:none;"
+        ingen.widgets.exhibits._datagrid.databind
 
       .page:0
       class:strip fill themepark-large-strip
       events
 
+
         /*
          * Returns the current page of datagrid.
          */
-        ingen.widgets._exhibits-filter.get-page
+        ingen.widgets.exhibits._datagrid-filter.get-page
+
+          /*
+           * Since we store the page as a hidden attribute of main root widget,
+           * we return that value to caller.
+           */
           get-widget-property:x:/../*/_event?value
             .page
           return:x:/-/*/*?value.long
 
+
         /*
          * Returns the current filter for datagrid.
          */
-        ingen.widgets._exhibits-filter.get-filter
+        ingen.widgets.exhibits._datagrid-filter.get-filter
+
+          /*
+           * Returning the value of our textbox, if is has any value.
+           */
           get-widget-property:exhibits-filter
             value
           if:x:/@get-widget-property/*/*?value
             and:x:/@get-widget-property/*/*?value
               !=:
             return:x:/@get-widget-property/*/*?value
+
 
       widgets
 
@@ -82,33 +78,11 @@ create-event:ingen.widgets._exhibits-filter
               .page
             set-widget-property:x:/-/*/*?value
               .page:0
-            set-widget-property:exhibits-page-previous
-              disabled
 
             /*
              * Databinding exhibits.
              */
-            themepark.exhibits.databind
-
-            /*
-             * Checking if we should enabled the next button or not.
-             */
-            if:x:/@themepark.exhibits.databind/*/more-pages?value
-              =:bool:true
-
-              /*
-               * Enabling next button.
-               */
-              delete-widget-property:exhibits-page-next
-                disabled
-
-            else
-
-              /*
-               * Disabling next button.
-               */
-              set-widget-property:exhibits-page-next
-                disabled
+            ingen.widgets.exhibits._datagrid.databind
 
             /*
              * Setting focus to filter textbox again, to make it easily removed.
@@ -148,23 +122,9 @@ create-event:ingen.widgets._exhibits-filter
               .page:x:/@-?value
 
             /*
-             * Checking if we should disabled the previous button.
-             */
-            if:x:/@-?value.long
-              =:long:0
-
-              /*
-               * At the beginning of dataset, hence disabling previous button.
-               */
-              set-widget-property:exhibits-page-previous
-                disabled
-
-            /*
              * Re-databinding grid and making sure we enable the "next page" button.
              */
-            themepark.exhibits.databind
-            delete-widget-property:exhibits-page-next
-              disabled
+            ingen.widgets.exhibits._datagrid.databind
 
         button:exhibits-page-next
           class:large
@@ -172,7 +132,7 @@ create-event:ingen.widgets._exhibits-filter
           onclick
 
             /*
-             * Retrieving current page, adding 10 to it, and re-databinding grid.
+             * Retrieving current page, adding 1 to it, and re-databinding grid.
              */
             p5.web.widgets.find-first-ancestor:x:/../*/_event?value
               .page
@@ -182,22 +142,4 @@ create-event:ingen.widgets._exhibits-filter
               _:1
             set-widget-property:x:/@p5.web.widgets.find-first-ancestor/*/*?value
               .page:x:/@+?value
-            themepark.exhibits.databind
-
-            /*
-             * Checking if we should disabled next button.
-             */
-            if:x:/@themepark.exhibits.databind/*/more-pages?value
-              =:bool:false
-
-              /*
-               * Disabling next button since there are no more pages.
-               */
-              set-widget-property:exhibits-page-next
-                disabled
-
-            /*
-             * Enabling previous button.
-             */
-            delete-widget-property:exhibits-page-previous
-              disabled
+            ingen.widgets.exhibits._datagrid.databind
