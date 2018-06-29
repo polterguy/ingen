@@ -1,5 +1,9 @@
 /*
  * Main launch file for InGen.
+ *
+ * This file creates the main wire frame for the entire application, both
+ * its front end, and its backend. If you wish to change an aspect of your app
+ * _"globally"_, this is where you would want to add your code.
  */
 
 
@@ -27,7 +31,7 @@ micro.widgets.paypal-button.ensure-checkout-js
  * The next two pieces of code might need some explanation, since this is the "access control"
  * of the system.
  *
- * It invokes the "get-jumbo-buttons.hl" file inside of the "/imp/" folder, and adds the result
+ * It invokes the "get-jumbo-buttons.hl" file inside of the "/modules/" folder, and adds the result
  * of the invocation to that file into the Jumbo Buttons wrapper widget below on page. This file internally
  * invokes [p5.auth.has-access], passing in the [default-access] argument as the default argument.
  * This results in that by default all users, insluding guest visitors, have access to all "frontend"
@@ -35,32 +39,8 @@ micro.widgets.paypal-button.ensure-checkout-js
  *
  * This can be overridden by creating access objects in your installation using e.g. "Peeples" to
  * associate such access objects with the access object list of the system. See the comments in the
- * "/imp/common/get-jumbo-buttons.hl" file for details about how to create such access objects.
+ * "/modules/common/get-jumbo-buttons.hl" file for details about how to create such access objects.
  */
-
-
-/*
- * Adding all Jumbo Buttons for frontend modules according to whether or not
- * user has access to the modules or not.
- *
- * Notice, we default access to "true".
- */
-add:x:/../*/create-widget/**/micro.widgets.file/=themepark-jumbo-buttons
-  micro.evaluate.file:@INGEN/imp/common/get-jumbo-buttons.hl
-    folder:@INGEN/imp/frontend/
-    default-access:true
-
-
-/*
- * Adding all Jumbo Buttons for backend modules according to whether or not
- * user has access to the modules or not.
- *
- * Notice, we default access to "false".
- */
-add:x:/../*/create-widget/**/micro.widgets.file/=themepark-jumbo-buttons
-  micro.evaluate.file:@INGEN/imp/common/get-jumbo-buttons.hl
-    folder:@INGEN/imp/backend/
-    default-access:false
 
 
 /*
@@ -198,13 +178,23 @@ create-widget
              * These are our "launch modules" buttons, that allows the user to interact with
              * the app in general, and launches modules, such as "front end exhibit module", etc.
              *
-             * This widget is dynamically populated according to the access control objects in P5, using
-             * [p5.auth.has-access]. This occurs in the "get-jumbo-buttons.hl" file which is invoked twice
-             * further up on page, passing in frontend module (default to access granted) and backend
-             * modules (default to access denied).
+             * This widget is dynamically populated according to the access control objects
+             * in P5, using [p5.auth.has-access]. This occurs in the "get-jumbo-buttons.hl"
+             * file which is invoked twice further up on page, passing in frontend module
+             * (default to access granted) and backend modules (default to access denied).
              */
-            micro.widgets.file:themepark-jumbo-buttons
+            div:themepark-jumbo-buttons
               class:center themepark-center-content
+              widgets
+                ingen.widgets.jumbo-buttons
+                  folder:frontend
+                  default-access:true
+                ingen.widgets.jumbo-buttons
+                  folder:common
+                  default-access:true
+                ingen.widgets.jumbo-buttons
+                  folder:backend
+                  default-access:false
 
             /*
              * Container widget, for displaying dynamic "view content" for modules.
@@ -231,5 +221,5 @@ if:x:/@micro.url.get-entities/1?name
    * Automatically launching tour.
    */
   eval-x:x:/+/*
-  micro.evaluate.file:@INGEN/imp/frontend/tours/ui/view-single-tour.hl
+  micro.evaluate.file:@INGEN/modules/tours/frontend/ui/view-single-tour.hl
     id:x:/@micro.url.get-entities/2?name.long

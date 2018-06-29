@@ -1,0 +1,30 @@
+﻿/*
+ * Jumbo Button for allowing admin to administrate tickets.
+ */
+button
+  class:jumbo-button
+  innerValue:@"<span>Tickets</span><span class=""icon-cart""></span>"
+  oninit
+
+    /*
+     * Checking if the system has enabled the "ticket module", and if not, simply deleting
+     * widget.
+     */
+    if
+      ingen.settings.has-ticket-module
+      =:bool:false
+      delete-widget:x:/../*/_event?value
+
+  onclick
+
+    /*
+     * Evaluating file responsible for administrating tickets.
+     */
+    micro.evaluate.file:@INGEN/modules/tickets/backend/ui/admin-tickets.hl
+
+    /*
+     * Evaluating file responsible for toggling Jumbo Buttons.
+     */
+    eval-x:x:/+/*
+    ingen.toggle-jumbo-button
+      button:x:/../*/_event?value

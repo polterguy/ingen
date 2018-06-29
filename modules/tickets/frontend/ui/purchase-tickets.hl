@@ -1,0 +1,313 @@
+﻿/*
+ * File responsible for allowing user to purchase tickets to exhibit.
+ */
+
+
+/*
+ * Sanity checking invocation.
+ */
+micro.lambda.contract.min:x:/..
+  id:long
+
+
+/*
+ * Verifying access.
+ */
+ingen.access._throw-if-no-access:true
+  path:/frontend/tickets/
+
+
+/*
+ * Retrieving data for exhibit.
+ */
+eval-x:x:/+/*
+micro.evaluate.file:@INGEN/modules/exhibits/common/model/get-exhibit.hl
+  id:x:/../*/id?value
+
+
+/*
+ * Displaying a modal window and allowing user to purchase ticket(s) for exhibit.
+ */
+eval-x:x:/+/**/.id
+create-widgets
+  micro.widgets.modal:order-exhibit-modal
+    widgets
+      h2:purchase-header
+        innerValue:Purchase tickets for '{0}'
+          :x:/@micro.evaluate.file/*/name?value
+      div:purchase-tickets-wrapper
+        widgets
+          div
+            class:strip fill
+            widgets
+              label
+                innerValue:Name
+                class:description-9
+              input:name-input
+                type:text
+                placeholder:Purchaser's name ...
+                .data-field:purchaser_name
+                onkeydown:@"if (event.keyCode == 13) {p5.$('confirm-purchase').raise('onclick');return false;} else if (event.keyCode == 27) {p5.$('close-purchase').raise('onclick');return false;}"
+                oninit
+
+                  /*
+                   * Setting initial focus to name widget.
+                   */
+                  micro.page.set-focus:x:/../*/_event?value
+
+          div
+            class:strip fill
+            widgets
+              label
+                innerValue:Email
+                class:description-9
+              input:email-input
+                type:text
+                placeholder:Purchaser's email ...
+                .data-field:purchaser_email
+                onkeydown:@"if (event.keyCode == 13) {p5.$('confirm-purchase').raise('onclick');return false;} else if (event.keyCode == 27) {p5.$('close-purchase').raise('onclick');return false;}"
+              label
+                widgets
+                  span
+                    innerValue:Subscribe
+                  input
+                    type:checkbox
+                    checked
+                    .data-field:subscribe
+          div
+            class:strip fill
+            widgets
+              label
+                innerValue:Adults
+                class:description-9
+              input
+                type:number
+                placeholder:Number of adults ...
+                .data-field:no_adults
+                value:1
+                onkeydown:@"if (event.keyCode == 13) {p5.$('confirm-purchase').raise('onclick');return false;} else if (event.keyCode == 27) {p5.$('close-purchase').raise('onclick');return false;}"
+          div
+            class:strip fill
+            widgets
+              label
+                innerValue:Children
+                class:description-9
+              input
+                type:number
+                placeholder:Number of children ...
+                .data-field:no_children
+                value:0
+                onkeydown:@"if (event.keyCode == 13) {p5.$('confirm-purchase').raise('onclick');return false;} else if (event.keyCode == 27) {p5.$('close-purchase').raise('onclick');return false;}"
+          p
+            class:themepark-email-disclaimer
+            innerValue:@"<strong>Disclaimer</strong> - If you leave the above checkbox as it is, you will sign up for our newsletter.
+If you do not want to subscribe to our newsletter, you'll have to explicitly turn OFF the above checkbox!"
+          div
+            class:right strip
+            widgets
+              button:confirm-purchase
+                innerValue:Done
+                events
+
+                  /*
+                   * Event sanity checking input fields' values supplied by user.
+                   */
+                  ingen.purchase.sanity-check-fields
+
+                    /*
+                     * Serialising form, and making sure all fields have sane values.
+                     */
+                    micro.form.serialize:purchase-tickets-wrapper
+                    if:x:/@micro.form.serialize/*/purchaser_name?value
+                      =:
+
+                      /*
+                       * No name supplied.
+                       */
+                      micro.windows.info:You must supply a name
+                        class:micro-windows-info warning
+                      micro.page.set-focus:name-input
+                      return:bool:false
+                    if:x:/@micro.form.serialize/*/purchaser_email?value
+                      =:
+
+                      /*
+                       * No email supplied.
+                       */
+                      micro.windows.info:You must supply an email
+                        class:micro-windows-info warning
+                      micro.page.set-focus:email-input
+                      return:bool:false
+
+                    else
+
+                      /*
+                       * Regexing email address.
+                       */
+                      match:x:/@micro.form.serialize/*/purchaser_email?value
+                        src:regex:/^[\w!#$%&'*+\-/=?\^_`{|}~]+(\.[\w!#$%&'*+\-/=?\^_`{|}~]+)*@((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))$/i
+                      if:x:/@match/*?count
+                        =:int:0
+
+                        /*
+                         * Bad email address supplied.
+                         */
+                        micro.windows.info:You must supply a valid email address
+                          class:micro-windows-info warning
+                        micro.page.set-focus:email-input
+                        return:bool:false
+
+                    /*
+                     * Success!
+                     */
+                    return:bool:true
+
+                onclick
+
+                  /*
+                   * Forward evaluated above.
+                   */
+                  .id:x:/../*/id?value
+
+                  /*
+                   * Sanity checking input fields.
+                   */
+                  if
+                    ingen.purchase.sanity-check-fields
+                    =:bool:false
+
+                    /*
+                     * Input was not accepted.
+                     */
+                    return
+
+                  /*
+                   * Figuring out sum to pay for customer.
+                   */
+                  micro.form.serialize:purchase-tickets-wrapper
+                  eval-x:x:/+/*
+                  micro.evaluate.file:@INGEN/modules/tickets/frontend/model/calculate-sum-of-purchase.hl
+                    no_adults:x:/@micro.form.serialize/*/no_adults?value.int
+                    no_children:x:/@micro.form.serialize/*/no_children?value.int
+                    exhibit-id:x:/@.id?value
+
+                  /*
+                   * Deleting purchase view exhibit info widget.
+                   */
+                  delete-widget:view-exhibit-wrapper
+
+                  /*
+                   * Changing header of modal widget.
+                   */
+                  set-widget-property:purchase-header
+                    innerValue:Total sum €{0}
+                      :x:/@micro.evaluate.file?value
+
+                  /*
+                   * Making sure we display PayPal wrapper widget, and give user a notification that
+                   * he'll have to click the button.
+                   */
+                  add:x:/+2/**/.data
+                    src:x:/@micro.form.serialize/*
+                  eval-x:x:/+/*/micro.widgets.paypal-button/*/price
+                  create-widgets
+                    h3
+                      parent:paypal-wrapper
+                      innerValue:Choose your preferred payment method
+                    micro.widgets.paypal-button
+                      parent:paypal-wrapper
+                      price:x:/@micro.evaluate.file?value
+                      .onok
+
+                        /*
+                         * Forward evaluated above.
+                         */
+                        .id:x:/../*/id?value
+
+                        /*
+                         * Forward evaluated above.
+                         */
+                        .data
+
+                        /*
+                         * Deleting order exhibit info modal window.
+                         */
+                        delete-widget:order-exhibit-modal
+
+                        /*
+                         * Invoking file responsible for inserting a purchase into database.
+                         */
+                        add:x:/+2
+                          src:x:/@.data/*
+                        eval-x:x:/+/*/exhibit-id
+                        micro.evaluate.file:@INGEN/modules/tickets/frontend/model/create-purchase.hl
+                          exhibit-id:x:/@.id?value
+
+                        /*
+                         * Displaying modal confirmation window to caller.
+                         */
+                        create-widgets
+                          micro.widgets.modal:confirm-ticket-purchase
+                            class:micro-widgets-modal larger-text
+                            widgets
+                              h2
+                                innerValue:Purchase complete
+                              p
+                                innerValue:Please provide your name and email address at the gate for the exhibit.
+                              div
+                                class:right
+                                widgets
+                                  button
+                                    innerValue:Close
+                                    onclick
+
+                                      /*
+                                       * Deleting modal widget.
+                                       */
+                                      delete-widget:confirm-ticket-purchase
+
+                        /*
+                         * Creating a timeout that destroys modal confirmation window 10 seconds from now,
+                         * in case this is a kiosk, such that it is ready for the next customer to place
+                         * his order.
+                         */
+                        micro.lambda.create-timeout
+                          milliseconds:10000
+                          onfinish
+
+                            /*
+                             * Deleting modal window, if it exists.
+                             */
+                            if
+                              fetch:x:/0/0?value
+                                widget-exists:confirm-ticket-purchase
+
+                              /*
+                               * Widget exists, deleting it.
+                               */
+                              delete-widget:confirm-ticket-purchase
+
+                  /*
+                   * Giving user a visual feedback that he'll have to actually click the PayPal button.
+                   */
+                  micro.windows.info:Choose your preferred payment method
+                    class:micro-windows-info success
+
+                  /*
+                   * Hiding "supply information widget".
+                   */
+                  set-widget-property:purchase-tickets-wrapper
+                    visible:false
+
+              button:close-purchase
+                innerValue:Close
+                onclick
+
+                  /*
+                   * Deleting purchase modal widget.
+                   */
+                  delete-widget:order-exhibit-modal
+
+      container:paypal-wrapper
+        class:air-bottom center
+

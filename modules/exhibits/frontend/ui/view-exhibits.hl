@@ -1,0 +1,72 @@
+﻿/*
+ * Creates our "view exhibits" front end widget.
+ */
+
+
+/*
+ * Verifying access.
+ */
+ingen.access._throw-if-no-access:true
+  path:/frontend/exhibits/
+
+
+/*
+ * Checking if "view exhibit" widget already exists, at which point we simply
+ * return early.
+ */
+if
+  fetch:x:/0/0?value
+    widget-exists:view-exhibits-wrapper
+
+  /*
+   * Widget is already visible.
+   */
+  return
+
+
+/*
+ * Clearing previously create widgets from dynamic content wrapper widget.
+ */
+ingen.main-viewport.clear
+
+
+/*
+ * Setting header and title of page.
+ */
+ingen.header.set:Exhibits
+
+
+/*
+ * Creating our "view exhibit" datagrid in a "bg" wrapper div.
+ */
+create-widget:view-exhibits-wrapper
+  parent:themepark-dynamic-content
+  class:shaded rounded air air-inner bg
+  widgets
+
+    /*
+     * This is the "exhibit filter" wrapper widget.
+     *
+     * Since we're using this in both the front end and the back end, we've created
+     * an extension widget, to keep our code "DRY".
+     */
+    ingen.widgets.exhibits._datagrid-filter
+
+    /*
+     * Our actual datagrid, dynamically databound towards "exhibits" table.
+     */
+    ingen.widgets.exhibits._datagrid:exhibits-datagrid
+      onclick
+
+        /*
+         * Evaluating file responsible for displaying information for exhibit,
+         * and allowing user to purchase ticket(s) to exhibit.
+         */
+        eval-x:x:/+/*
+        micro.evaluate.file:@INGEN/modules/exhibits/frontend/ui/view-single-exhibit.hl
+          id:x:/../*/.row/*/id?value
+
+    /*
+     * This is where we display exhibits as the user selects an exhibit to view it.
+     */
+    container:exhibits-display-single-exhibit

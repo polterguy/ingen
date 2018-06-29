@@ -1,0 +1,127 @@
+/*
+ * Creates the **[ingen.widgets.jumbo-buttons]** extension widget that returns all
+ * Jumbo Buttons to all modules that currently logged in user has access to.
+ *
+ * The event requires a **[folder]** and a **[default-access]** argument, and will list
+ * all folders inside of the specified folder, and check for the existence of a
+ * _"/jumbo-buttons/"_ inside of the children folder of the specified argument.
+ *
+ * If it finds such a folder, it will invoke **[p5.auth.has-access]**, passing in
+ * **[default-access]** as the default access value, to determine if the user has
+ * access to the module or not. This allows you to create access objects resembling
+ * the following to grant or deny access to specific roles accordingly. The example
+ * below will grant access to the _"exhibits"_ backend module to all users belonging
+ * to the role of _"super-user"_.
+ *
+ * ```hyperlambda
+ * super-user
+ *   ingen.module.allow:/exhibits/backend/
+ * ```
+ *
+ * The namespace for the access objects you create can be either **[ingen.module.allow]**, or
+ * **[ingen.module.deny]**, and the path should be either _"/backend/some-backend-module/"_,
+ * _"/frontend/some-frontend-module/"_, or _"/common/some-common-module/"_.
+ *
+ * Only if the user has access it will add any widgets it finds beneath the _"/jumbo-buttons/"_ folder
+ * to the main _"desktop launcher"_ of the InGen system.
+ *
+ * The system will also verify access to modules when a module is loaded, to safeguard against buggy
+ * implementations, that for some reasons accidentally evaluates a Hyperlambda file/Active Event it shouldn't
+ * have done.
+ *
+ * If you create your own modules, you should internally invoke **[p5.auth.has-access]** to check if the
+ * user has access to the module or not.
+ */
+create-event:ingen.widgets.jumbo-buttons
+
+  /*
+   * Sanity checking invocation.
+   */
+  micro.lambda.contract.min:x:/..
+    folder:string
+    default-access:bool
+
+  /*
+   * Listing all module folders and iterating through them.
+   */
+  list-folders:@INGEN/modules/
+  for-each:x:/@list-folders/*?name
+
+    /*
+     * Checking if currently iterated module has a [folder] module.
+     */
+    if
+      fetch:x:/0/0?value
+        folder-exists:{0}{1}/
+          :x:/@_dp?value
+          :x:/../*/folder?value
+
+      /*
+       * The [folder] folder exists inside of currently iterated module's folder.
+       * Now checking if that folder has a "/jumbo-buttons/" folder.
+       */
+      if
+        fetch:x:/0/0?value
+          folder-exists:{0}{1}/jumbo-buttons/
+            :x:/@_dp?value
+            :x:/../*/folder?value
+
+        /*
+         * Currently iterated module folder's [folder] has a "jumbo-buttons" folder.
+         *
+         * Now figuring out if user has access to InGen module or not.
+         */
+        split:x:/@_dp?value
+          =:/
+        set:x:/@split(/0|/1|/2)
+        add:x:/@split
+          src:x:/../*/folder?value
+        join:x:/@split/*?name
+          sep:/
+        set:x:/@join?value
+          src:/{0}/
+            :x:/@join?value
+
+        /*
+         * TODO: Minor bug in [p5.auth.get-access] doesn't allow us to use x-pressions in main value argument.
+         * This is fixed in the source forP5, but not yet released.
+         * Remove the [eval-x] invocation below once released version 8.5 of P5.
+         */
+        eval-x:x:/+
+        p5.auth.has-access:x:/../*/default-access?value
+          filter:ingen.module
+          path:x:/@join?value
+        if:x:/@p5.auth.has-access?value
+          =:bool:true
+
+          /*
+           * User has access to module.
+           */
+          eval-x:x:/+/*/*
+          add:x:/../*/return/*
+            src
+              folder:{0}{1}/jumbo-buttons/
+                :x:/@_dp?value
+                :x:/../*/folder?value
+
+  /*
+   * Checking if we had no folders that user had access to, at which point
+   * we simply return an invisible span widget.
+   */
+  if:x:/../*/return/*/micro.widgets.file/*/folder?count
+    =:int:0
+
+    /*
+     * No access here, returning empty/invisible span.
+     */
+    return
+      literal
+        element:span
+        style:"display:none;"
+
+  /*
+   * Returning folder to caller.
+   */
+  return
+    micro.widgets.file
+      class:air-top

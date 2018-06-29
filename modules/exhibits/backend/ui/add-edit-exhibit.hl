@@ -1,0 +1,257 @@
+﻿/*
+ * Allows the user to add a new exhibit, or edit an existing exhibit.
+ */
+micro.lambda.contract.optional:x:/..
+  id:long
+
+
+/*
+ * Verifying access.
+ */
+ingen.access._throw-if-no-access:false
+  path:/backend/exhibits/
+
+
+/*
+ * Checking if caller supplied an [id] argument, at which point we populate the widget
+ * with the existing values from that record.
+ */
+.data
+if:x:/../*/id?value
+
+  /*
+   * Edit mode.
+   */
+  eval-x:x:/+/*/*
+  add:x:/@.data
+    micro.evaluate.file:@INGEN/modules/exhibits/common/model/get-exhibit.hl
+      id:x:/../*/id?value
+
+
+/*
+ * Creating a modal widget for creating a new exhibit, or editing an existing exhibit.
+ */
+eval-x:x:/+/**/.id
+create-widgets
+  micro.widgets.modal:themepark-add-exhibit-modal
+    events
+
+      /*
+       * Common helper event to hide some price widget,depending upon whether or not
+       * the price module is in use or not.
+       */
+      ingen.exhibits.hide-price-widget
+
+        /*
+         * Checking if system is configured with the "tickets module", and if not,
+         * simply hiding widget entirely
+         */
+        if
+          ingen.settings.has-ticket-module
+          =:bool:false
+
+          /*
+           * Hiding wrapper strip for value.
+           */
+          p5.web.widgets.find-first-ancestor:x:/../*/_arg?value
+            element:div
+          set-widget-property:x:/-/*/*?value
+            style:"display:none;"
+
+          /*
+           * To avoid having updates delete existing price information when tickets are
+           * (temporarily) turned off, we check if this is an edit operation, at which point
+           * we simply keep the existing value.
+           */
+          .id:x:/../*/id?value
+          if:x:/-?value
+            not
+
+            /*
+             * No existing price information, hence we default its value to "0".
+             */
+            set-widget-property:x:/../*/_arg?value
+              value:0
+
+    widgets
+
+      /*
+       * Some simple header for our modal widget.
+       */
+      h2
+        innerValue:Exhibit data
+
+      /*
+       * Name of exhibit.
+       */
+      ingen.widgets._input-field
+        info:Name
+        type:text
+        .data-field:name
+        placeholder:Name ...
+        value:x:/@.data/*/name?value
+        onkeydown:@"if (event.keyCode == 13) {p5.$('add-edit-exhibit-save-button').raise('onclick');return false;} else if (event.keyCode == 27) {p5.$('close-add-edit-exhibit-save-button').raise('onclick');return false;}"
+        oninit
+
+          /*
+           * Setting initial focus to name widget.
+           */
+          micro.page.set-focus:x:/../*/_event?value
+
+      /*
+       * Adult price for exhibit.
+       */
+      ingen.widgets._input-field
+        info:Price
+        type:number
+        .data-field:price
+        placeholder:Price ...
+        value:x:/@.data/*/price?value
+        onkeydown:@"if (event.keyCode == 13) {p5.$('add-edit-exhibit-save-button').raise('onclick');return false;} else if (event.keyCode == 27) {p5.$('close-add-edit-exhibit-save-button').raise('onclick');return false;}"
+        oninit
+
+          /*
+           * Invoking common lambda event which will hide current widget if price module is not
+           * being used.
+           */
+          ingen.exhibits.hide-price-widget:x:/../*/_event?value
+
+      /*
+       * Children price for exhibit.
+       */
+      ingen.widgets._input-field
+        info:Children price
+        type:number
+        .data-field:children_price
+        placeholder:Children price ...
+        value:x:/@.data/*/children_price?value
+        onkeydown:@"if (event.keyCode == 13) {p5.$('add-edit-exhibit-save-button').raise('onclick');return false;} else if (event.keyCode == 27) {p5.$('close-add-edit-exhibit-save-button').raise('onclick');return false;}"
+        oninit
+
+          /*
+           * Invoking common lambda event which will hide current widget if price module is not
+           * being used.
+           */
+          ingen.exhibits.hide-price-widget:x:/../*/_event?value
+
+      /*
+       * Hidden input widget containing database id of existing exhibit.
+       */
+      input
+        type:hidden
+        value:x:/@.data/*/id?value
+        .data-field:id
+
+      /*
+       * Description Markdown widget.
+       */
+      label
+        innerValue:Description (Markdown)
+      micro.widgets.codemirror:admin-exhibits-markdown-editor
+        mode:markdown
+        .data-field:description
+        value:x:/@.data/*/description?value
+
+      /*
+       * Toolbar at the bottom allowing user to save exhibit, add image to Markdown content,
+       * or close modal widget without saving.
+       */
+      div
+        class:right strip
+        widgets
+
+          /*
+           * Save button.
+           */
+          button:add-edit-exhibit-save-button
+            innerValue:Save
+            onclick
+
+              /*
+               * Serializing form and invoking file responsible for creating a new record in database.
+               */
+              micro.form.serialize:themepark-add-exhibit-modal
+
+              /*
+               * Checking if this is an edit operation.
+               */
+              if:x:/@micro.form.serialize/*/id?value
+                =:
+
+                /*
+                 * Removing [id], since this is not en edit operation.
+                 */
+                set:x:/@micro.form.serialize/*/id
+
+              /*
+               * Invoking file responsible for creating/editing exhibit.
+               */
+              add:x:/+
+                src:x:/@micro.form.serialize/*
+              micro.evaluate.file:@INGEN/modules/exhibits/backend/model/add-edit-exhibit.hl
+
+              /*
+               * Deleting widget and re-databinding datagrid.
+               */
+              delete-widget:themepark-add-exhibit-modal
+              ingen.widgets.exhibits._datagrid.databind
+
+              /*
+               * Provding some visual feedback to user.
+               */
+              micro.windows.info:Successfully updated exhibits
+                class:micro-windows-info success
+
+          /*
+           * Add image button.
+           */
+          button
+            innerValue:Add image
+            onclick
+
+              /*
+               * Invokes the file responsible for allowing user to insert an image reference
+               * into his Exhibit's content Markdown editor.
+               */
+              micro.evaluate.file:@INGEN/modules/images/backend/ui/select-image.hl
+                .onok
+
+                  /*
+                   * Simply appending image at the end of CodeMirror's Markdown content for simplicity.
+                   *
+                   * First we retrieve CodeMirror editor's Markdown.
+                   */
+                  micro.widgets.codemirror.get-value:admin-exhibits-markdown-editor
+
+                  /*
+                   * Then we trim the content to make sure we remove additional whitespace characters.
+                   */
+                  trim:x:/@micro.widgets.codemirror.get-value/*?value
+
+                  /*
+                   * Then we append the necessary Markdown syntax to embed image into Markdown editor.
+                   *
+                   * Notice, since Markdown doesn't allow for setting CSS class of images, we simply
+                   * use the "alt" tag as a CSS selector, allowing us to create different style
+                   * representations, depending upon what alignment the user chose as he selected
+                   * an image.
+                   */
+                  eval-x:x:/+/*
+                  micro.widgets.codemirror.set-value:admin-exhibits-markdown-editor
+                    value:"{0}\r\n\r\n![{1}]({2})\r\n\r\n"
+                      :x:/@trim?value
+                      :x:/../*/float?value
+                      :x:/../*/path?value
+
+          /*
+           * Close modal widget button.
+           */
+          button:close-add-edit-exhibit-save-button
+            innerValue:Close
+            onclick
+
+              /*
+               * Helper Ajax callback to simply delete modal widget without saving anything.
+               */
+              delete-widget:themepark-add-exhibit-modal
+

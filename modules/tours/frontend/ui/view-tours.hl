@@ -1,0 +1,74 @@
+﻿/*
+ * Creates our "view tours" front end widget.
+ */
+
+
+/*
+ * Verifying access.
+ */
+ingen.access._throw-if-no-access:true
+  path:/frontend/tours/
+
+
+/*
+ * Checking if "view tour" widget already exists, at which point we simply
+ * return early.
+ */
+if
+  fetch:x:/0/0?value
+    widget-exists:view-tours-wrapper
+
+  /*
+   * Widget is already visible.
+   */
+  return
+
+
+/*
+ * Clearing previously create widgets from dynamic content wrapper widget.
+ */
+ingen.main-viewport.clear
+
+
+/*
+ * Setting header and title of page.
+ */
+ingen.header.set:Tours
+
+
+/*
+ * Creating our "view tour" datagrid in a "bg" wrapper div.
+ */
+create-widget:view-tours-wrapper
+  parent:themepark-dynamic-content
+  class:shaded rounded air air-inner bg
+  widgets
+
+    /*
+     * This is the "tours filter" wrapper widget.
+     *
+     * Since we're using this in both the front end and the back end, we've created
+     * an extension widget, to keep our code "DRY".
+     *
+     * If we wanted to further improve upon this logic, we could probably even share the
+     * same filter/paging toolbar between also for instance the administration of tickets.
+     * However, this has been left as an exercise if you want to do this.
+     */
+    ingen.widgets.tours._datagrid-filter
+
+    /*
+     * Our actual datagrid, dynamically databound towards "exhibits" table.
+     *
+     * Notice, our [onclick] is what occurs when a row in our datagrid is clicked.
+     * The [columns] declaration as simply appended to the existing common columns
+     * for our datagrid - Which we take advantage of to make it possible to delete items.
+     */
+    ingen.widgets.tours._datagrid:tours-datagrid
+      onclick
+
+        /*
+         * Invoking file responsible for editing a specific item from database.
+         */
+        eval-x:x:/+/*
+        micro.evaluate.file:@INGEN/modules/tours/frontend/ui/view-single-tour.hl
+          id:x:/../*/.row/*/id?value

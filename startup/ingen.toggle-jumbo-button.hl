@@ -1,0 +1,32 @@
+
+/*
+ * Creates the event that toggles a Jumbo Button once clicked.
+ */
+create-event:ingen.toggle-jumbo-button
+
+  /*
+   * Sanity checking invocation.
+   */
+  micro.lambda.contract.optional:x:/..
+    button:string
+
+
+  /*
+   * Removing "toggled" state from all Jumbo Buttons.
+   */
+  p5.web.widgets.find-first-like:themepark-jumbo-buttons
+    class:themepark-jumbo-button-toggled
+  micro.css.delete:x:/-/*/*?value
+    class:themepark-jumbo-button-toggled
+
+
+  /*
+   * Checking if caller wants to add toggled state to a specific button.
+   */
+  if:x:/../*/button?value
+
+    /*
+     * Toggling [button] argument button.
+     */
+    micro.css.add:x:/../*/button?value
+      class:themepark-jumbo-button-toggled

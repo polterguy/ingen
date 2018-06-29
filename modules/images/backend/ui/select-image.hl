@@ -1,0 +1,398 @@
+﻿/*
+ * Creates a modal window allowing the user to select an image, and invokes **[.onok]**
+ * with the **[path]** to the image if user selects an image, and a **[float]** argument
+ * being either _"left"_, _"none"_ or _"right"_.
+ *
+ * The user can select an image, its size (thumb, medium or large), in addition to how
+ * he wants to float the image.
+ *
+ * If the user uploads an images, the images will be resized and automatically cropped,
+ * to 3 different sizes 800x600, 400x300 and 160x120.
+ *
+ * Notice, since Markdown doesn't support adding any attributes to image references, except
+ * the _"alt"_ attribute, we use the _"alt"_ attribute as a CSS selector. Which is probably
+ * kind of a _"cowboy trick"_, but still works perfectly fine none the less.
+ *
+ * Notice, during uploading the 3 different sizes will be stored in the main image folder (large),
+ * medium image folder, and thumbs image folder. but the files will have the same name. The
+ * name is not changed when an image is uploaded, which implies that if you upload an image
+ * with a name that already exists, the old image will be overwritten.
+ */
+
+
+/*
+ * Sanity checking invocation.
+ */
+micro.lambda.contract.min:x:/..
+  .onok
+
+
+/*
+ * Adding callback to "elect image" event.
+ */
+add:x:/../*/create-widgets/**/events/*/ingen.images.select/*/.onok
+  src:x:/../*/.onok/*
+
+
+/*
+ * Creates our modal widget that allows the user to select and/or upload images to use.
+ */
+create-widgets
+  micro.widgets.modal:select-image-modal-widget
+    widgets
+
+      /*
+       * Descriptive header of what widget does.
+       */
+      h2
+        innerValue:Select image
+
+      /*
+       * Some general information about widget.
+       */
+      p
+        innerValue:@"Notice, your uploaded images will be automatically clipped and resized to a 4/3 ratio of 800x600 pixels (large), 400x300 (small) and 160x120 pixels (thumbnails)."
+
+      /*
+       * This serves as the container widget, within the images are actually rendered, allowing
+       * the user to select one image.
+       */
+      container
+        class:air-bottom
+        oninit
+
+          /*
+           * Initially databinding thumbnails.
+           */
+          ingen.images.databind
+
+        events
+
+          /*
+           * Databinds each image and displays in widget, such that use can select one.
+           */
+          ingen.images.databind
+
+            /*
+             * Clearing out all old thumbnails from widget.
+             */
+            clear-widget:x:/../*/_event?value
+
+            /*
+             * Listing all thumbnails in the system.
+             */
+            micro.evaluate.file:@INGEN/modules/images/backend/model/get-thumbnails.hl
+
+            /*
+             * Looping through each image listed above, and creates one select image widget for each.
+             */
+            for-each:x:/@micro.evaluate.file/*?name
+
+              /*
+               * Creating select image widget.
+               *
+               * This is an "img" widget, acting like a Jumbo Button, which once clicked,
+               * "selects" the image.
+               */
+              eval-x:x:/+/**/.path
+              create-widget
+                parent:x:/../*/_event?value
+                element:img
+                role:button
+                class:themepark-thumbnail-image jumbo-button
+                alt:Thumbnail of image
+                src:x:/@_dp?value
+                onclick
+
+                  /*
+                   * Forward evaluated during creation.
+                   */
+                  .path:x:/@_dp?value
+
+                  /*
+                   * Assuming file has exact same name, except that it's not in the "/thumbs/" folder.
+                   */
+                  replace:x:/@.path?value
+                    src:/thumbs
+                  ingen.images.select:x:/@replace?value
+
+          /*
+           * Invoked when user selects an image.
+           */
+          ingen.images.select
+
+            /*
+             * Contains callback supplied by caller.
+             */
+            .onok
+
+            /*
+             * Checking if size preferences is anything but "large", at which point we
+             * append the appropriate folder to the filename.
+             */
+            ingen.images.get-size-used
+            if:x:/@ingen.images.get-size-used?value
+              !=:large
+
+              /*
+               * Splitting path, and appending the size as a folder.
+               */
+              split:x:/../*/_arg?value
+                =:/
+              insert-before:x:/@split/0/-
+                src:x:/@ingen.images.get-size-used?value
+              join:x:/@split/*?name
+                sep:/
+              set:x:/../*/_arg?value
+                src:x:/@join?value
+
+            /*
+             * Making sure we figure out what float to use for the image.
+             */
+            ingen.images.get-float
+
+            /*
+             * Evaluates callback, to do whatever user wants us to do when an image is selected.
+             *
+             * This allows us to reuse the image selector widget for multiple scenarios.
+             */
+            eval-x:x:/+/*
+            eval:x:/@.onok
+              path:x:/../*/_arg?value
+              float:x:/@ingen.images.get-float?value
+
+            /*
+             * Deletes the modal widget.
+             */
+            delete-widget:select-image-modal-widget
+
+      /*
+       * The bottom button strip, that allows the user to upload images,
+       * or close modal widget without selecting an image, at which point the [.onok]
+       * will not be invoked.
+       */
+      div
+        class:strip right
+        widgets
+
+          /*
+           * Ajax upload button to allow user to upload images.
+           */
+          micro.widgets.upload-button
+            class:large
+            multiple
+            accept:.png,.jpg,.jpeg
+            .onupload
+
+              /*
+               * Looping through each image that was uploaded and invoking file
+               * responsible for saving image.
+               */
+              for-each:x:/../*/files/*?value
+                eval-x:x:/+/*
+                micro.evaluate.file:@INGEN/modules/images/backend/model/save-image.hl
+                  image:x:/@_dp?value
+
+              /*
+               * Re-databinding thumbnails.
+               */
+              ingen.images.databind
+
+          /*
+           * Close modal widget button.
+           */
+          button
+            innerValue:Close
+            onclick
+
+              /*
+               * Simply deletes the modal widget.
+               */
+              delete-widget:select-image-modal-widget
+
+      /*
+       * Button strip that allows the user to select what size to use for his selected image.
+       */
+      div:themepark-select-size-buttons
+        class:strip right
+        oninit
+
+          /*
+           * Figuring out if user has previously selected a size.
+           */
+          p5.web.session.get:ingen.images.set-size-used
+          if:x:/@p5.web.session.get/*?value
+
+            /*
+             * User has previously selected a size to use.
+             */
+            ingen.images.set-size-used:x:/@p5.web.session.get/*?value
+
+          else
+
+            /*
+             * Defaulting to using large size.
+             */
+            ingen.images.set-size-used:large
+
+        events
+
+          /*
+           * Changes the size used during selection of image.
+           */
+          ingen.images.set-size-used
+
+            /*
+             * Simply storing in session the user preferences to which image to use.
+             */
+            p5.web.session.set:ingen.images.set-size-used
+              src:x:/../*/_arg?value
+
+            /*
+             * Un-toggling all buttons, for the to toggle currently clicked button.
+             */
+            p5.web.widgets.find-first-like:themepark-select-size-buttons
+              class:toggled
+            micro.css.delete:x:/-/*/*?value
+              class:toggled
+            p5.web.widgets.find-first:themepark-select-size-buttons
+              .size:x:/../*/_arg?value
+            micro.css.add:x:/-/*/*?value
+              class:toggled
+
+          /*
+           * Retrieves the size used during selection of image.
+           */
+          ingen.images.get-size-used
+
+            /*
+             * Retrieves the size preferences for user from session.
+             */
+            p5.web.session.get:ingen.images.set-size-used
+            return:x:/-/*?value
+
+        widgets
+          button
+            innerValue:Large
+            .size:large
+            onclick
+
+              /*
+               * Changing size used during selection.
+               */
+              ingen.images.set-size-used:large
+
+          button
+            innerValue:Medium
+            .size:medium
+            onclick
+
+              /*
+               * Changing size used during selection.
+               */
+              ingen.images.set-size-used:medium
+
+          button
+            innerValue:Thumbnail
+            .size:thumbs
+            onclick
+
+              /*
+               * Changing size used during selection.
+               */
+              ingen.images.set-size-used:thumbs
+
+      /*
+       * Button strip that allows the user to select what float to use for his selected image.
+       */
+      div:themepark-select-float-buttons
+        class:strip right
+        oninit
+
+          /*
+           * Figuring out if user has previously selected a float.
+           */
+          p5.web.session.get:ingen.images.set-float
+          if:x:/@p5.web.session.get/*?value
+
+            /*
+             * User has previously selected a size to use.
+             */
+            ingen.images.set-float:x:/@p5.web.session.get/*?value
+
+          else
+
+            /*
+             * Defaulting to using no floats.
+             */
+            ingen.images.set-float:none
+
+        events
+
+          /*
+           * Changes the float used during selection of image.
+           */
+          ingen.images.set-float
+
+            /*
+             * Simply storing in session the user preferences to which image to use.
+             */
+            p5.web.session.set:ingen.images.set-float
+              src:x:/../*/_arg?value
+
+            /*
+             * Un-toggling all buttons, for the to toggle currently clicked button.
+             */
+            p5.web.widgets.find-first-like:themepark-select-float-buttons
+              class:toggled
+            micro.css.delete:x:/-/*/*?value
+              class:toggled
+            p5.web.widgets.find-first:themepark-select-float-buttons
+              .float:x:/../*/_arg?value
+            micro.css.add:x:/-/*/*?value
+              class:toggled
+
+          /*
+           * Retrieves the size used during selection of image.
+           */
+          ingen.images.get-float
+
+            /*
+             * Retrieves the size preferences for user from session.
+             */
+            p5.web.session.get:ingen.images.set-float
+            return:x:/-/*?value
+
+        widgets
+          button
+            innerValue:@"<span class=""icon-paragraph-left""></span>"
+            .float:left
+            title:Floats the image to the left of your text
+            onclick
+
+              /*
+               * Changing float used during selection.
+               */
+              ingen.images.set-float:left
+
+          button
+            innerValue:@"<span class=""icon-paragraph-center""></span>"
+            .float:none
+            title:Display the image such that text comes above and below the image.
+            onclick
+
+              /*
+               * Changing float used during selection.
+               */
+              ingen.images.set-float:none
+
+          button
+            innerValue:@"<span class=""icon-paragraph-right""></span>"
+            .float:right
+            title:Floats the image to the right of your text
+            onclick
+
+              /*
+               * Changing float used during selection.
+               */
+              ingen.images.set-float:right

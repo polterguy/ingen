@@ -1,0 +1,36 @@
+
+/*
+ * Evaluating all startup folders in all sub-modules.
+ *
+ * This implies looking for a "/startup/" folder inside of each of our module's
+ * sub folders of type 'backend', 'common' and 'frontend'.
+ */
+.common-folders
+  backend
+  common
+  frontend
+
+
+/*
+ * First listing all modules, and iterating through each modul's folder.
+ */
+list-folders:@INGEN/modules/
+for-each:x:/-/*?name
+
+  /*
+   * Listing all common folders inside of currently iterated module.
+   */
+  for-each:x:/@.common-folders/*?name
+
+    /*
+     * Checking if currently iterated common folder inside of module's folder contains
+     * a "startup" folder, at which point we evaluate all of that folder's Hyperlambda files.
+     */
+    if
+      fetch:x:/0/0?value
+        folder-exists:{0}{1}/startup/
+          :x:/..for-each/@_dp?value
+          :x:/@_dp?value
+      micro.evaluate.folder:{0}{1}/startup/
+        :x:/..for-each/@_dp?value
+        :x:/@_dp?value

@@ -1,0 +1,19 @@
+﻿/*
+ * Jumbo Button for allowing admin to administrate settings of installation.
+ */
+button
+  class:jumbo-button
+  innerValue:@"<span>Settings</span><span class=""icon-wrench""></span>"
+  onclick
+
+    /*
+     * Evaluating file responsible for administrating exhibits.
+     */
+    micro.evaluate.file:@INGEN/modules/settings/backend/ui/settings.hl
+
+    /*
+     * Evaluating file responsible for toggling Jumbo Buttons.
+     */
+    eval-x:x:/+/*
+    ingen.toggle-jumbo-button
+      button:x:/../*/_event?value

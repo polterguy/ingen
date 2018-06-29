@@ -1,0 +1,19 @@
+﻿/*
+ * Jumbo Button for allowing admin to administrate tours.
+ */
+button
+  class:jumbo-button
+  innerValue:@"<span>Tours</span><span class=""icon-cogs""></span>"
+  onclick
+
+    /*
+     * Evaluating file responsible for administrating exhibits.
+     */
+    micro.evaluate.file:@INGEN/modules/tours/backend/ui/admin-tours.hl
+
+    /*
+     * Evaluating file responsible for toggling Jumbo Buttons.
+     */
+    eval-x:x:/+/*
+    ingen.toggle-jumbo-button
+      button:x:/../*/_event?value
