@@ -15,5 +15,5 @@ button
      * Evaluating file responsible for toggling Jumbo Buttons.
      */
     eval-x:x:/+/*
-    ingen.toggle-jumbo-button
+    ingen.jumbo-buttons.toggle
       button:x:/../*/_event?value

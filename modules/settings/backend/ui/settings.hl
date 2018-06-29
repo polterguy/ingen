@@ -7,7 +7,7 @@
  * Verifying access.
  */
 ingen.access._throw-if-no-access:false
-  path:/backend/settings/
+  path:/settings/backend/
 
 
 /*
@@ -147,4 +147,4 @@ create-widgets
                * Simply deleting modal window, and making sure we remove toggled state from Jumbo Button.
                */
               delete-widget:ingen-settings-modal
-              ingen.toggle-jumbo-button
+              ingen.jumbo-buttons.toggle

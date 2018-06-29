@@ -1,4 +1,3 @@
-
 ## Introduction to InGen
 
 InGen is the name of the software system that the feature movie _"Jurassic Park"_ is using, and
@@ -10,6 +9,9 @@ the programming contest was over, to refactor it and clean it up.
 The system allows guests to browse exhibits, optionally purchase tickets for exhibits, in
 addition to taking tours, which are guided tours based upon speech synthesis, using Google
 Translate to translate from English to any language you wish to configure the system to use.
+The system is supposed to serve as a _"micro CMS"_ for Theme Parks, and be accessed through
+the LAN, either from kiosk terminals or through customer's smartphones or tablets.
+
 An employee can administrate tours, exhibits, and tickets. The system features strong support
 for access control, allowing you to easily create access control to any individual parts of
 the system, according to which roles your employees belongs to. Below is a screenshot of how
@@ -35,12 +37,13 @@ For instance, I could have made the system even more _"DRY"_ by creating one com
 widget for all datagrids used in the system, but this would have made the code more difficult
 to understand - And since the purpose of the system is to provide a reference implementation
 of an enterprise software system for others, I felt this would be overkill, and defeat its
-main purpose. _"DRY"_ implying _"Don't Repeat Yourself"_. At the same time, I have also tried
-to create it fairly DRY, to illustrate Phosphorus Five's capacity in regards to these ideas.
-For instance, the Exhibits and Tours datagrids of the system is implemented as a common
-reusable datagrid, for both the frontend and the backend. However, the Tickets datagrid is
-simply declared inline, directly into the module that loads it. This creates a simple example
-use case for you that you can study to understand how to create MySQL datagrids in your own
-systems - Which of course is the Tickets datagrid. While at the same time giving you hints
-in regards to how you can continue to implement extremely DRY systems, by studying the Exhibits
-and Tours modules.
+main purpose. _"DRY"_ implying _"Don't Repeat Yourself"_.
+
+At the same time, I have also tried to create it fairly DRY, to illustrate Phosphorus Five's
+capacity in regards to these ideas. For instance, the Exhibits and Tours datagrids of the
+system is implemented as a common reusable datagrid, for both the frontend and the backend.
+However, the Tickets datagrid is simply declared inline, directly into the module that loads
+it. This creates a simple example use case for you that you can study to understand how to
+create MySQL datagrids in your own systems - Which of course is the Tickets datagrid. While
+at the same time giving you hints in regards to how you can continue to implement extremely
+DRY systems, by studying the Exhibits and Tours modules.

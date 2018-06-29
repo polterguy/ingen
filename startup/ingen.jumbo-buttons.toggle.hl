@@ -1,8 +1,14 @@
-
 /*
  * Creates the event that toggles a Jumbo Button once clicked.
+ *
+ * As a user is clicking a Jumbo Button, we add a CSS class to the _"currently active"_
+ * Jumbo Button. This is done to give the user visual clues as to which module
+ * is currently _"active"_.
+ *
+ * Basically, this event will untoggle all toggled Jumbo Buttons, and if you pass in
+ * the optional **[button]** argument it will toggle the specified **[button]** button.
  */
-create-event:ingen.toggle-jumbo-button
+create-event:ingen.jumbo-buttons.toggle
 
   /*
    * Sanity checking invocation.

@@ -7,7 +7,7 @@
  * Verifying access.
  */
 ingen.access._throw-if-no-access:false
-  path:/backend/tours/
+  path:/tours/backend/
 
 
 /*

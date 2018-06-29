@@ -15,7 +15,7 @@ micro.lambda.contract.min:x:/..
  * Verifying access.
  */
 ingen.access._throw-if-no-access:false
-  path:/backend/tickets/
+  path:/tickets/backend/
 
 
 /*
