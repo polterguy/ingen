@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Creates our "admin tickets" back end widget.
  */
 
@@ -67,7 +67,7 @@ create-widget:manage-tickets-wrapper
          * Adding additional free text filtering condition.
          */
         set:x:/@.custom-filter?value
-          src:and (purchaser_name like @custom or purchaser_email like @custom)
+          src:and (purchaser_name like @custom or purchaser_email like @custom or tickets_collection_guid like @custom)
         eval-x:x:/+/*/*
         add:x:/../*/micro.widgets.mysql.datagrid.databind/*/filter
           src
@@ -258,3 +258,6 @@ create-widget:manage-tickets-wrapper
             return
               span
                 innerValue:x:/@p5.types.date.format?value
+        tickets_collection_guid
+          .header
+            innerValue:Reference

@@ -44,6 +44,7 @@ create table tickets_collection (
   purchaser_email varchar(200) character set utf8mb4 collate utf8mb4_unicode_ci not null,
   exhibit_id int(10) unsigned not null,
   purchased datetime not null default now(),
+  tickets_collection_guid varchar(50) character set utf8mb4 collate utf8mb4_unicode_ci not null,
   constraint fk_tickets_collection_exhibits foreign key (exhibit_id) references exhibits(id) on delete cascade,
   primary key (id)
 ) engine=InnoDB auto_increment=1 default charset=utf8mb4 collate=utf8mb4_unicode_ci;

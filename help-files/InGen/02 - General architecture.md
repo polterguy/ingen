@@ -88,7 +88,18 @@ An administrator can through its backend accept tickets and mark these as _"used
 
 When a guest orders tickets, the system will by default ask the guest to sign up for
 the Theme Park's marketing newsletter, collecting the customer's email address in the
-process.
+process. In addition, a QR code will be generated with the _"tickets\_collection_guid"_,
+which serves as the _"ticket reference"_ and sent to the guest's email address. This allows
+for creating QR code readers at the exhibit, where the guest simply opens up this attachment
+on his phone for instance, for then to put his phone in front of the QR code reader, to
+automatically have the gates to the exhibit open, if the QR code references an unused ticket.
+The latter also (obviously) easily allows you to extend the system, and write out these QR
+codes using a printer if you're using kiosks, to such give the user a physical ticket to
+hold in his hand.
+
+Since I don't want to include any fancy hardware requirements for the app though, since it's
+a use case for Phosphorus Five, I have not actually implemented any of these last features -
+But implementing this would probably be easily achieved.
 
 ### Tours module
 

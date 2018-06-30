@@ -16,6 +16,28 @@ micro.lambda.contract.min:x:/..
 
 
 /*
+ * Checking if our "ticket cache" folder exists, and if not, making sure we create it.
+ */
+if
+  fetch:x:/0/0?value
+    folder-exists:/common/private/ingen-tickets/
+  not
+  create-folder:/common/private/ingen-tickets/
+
+
+/*
+ * This is our "ticket reference", and is used as a unique reference to easily identify tickets,
+ * without allowing for faking the system.
+ */
+p5.types.guid.new
+.ticket-id
+split:x:/@p5.types.guid.new?value.string
+  =:-
+set:x:/@.ticket-id?value
+  src:x:/@split/0?name
+
+
+/*
  * Opening up database connection and doing insert into relevant tables.
  */
 p5.mysql.connect:[ingen]
@@ -49,12 +71,14 @@ p5.mysql.connect:[ingen]
           @email:x:/../*/purchaser_email?value
 
     /*
-     * Creating our tickets_collection record.
+     * Creating our tickets_collection record, making sure we insert our GUID
+     * as its "tickets_collection_guid" value.
      */
-    p5.mysql.insert:insert into tickets_collection (purchaser_name, purchaser_email, exhibit_id) values (@purchaser_name, @purchaser_email, @exhibit_id)
+    p5.mysql.insert:insert into tickets_collection (purchaser_name, purchaser_email, exhibit_id, tickets_collection_guid) values (@purchaser_name, @purchaser_email, @exhibit_id, @tickets_collection_guid)
       @purchaser_name:x:/../*/purchaser_name?value
       @purchaser_email:x:/../*/purchaser_email?value
       @exhibit_id:x:/../*/exhibit-id?value.long
+      @tickets_collection_guid:x:/@.ticket-id?value
 
     /*
      * Creating our adult tickets records.
@@ -102,3 +126,77 @@ p5.mysql.connect:[ingen]
      * Committing database transaction.
      */
     p5.mysql.transaction.commit
+
+
+/*
+ * Trying to send purchaser an email, but only if we have an actual username for our SMTP settings,
+ * since otherwise SMTP settings probably haven't been configured.
+ */
+ingen.settings.get-smtp-settings
+if:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-username?value
+  =:your-username@gmail.com
+
+  /*
+   * Creating warning that SMTP settings have notbeen configured.
+   */
+  micro.windows.info:SMTP settings of app is not configured
+    class:micro-windows-info warning
+
+else
+
+  /*
+   * Customizing the body of the email according to settings and ticket reference.
+   *
+   * Notice, we could have used a [fork] (multiple threads) here, but to keep the system
+   * simple, and avoid complexity, we've chosen to keep it simple.
+   */
+  eval-x:x:/+
+  .body:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-body?value
+  set:x:/@.body?value
+    replace:x:/@.body?value
+      src:[ticket-reference]
+      dest:x:/@.ticket-id?value
+
+  /*
+   * Creating QR code for ticket, and downloading it locally, to attach it as an image
+   * attachment to email sent to user. Notice, we simply use Google's QR code API for this.
+   */
+  eval-x:x:/+/*/*/*/.p5.io.file.save-to-stream
+  p5.http.get:"https://chart.googleapis.com/chart?cht=qr&chl={0}&chs=250x250&chld=L|0"
+    :x:/@.ticket-id?value
+    .onresponse
+      .p5.io.file.save-to-stream:/common/private/ingen-tickets/{0}.png
+        :x:/@.ticket-id?value
+
+  /*
+   * Sending user an email.
+   */
+  set:x:/+2/*/*/Sender/*?name
+    src:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-name?value
+  set:x:/+/*/*/To/*?name
+    src:x:/../*/purchaser_name?value
+  p5.smtp.send
+    server:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-server?value
+    port:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-port?value
+    ssl:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-use-ssl?value
+    username:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-username?value
+    password:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-password?value
+    envelope
+      Subject:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-subject?value
+      Sender
+        foo:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-sender?value
+      To
+        foo:x:/../*/purchaser_email?value
+      body
+        multipart:mixed
+          text:plain
+            content:x:/@.body?value
+          image:png
+            filename:/common/private/ingen-tickets/{0}.png
+              :x:/@.ticket-id?value
+
+
+/*
+ * Returning tickets_collection_guid to caller.
+ */
+return:x:/@.ticket-id?value

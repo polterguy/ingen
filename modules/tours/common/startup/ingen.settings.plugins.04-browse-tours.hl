@@ -2,7 +2,7 @@
  * Creates the **[ingen.settings.plugins._browse-tours]** plugin Active Event for
  * the settings module.
  */
-create-event:ingen.settings.plugins.03-browse-tours
+create-event:ingen.settings.plugins.04-browse-tours
 
   /*
    * Returning widget necessary to include settings for "enable browse tours" widget

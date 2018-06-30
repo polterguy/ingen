@@ -41,11 +41,11 @@ create-widgets
             class:strip fill
             widgets
               label
-                innerValue:Name
+                innerValue:Full name
                 class:description-9
               input:name-input
                 type:text
-                placeholder:Purchaser's name ...
+                placeholder:Purchaser's full name ...
                 .data-field:purchaser_name
                 onkeydown:@"if (event.keyCode == 13) {p5.$('confirm-purchase').raise('onclick');return false;} else if (event.keyCode == 27) {p5.$('close-purchase').raise('onclick');return false;}"
                 oninit
@@ -192,11 +192,6 @@ If you do not want to subscribe to our newsletter, you'll have to explicitly tur
                     exhibit-id:x:/@.id?value
 
                   /*
-                   * Deleting purchase view exhibit info widget.
-                   */
-                  delete-widget:view-exhibit-wrapper
-
-                  /*
                    * Changing header of modal widget.
                    */
                   set-widget-property:purchase-header
@@ -251,9 +246,14 @@ If you do not want to subscribe to our newsletter, you'll have to explicitly tur
                             class:micro-widgets-modal larger-text
                             widgets
                               h2
-                                innerValue:Purchase complete
+                                innerValue:Ticket information
                               p
-                                innerValue:Please provide your name and email address at the gate for the exhibit.
+                                innerValue:@"An email with your ticket has been sent to your email
+address, please either show this email as you enter the gate to the exhibit, or provide one of our
+employees with your name, email address, and/or ticket reference as you enter."
+                              p
+                                innerValue:@"Your ticket reference is <strong>{0}</strong>"
+                                  :x:/@micro.evaluate.file?value
                               div
                                 class:right
                                 widgets
@@ -265,27 +265,6 @@ If you do not want to subscribe to our newsletter, you'll have to explicitly tur
                                        * Deleting modal widget.
                                        */
                                       delete-widget:confirm-ticket-purchase
-
-                        /*
-                         * Creating a timeout that destroys modal confirmation window 10 seconds from now,
-                         * in case this is a kiosk, such that it is ready for the next customer to place
-                         * his order.
-                         */
-                        micro.lambda.create-timeout
-                          milliseconds:10000
-                          onfinish
-
-                            /*
-                             * Deleting modal window, if it exists.
-                             */
-                            if
-                              fetch:x:/0/0?value
-                                widget-exists:confirm-ticket-purchase
-
-                              /*
-                               * Widget exists, deleting it.
-                               */
-                              delete-widget:confirm-ticket-purchase
 
                   /*
                    * Giving user a visual feedback that he'll have to actually click the PayPal button.

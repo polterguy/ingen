@@ -1,0 +1,29 @@
+/*
+ * Creates the event that returns the SMTP settings for the app.
+ */
+create-event:ingen.settings.get-smtp-settings
+
+  /*
+   * Selects the relevant data from p5.data, making sure we return sane defaults.
+   */
+  .defaults
+    ingen.settings.smtp-server:smtp.gmail.com
+    ingen.settings.smtp-use-ssl:bool:true
+    ingen.settings.smtp-port:int:465
+    ingen.settings.smtp-sender:your-username@gmail.com
+    ingen.settings.smtp-name:Your Name
+    ingen.settings.smtp-username:your-username@gmail.com
+    ingen.settings.smtp-password:your-gmail-password
+    ingen.settings.smtp-subject:Your ticket from InGen
+    ingen.settings.smtp-body:@"Below you can find your ticket information.
+
+Ticket reference - [ticket-reference]"
+  select-data:x:/*/*/~ingen.settings.smtp-
+  for-each:x:(/-/*|/@.defaults/*)/$
+    set:x:/+2/*/*?name
+      src:x:/@_dp/#?name
+    eval-x:x:/+/*/*
+    add:x:/../*/return
+      src
+        foo:x:/@_dp(/#/*|/#)/[0,1]?value
+  return

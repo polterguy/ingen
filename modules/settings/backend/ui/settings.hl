@@ -24,7 +24,7 @@ for-each:x:/-/*?value
   set:x:/+?name
     src:x:/@_dp?value
   foo
-  insert-before:x:/../*/create-widgets/*/*/*/div
+  insert-before:x:/../*/create-widgets/*/*/0/-
     src:x:/./-/*
 
 
