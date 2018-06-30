@@ -1,4 +1,4 @@
-# InGen Theme Park system information
+# InGen Dinosaur Theme Park Software System
 
 This system was the specification given to me and my opponent by the mods at
 [/r/shittyprogramming](https://www.reddit.com/r/shittyprogramming/comments/8t2j1l/shittyprogramming_deathmatch_is_tonight_8pm_est/).
