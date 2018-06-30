@@ -16,7 +16,7 @@ copyright reasons. We were supposed to code for three hours, and
 
 
 Since I thought it was a nice specification and use case for [Phosphorus Five](https://github.com/polterguy/phosphorusfive),
-I chose to finish it after the contest was done, and implement a working example of a Theme Park
+I finished it after the contest was done, and implemented a working example of a Theme Park
 _"kiosk"_ system, intended to run on either fullscreen touch screen _"kiosks"_, and/or be launched
 through usage of QR codes inside a Theme Park. The system is created with the intentions of not being publicly
 available on the general internet, but rather accessible through the LAN of some Theme Park.
@@ -28,7 +28,10 @@ The original specification was heavily centered around _"Jurassic Park"_ problem
 not that useful for an actual system. So I chose to implement it after the contest was finished,
 as a more general _"Theme Park"_ type of system. It features PayPal integration for accepting
 payments, and allowing public visitors to browse the exhibitions of the theme park, to see what
-type of exhibits they can sign up for.
+type of exhibits they can sign up for. In addition, it allows the guests to take _"guided tours"_
+in the theme park, launched through QR codes, which will ise speech synthesis and Google Translate
+such that a guest can use his smartphone and headset to get information about the exhibits he
+is visiting.
 
 The system hence functions as a use case for what you can expect to be able to create with Phosphorus
 Five and Hyperlambda. The system is rendered responsively, and runs just as well on phones and tablets,
