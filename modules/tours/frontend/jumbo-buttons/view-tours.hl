@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Jumbo Button for browsing tours.
  */
 button
@@ -12,6 +12,8 @@ button
     select-data:x:/*/*/ingen.settings.display-tours-jumbo-button
     if:x:/@select-data/*/*?value
       =:bool:false
+      or:x:/@select-data/*/*
+        not
       delete-widget:x:/../*/_event?value
 
   onclick
