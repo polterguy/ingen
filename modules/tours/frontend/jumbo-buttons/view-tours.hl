@@ -9,8 +9,8 @@ button
     /*
      * Checking if we should display "browse tours" button, and if not, deleting it.
      */
-    if
-      ingen.settings.browse-tours-button
+    select-data:x:/*/*/ingen.settings.display-tours-jumbo-button
+    if:x:/@select-data/*/*?value
       =:bool:false
       delete-widget:x:/../*/_event?value
 

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Creates our "view tours" front end widget.
  */
 
@@ -72,3 +72,9 @@ create-widget:view-tours-wrapper
         eval-x:x:/+/*
         micro.evaluate.file:@INGEN/modules/tours/frontend/ui/view-single-tour.hl
           id:x:/../*/.row/*/id?value
+
+
+/*
+ * Scrolling main widget into view.
+ */
+micro.page.scroll-into-view:view-tours-wrapper

@@ -169,3 +169,11 @@ from within your _"Foo bar"_ module.
 select-data:x:/*/*/ingen.settings.foo-bar-module
 ```
 
+Out of the box the system contains 3 different settings.
+
+* CSS skin file to use
+* Whether or not the tickets module is enabled
+* Whether or not a guest can browse tours without accessing tours through a direct link
+
+All of the above are Active Events that are declared in the relevant parts of the system,
+that returns plugins to the settings module's UI.

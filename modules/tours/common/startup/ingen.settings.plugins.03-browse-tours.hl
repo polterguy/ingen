@@ -17,10 +17,10 @@ create-event:ingen.settings.plugins.03-browse-tours
           oninit
 
             /*
-             * Checking if tickets module is turned on.
+             * Checking if tours can be browsed.
              */
-            if
-              ingen.settings.browse-tours-button
+            select-data:x:/*/*/ingen.settings.display-tours-jumbo-button
+            if:x:/@select-data/*/*?value
               =:bool:true
               set-widget-property:x:/../*/_event?value
                 checked

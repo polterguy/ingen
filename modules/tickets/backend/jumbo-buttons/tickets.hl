@@ -11,7 +11,7 @@ button
      * widget.
      */
     if
-      ingen.settings.has-ticket-module
+      ingen.settings.show-price-information
       =:bool:false
       delete-widget:x:/../*/_event?value
 

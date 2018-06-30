@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Creates our "admin exhibits" backend widget.
  */
 
@@ -119,3 +119,9 @@ create-widget:manage-exhibits-wrapper
              * Invokes file responsible for creating a new exhibit.
              */
             micro.evaluate.file:@INGEN/modules/exhibits/backend/ui/add-edit-exhibit.hl
+
+
+/*
+ * Scrolling main widget into view.
+ */
+micro.page.scroll-into-view:manage-exhibits-wrapper

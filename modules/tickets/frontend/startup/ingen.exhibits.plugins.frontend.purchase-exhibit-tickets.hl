@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Creates the plugin for our exhibits module that allows the user to purchase
  * tickets to the exhibit.
  */
@@ -25,7 +25,7 @@ create-event:ingen.exhibits.plugins.frontend.purchase-exhibit-tickets
   if:x:/-?value
     =:bool:false
     or
-      ingen.settings.has-ticket-module
+      ingen.settings.show-price-information
       =:bool:false
 
     /*

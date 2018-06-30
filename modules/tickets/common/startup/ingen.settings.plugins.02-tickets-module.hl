@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Creates the **[ingen.settings.plugins._tickets-module]** plugin Active Event for
  * the settings module.
  */
@@ -13,14 +13,14 @@ create-event:ingen.settings.plugins.02-tickets-module
       widgets
         input
           type:checkbox
-          .data-field:ingen.settings.has-ticket-module
+          .data-field:ingen.settings.show-price-information
           oninit
 
             /*
              * Checking if tickets module is turned on.
              */
             if
-              ingen.settings.has-ticket-module
+              ingen.settings.show-price-information
               =:bool:true
               set-widget-property:x:/../*/_event?value
                 checked

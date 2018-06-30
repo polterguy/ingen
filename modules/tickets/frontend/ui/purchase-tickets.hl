@@ -1,4 +1,4 @@
-﻿/*
+/*
  * File responsible for allowing user to purchase tickets to exhibit.
  */
 
@@ -106,7 +106,7 @@ If you do not want to subscribe to our newsletter, you'll have to explicitly tur
             class:right strip
             widgets
               button:confirm-purchase
-                innerValue:Done
+                innerValue:OK
                 events
 
                   /*

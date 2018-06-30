@@ -1,0 +1,19 @@
+/*
+ * Creates the **[ingen.settings.show-price-information]** Active Event, that will return boolean
+ * "true" if the system has the _"ticket module"_. This is a simple setting, possibly to change
+ * for the administrator of the system.
+ */
+create-event:ingen.settings.show-price-information
+
+  /*
+   * Checking p5.data to see if ticket module is turned on, defaulting to true if
+   * setting hasn't been changed.
+   */
+  select-data:x:/*/*/ingen.settings.show-price-information/*?value
+  if:x:/@select-data/*
+    return:x:/@select-data/*?value.bool
+
+  /*
+   * Defaulting to true.
+   */
+  return:bool:true

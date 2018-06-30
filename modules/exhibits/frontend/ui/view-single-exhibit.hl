@@ -32,6 +32,15 @@ micro.evaluate.file:@INGEN/modules/exhibits/common/model/get-exhibit.hl
 
 
 /*
+ * Checking if we should hide price information.
+ */
+if
+  ingen.settings.show-price-information
+  =:bool:false
+  set:x:/../*/create-widgets/*/div/*/widgets/*/h1/*/widgets/*/small
+
+
+/*
  * Transforming description markdownto HTML.
  */
 micro.markdown.markdown2html:x:/@micro.evaluate.file/*/description?value

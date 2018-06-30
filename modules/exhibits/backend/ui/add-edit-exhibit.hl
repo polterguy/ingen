@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Allows the user to add a new exhibit, or edit an existing exhibit.
  */
 micro.lambda.contract.optional:x:/..
@@ -16,6 +16,8 @@ ingen.access._throw-if-no-access:false
  * Checking if caller supplied an [id] argument, at which point we populate the widget
  * with the existing values from that record.
  */
+.defaults
+  price:0
 .data
 if:x:/../*/id?value
 
@@ -65,11 +67,10 @@ create-widgets
       ingen.exhibits.hide-price-widget
 
         /*
-         * Checking if system is configured with the "tickets module", and if not,
-         * simply hiding widget entirely
+         * Checking if system is configured to hide pricing information.
          */
         if
-          ingen.settings.has-ticket-module
+          ingen.settings.show-price-information
           =:bool:false
 
           /*
@@ -79,21 +80,6 @@ create-widgets
             element:div
           set-widget-property:x:/-/*/*?value
             style:"display:none;"
-
-          /*
-           * To avoid having updates delete existing price information when tickets are
-           * (temporarily) turned off, we check if this is an edit operation, at which point
-           * we simply keep the existing value.
-           */
-          .id:x:/../*/id?value
-          if:x:/-?value
-            not
-
-            /*
-             * No existing price information, hence we default its value to "0".
-             */
-            set-widget-property:x:/../*/_arg?value
-              value:0
 
     widgets
 
@@ -128,7 +114,7 @@ create-widgets
         type:number
         .data-field:price
         placeholder:Price ...
-        value:x:/@.data/*/price?value
+        value:x:(/@.data/*/price|/@.defaults/*/price)/[0,1]?value
         onkeydown:@"if (event.keyCode == 13) {p5.$('add-edit-exhibit-save-button').raise('onclick');return false;} else if (event.keyCode == 27) {p5.$('close-add-edit-exhibit-save-button').raise('onclick');return false;}"
         oninit
 
@@ -146,7 +132,7 @@ create-widgets
         type:number
         .data-field:children_price
         placeholder:Children price ...
-        value:x:/@.data/*/children_price?value
+        value:x:(/@.data/*/children_price|/@.defaults/*/price)/[0,1]?value
         onkeydown:@"if (event.keyCode == 13) {p5.$('add-edit-exhibit-save-button').raise('onclick');return false;} else if (event.keyCode == 27) {p5.$('close-add-edit-exhibit-save-button').raise('onclick');return false;}"
         oninit
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Creates the **[ingen.widgets.exhibits._datagrid]** extension widget, to make sure we keep our
  * code "DRY", since the differences between the frontend version and the backend version are
  * minimal.
@@ -20,7 +20,7 @@ create-event:ingen.widgets.exhibits._datagrid
    * from the datagrid.
    */
   if
-    ingen.settings.has-ticket-module
+    ingen.settings.show-price-information
     =:bool:false
 
     /*

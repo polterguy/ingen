@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Creates our "view exhibits" front end widget.
  */
 
@@ -70,3 +70,9 @@ create-widget:view-exhibits-wrapper
      * This is where we display exhibits as the user selects an exhibit to view it.
      */
     container:exhibits-display-single-exhibit
+
+
+/*
+ * Scrolling main widget into view.
+ */
+micro.page.scroll-into-view:view-exhibits-wrapper

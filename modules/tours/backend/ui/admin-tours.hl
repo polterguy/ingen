@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Creates our "admin tours" back end widget.
  */
 
@@ -119,3 +119,9 @@ create-widget:manage-tours-wrapper
              * Invokes file responsible for creating a new tours.
              */
             micro.evaluate.file:@INGEN/modules/tours/backend/ui/add-edit-tours.hl
+
+
+/*
+ * Scrolling main widget into view.
+ */
+micro.page.scroll-into-view:manage-tours-wrapper
