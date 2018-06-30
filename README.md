@@ -29,13 +29,15 @@ not that useful for an actual system. So I chose to implement it after the conte
 as a more general _"Theme Park"_ type of system. It features PayPal integration for accepting
 payments, and allowing public visitors to browse the exhibitions of the theme park, to see what
 type of exhibits they can sign up for. In addition, it allows the guests to take _"guided tours"_
-in the theme park, launched through QR codes, which will ise speech synthesis and Google Translate
+in the theme park, launched through QR codes, which will use speech synthesis and Google Translate
 such that a guest can use his smartphone and headset to get information about the exhibits he
 is visiting.
 
 The system hence functions as a use case for what you can expect to be able to create with Phosphorus
 Five and Hyperlambda. The system is rendered responsively, and runs just as well on phones and tablets,
-as it does on Windows, Linux and OS X machines.
+as it does on Windows, Linux and OS X machines. The system is heavily modularised, and allows for
+creating extension modules easily. Its intentions is to serve as an example _"use case"_ for
+Phosphorus Five.
 
 ## Installation
 
