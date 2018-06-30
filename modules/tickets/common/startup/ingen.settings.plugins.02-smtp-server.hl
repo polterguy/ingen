@@ -19,98 +19,113 @@ create-event:ingen.settings.plugins.02-smtp-server
    */
   eval-x:x:(/+/**/input/*/type(/=text|/=number|/=password)/./*/value)|(/+/**/literal/*/element/=textarea/./*/innerValue)
   return
-    div
-      class:strip fill
+    div:smtp-settings
       widgets
+        h4
+          innerValue:SMTP settings
+        p
+          innerValue:@"These are your SMTP settings, which are necessary to send emails
+to guests as they are purchasing tickets. If you don't intend to use the tickets module, you don't
+have to configure these parts."
+        div
+          class:strip fill
+          widgets
+            label
+              innerValue:SMTP server
+              class:description-9
+            input
+              type:text
+              placeholder:SMTP server ...
+              .data-field:ingen.settings.smtp-server
+              value:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-server?value
+        div
+          class:strip fill
+          widgets
+            label
+              innerValue:SMTP port
+              class:description-9
+            input
+              type:number
+              placeholder:SMTP port ...
+              .data-field:ingen.settings.smtp-port
+              value:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-port?value
+        div
+          class:strip fill
+          widgets
+            label
+              innerValue:SMTP username
+              class:description-9
+            input
+              type:text
+              placeholder:SMTP username ...
+              .data-field:ingen.settings.smtp-username
+              value:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-username?value
+        div
+          class:strip fill
+          widgets
+            label
+              innerValue:SMTP password
+              class:description-9
+            input
+              type:password
+              placeholder:SMTP password ...
+              .data-field:ingen.settings.smtp-password
+              value:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-password?value
         label
-          innerValue:SMTP server
-          class:description-9
-        input
-          type:text
-          placeholder:SMTP server ...
-          .data-field:ingen.settings.smtp-server
-          value:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-server?value
-    div
-      class:strip fill
-      widgets
+          widgets
+            input
+              type:checkbox
+              .data-field:ingen.settings.smtp-use-ssl
+            span
+              innerValue:Use SSL
+        hr
+        h4
+          innerValue:Ticket email settings
+        p
+          innerValue:@"These are your email settings, allowing you to configure how an
+email should appear when a ticket is purchased. If you don't intend to use the tickets module, you don't
+have to configure these parts."
+        div
+          class:strip fill
+          widgets
+            label
+              innerValue:Email
+              class:description-9
+            input
+              type:text
+              placeholder:Email ...
+              .data-field:ingen.settings.smtp-sender
+              value:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-sender?value
+        div
+          class:strip fill
+          widgets
+            label
+              innerValue:Name
+              class:description-9
+            input
+              type:text
+              placeholder:Name ...
+              .data-field:ingen.settings.smtp-name
+              value:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-name?value
+        div
+          class:strip fill
+          widgets
+            label
+              innerValue:Subject
+              class:description-9
+            input
+              type:text
+              placeholder:Ticket email's subject ...
+              .data-field:ingen.settings.smtp-subject
+              value:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-subject?value
         label
-          innerValue:SMTP port
+          innerValue:Body
           class:description-9
-        input
-          type:number
-          placeholder:SMTP port ...
-          .data-field:ingen.settings.smtp-port
-          value:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-port?value
-    div
-      class:strip fill
-      widgets
-        label
-          innerValue:SMTP username
-          class:description-9
-        input
-          type:text
-          placeholder:SMTP username ...
-          .data-field:ingen.settings.smtp-username
-          value:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-username?value
-    div
-      class:strip fill
-      widgets
-        label
-          innerValue:SMTP password
-          class:description-9
-        input
-          type:password
-          placeholder:SMTP password ...
-          .data-field:ingen.settings.smtp-password
-          value:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-password?value
-    div
-      class:strip fill
-      widgets
-        label
-          innerValue:Email
-          class:description-9
-        input
-          type:text
-          placeholder:Email ...
-          .data-field:ingen.settings.smtp-sender
-          value:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-sender?value
-    div
-      class:strip fill
-      widgets
-        label
-          innerValue:Name
-          class:description-9
-        input
-          type:text
-          placeholder:Name ...
-          .data-field:ingen.settings.smtp-name
-          value:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-name?value
-    div
-      class:strip fill
-      widgets
-        label
-          innerValue:Subject
-          class:description-9
-        input
-          type:text
-          placeholder:Ticket email's subject ...
-          .data-field:ingen.settings.smtp-subject
-          value:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-subject?value
-    label
-      innerValue:Body
-      class:description-9
-    literal
-      element:textarea
-      class:fill
-      rows:10
-      placeholder:Ticket email's body ...
-      .data-field:ingen.settings.smtp-body
-      innerValue:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-body?value
-    label
-      widgets
-        input
-          type:checkbox
-          .data-field:ingen.settings.smtp-use-ssl
-        span
-          innerValue:Use SSL
-    br
+        literal
+          element:textarea
+          class:fill
+          rows:10
+          placeholder:Ticket email's body ...
+          .data-field:ingen.settings.smtp-body
+          innerValue:x:/@ingen.settings.get-smtp-settings/*/ingen.settings.smtp-body?value
+        hr

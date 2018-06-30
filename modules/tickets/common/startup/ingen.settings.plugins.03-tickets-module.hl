@@ -14,6 +14,34 @@ create-event:ingen.settings.plugins.03-tickets-module
         input
           type:checkbox
           .data-field:ingen.settings.show-price-information
+          onchange
+
+            /*
+             * Checking if checkbox is check on, at which point we'll have to display
+             * SMTP/email settings - Otherwise we hide SMTP/email settings.
+             */
+            get-widget-property:x:/../*/_event?value
+              checked
+            if:x:/-/*/*
+
+              /*
+               * Price information is turned on.
+               * Displaying SMTP/email settings, since there are no reasons to allow user
+               * to configure them.
+               */
+              set-widget-property:smtp-settings
+                style:""
+
+            else
+
+              /*
+               * Price information is turned off.
+               * Hiding SMTP/email settings, since there are no reasons to allow user
+               * to configure them.
+               */
+              set-widget-property:smtp-settings
+                style:"display:none;"
+
           oninit
 
             /*
@@ -22,8 +50,21 @@ create-event:ingen.settings.plugins.03-tickets-module
             if
               ingen.settings.show-price-information
               =:bool:true
+
+              /*
+               * Price information is turned on.
+               */
               set-widget-property:x:/../*/_event?value
                 checked
+
+            else
+
+              /*
+               * Hiding SMTP/email settings, since there are no reasons to allow user to
+               * configure them.
+               */
+              set-widget-property:smtp-settings
+                style:"display:none;"
 
         span
           innerValue:Ticket module
