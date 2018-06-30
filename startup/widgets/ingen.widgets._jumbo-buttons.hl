@@ -1,4 +1,5 @@
-﻿/*
+
+/*
  * Creates the **[ingen.widgets._jumbo-buttons]** extension widget that returns all
  * Jumbo Buttons to all modules that currently logged in user has access to.
  *

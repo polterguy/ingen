@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Main launch file for InGen.
  *
  * This file creates the main wire frame for the entire application, both
@@ -8,8 +8,12 @@
 
 
 /*
- * Including Magic Forrest skin and Micro's CSS files.
+ * Including Micro's CSS files, and skin file used for system, defaulting to "magic-forrest".
  */
+select-data:x:/*/*/ingen.settings.css-skin/*?value
+if:x:/-/*?value
+  set:x:/../*/micro.css.include/*?value
+    src:x:/@select-data/*?value
 micro.css.include
   skin:magic-forrest
 

@@ -1,0 +1,61 @@
+/*
+ * Creates the **[ingen.settings.plugins._css-skin]** plugin Active Event for
+ * the settings module.
+ */
+create-event:ingen.settings.plugins.01-css-skin
+
+  /*
+   * Returning widget necessary to include settings for "has ticket module" widget
+   * in the settings module.
+   */
+  return
+    container
+      class:fill strip
+      widgets
+        label
+          class:description-9
+          innerValue:Skin
+        container
+          element:select
+          .data-field:ingen.settings.css-skin
+          oninit
+
+            /*
+             * Retrieving currently selected skin, defaulting to "magic-forrest"
+             */
+            .skin:magic-forrest
+            select-data:x:/*/*/ingen.settings.css-skin/*?value
+            if:x:/@select-data/*?value
+              set:x:/@.skin?value
+                src:x:/@select-data/*?value
+
+            /*
+             * Retrieving all skins in system, and creating one option widget for each.
+             */
+            list-files:@MICRO/media/skins/
+              filter:.css
+            for-each:x:/@list-files/*?name
+
+              /*
+               * Firguring out only filename of skin, without its file extension.
+               */
+              split:x:/@_dp?value
+                =:/
+                =:.
+
+              /*
+               * Checking if this is our currently used skin, and if so, making
+               * sure we make the option widget selected.
+               */
+              if:x:/@split/0/-2?name
+                =:x:/@.skin?value
+                add:x:/..for-each/*/create-widget
+                  src:selected
+
+              /*
+               * Creating our option widget.
+               */
+              create-widget
+                parent:x:/../*/_event?value
+                element:option
+                innerValue:x:/@split/0/-2?name

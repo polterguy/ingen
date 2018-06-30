@@ -1,12 +1,11 @@
-
 /*
- * Creates the **[ingen.settings.plugins._browse-tours]** plugin Active Event for
+ * Creates the **[ingen.settings.plugins._tickets-module]** plugin Active Event for
  * the settings module.
  */
-create-event:ingen.settings.plugins.browse-tours
+create-event:ingen.settings.plugins.02-tickets-module
 
   /*
-   * Returning widget necessary to include settings for "enable browse tours" widget
+   * Returning widget necessary to include settings for "has ticket module" widget
    * in the settings module.
    */
   return
@@ -14,17 +13,17 @@ create-event:ingen.settings.plugins.browse-tours
       widgets
         input
           type:checkbox
-          .data-field:ingen.settings.display-tours-jumbo-button
+          .data-field:ingen.settings.has-ticket-module
           oninit
 
             /*
              * Checking if tickets module is turned on.
              */
             if
-              ingen.settings.browse-tours-button
+              ingen.settings.has-ticket-module
               =:bool:true
               set-widget-property:x:/../*/_event?value
                 checked
 
         span
-          innerValue:Browse tours
+          innerValue:Ticket module
