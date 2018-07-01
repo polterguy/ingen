@@ -1,4 +1,4 @@
-﻿/*
+/*
  * File responsible for letting the user see a single tour.
  */
 
@@ -66,6 +66,8 @@ for-each:x:/@list-files/*?name
           eval-x:x:/+/*
           micro.speech.speak:x:/@micro.evaluate.file?value
             voice:x:/@split/0/-2?name
+            pitch:0.9
+            rate:0.9
           delete-widget-property:themepark-tour-pause-button
             disabled
 

@@ -32,6 +32,29 @@ create-event:ingen.settings.plugins.03-tickets-module
               set-widget-property:smtp-settings
                 style:""
 
+              /*
+               * Giving user some general information about what he needs to do to enable
+               * the ticket module.
+               */
+              create-widgets
+                micro.widgets.modal:ticket-settings-info
+                  widgets
+                    h3
+                      innerValue:Information
+                    p
+                      innerValue:@"If you wish to have the system automatically send an email to your guests,
+with the ticket information, as they purchase tickets - You'll have to configure your SMTP and email
+settings. If you don't change these settings, no such emails will be sent."
+                    div
+                      class:right
+                      widgets
+                        button
+                          innerValue:OK
+                          oninit
+                            micro.page.set-focus:x:/../*/_event?value
+                          onclick
+                            delete-widget:ticket-settings-info
+
             else
 
               /*

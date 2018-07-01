@@ -12,8 +12,10 @@ button
     select-data:x:/*/*/ingen.settings.display-tours-jumbo-button
     if:x:/@select-data/*/*?value
       =:bool:false
-      or:x:/@select-data/*/*
-        not
+
+      /*
+       * Browsing tours have been explicitly turned off.
+       */
       delete-widget:x:/../*/_event?value
 
   onclick

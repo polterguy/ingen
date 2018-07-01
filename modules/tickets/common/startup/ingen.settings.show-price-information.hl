@@ -1,7 +1,7 @@
 /*
  * Creates the **[ingen.settings.show-price-information]** Active Event, that will return boolean
- * "true" if the system has the _"ticket module"_. This is a simple setting, possibly to change
- * for the administrator of the system.
+ * "true" if the system has enabled the _"ticket module"_. This is a simple setting, possibly to
+ * change for the administrator of the system.
  */
 create-event:ingen.settings.show-price-information
 
@@ -14,6 +14,6 @@ create-event:ingen.settings.show-price-information
     return:x:/@select-data/*?value.bool
 
   /*
-   * Defaulting to true.
+   * Defaulting to false.
    */
-  return:bool:true
+  return:bool:false
