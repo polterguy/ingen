@@ -76,3 +76,16 @@ create table tours (
 ) engine=InnoDB auto_increment=1 default charset=utf8mb4 collate=utf8mb4_unicode_ci;
 "
 
+  /*
+   * If we came this far, we know that we have created the database initially, and hence
+   * we can import our default initial data, to populate database with some example data.
+   */
+  list-files:@INGEN/startup/initial-data/
+    filter:.csv
+  for-each:x:/@list-files/*?name
+    split:x:/@_dp?value
+      =:/
+      =:.
+    p5.mysql.load-from
+      table:x:/@split/0/-2?name
+      infile:x:/@_dp?value

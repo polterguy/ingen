@@ -1,0 +1,10 @@
+/*
+ * Creates the __[ingen.version]__ Active Event.
+ */
+
+/*
+ * This event will return the version of InGen back to caller.
+ */
+create-event:ingen.version
+
+  return:decimal:1.4
