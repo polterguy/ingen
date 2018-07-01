@@ -3,13 +3,12 @@
 This system was the specification given to me and my opponent by the mods at
 [/r/shittyprogramming](https://www.reddit.com/r/shittyprogramming/comments/8t2j1l/shittyprogramming_deathmatch_is_tonight_8pm_est/)
 in a programming contest that was held in June of 2018. The idea was to implement a better IT
-system for a _"Jurassic Park"_ type of theme park, although the system was named _"InGen"_ for
-copyright reasons. We were supposed to code for three hours, and
+system for a _"Jurassic Park"_ type of theme park. We were supposed to code for three hours, and
 [here is how my implementation looked like when when we were finished](https://github.com/polterguy/ingen/tree/v1.1).
 
 
 <p align="center">
-<a href="https://www.youtube.com/watch?v=zo1-5ETRTaw">
+<a href="https://www.youtube.com/watch?v=i82lruH0f8I">
 <img alt="The InGen Dinosaur Theme Park Software System" title="The InGen Dinosaur Theme Park Software System" src="https://phosphorusfive.files.wordpress.com/2018/06/screen-shot-2018-06-23-at-21-37-22.png" />
 </a>
 </p>
