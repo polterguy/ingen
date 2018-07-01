@@ -22,6 +22,8 @@ create-event:ingen.settings.plugins.04-browse-tours
             select-data:x:/*/*/ingen.settings.display-tours-jumbo-button
             if:x:/@select-data/*/*?value
               =:bool:true
+              or:x:/@select-data/*/*?value
+                not
               set-widget-property:x:/../*/_event?value
                 checked
 
