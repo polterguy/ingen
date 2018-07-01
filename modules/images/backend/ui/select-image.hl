@@ -216,14 +216,18 @@ create-widgets
             .onupload
 
               /*
-               * Looping through each image that was uploaded and invoking file
-               * responsible for saving image.
+               * Looping through each image that was uploaded, and invoking file responsible
+               * for saving image.
+               *
+               * Notice, we have to pass in the original filename to our invocation here.
                */
               for-each:x:/../*/files/*
+                split:x:/@_dp/#/*/original-filename?value
+                  =:/
                 eval-x:x:/+/*
                 micro.evaluate.file:@INGEN/modules/images/backend/model/save-image.hl
                   image:x:/@_dp/#?value
-                  name:x:/@_dp/#/*/original-filename?value
+                  name:x:/@split/0/-?name
 
               /*
                * Re-databinding thumbnails.

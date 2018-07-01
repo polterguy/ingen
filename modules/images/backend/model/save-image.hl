@@ -5,6 +5,10 @@
  * 1. Large 800x600 px
  * 2. Medium 400x300 px
  * 3. Thumbnail 160x120
+ *
+ * Notice, the event also expects **[name]** being the original filename for the image file,
+ * to avoid having temporary unique references in the physical filename becoming a part of
+ * the filename we use when storing the image locally.
  */
 
 
@@ -17,19 +21,12 @@ micro.lambda.contract.min:x:/..
 
 
 /*
- * Figuring out (only) filename of image.
- */
-split:x:/../*/name?value
-  =:/
-
-
-/*
  * First resizing the large image.
  */
 eval-x:x:/+/*/destination
 ingen.imaging._auto-crop-resize:x:/../*/image?value
   destination:@INGEN/media/images/{0}
-    :x:/@split/0/-?name
+    :x:/../*/name?value
   size
     width:800
     height:600
@@ -40,7 +37,7 @@ ingen.imaging._auto-crop-resize:x:/../*/image?value
 eval-x:x:/+/*/destination
 ingen.imaging._auto-crop-resize:x:/../*/image?value
   destination:@INGEN/media/images/medium/{0}
-    :x:/@split/0/-?name
+    :x:/../*/name?value
   size
     width:400
     height:300
@@ -51,7 +48,7 @@ ingen.imaging._auto-crop-resize:x:/../*/image?value
 eval-x:x:/+/*/destination
 ingen.imaging._auto-crop-resize:x:/../*/image?value
   destination:@INGEN/media/images/thumbs/{0}
-    :x:/@split/0/-?name
+    :x:/../*/name?value
   size
     width:160
     height:120
