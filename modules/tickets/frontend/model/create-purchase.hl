@@ -20,9 +20,9 @@ micro.lambda.contract.min:x:/..
  */
 if
   fetch:x:/0/0?value
-    folder-exists:/common/private/ingen-tickets/
+    folder-exists:/common/documents/private/ingen-tickets/
   not
-  create-folder:/common/private/ingen-tickets/
+  create-folder:/common/documents/private/ingen-tickets/
 
 
 /*
@@ -165,7 +165,7 @@ else
   p5.http.get:"https://chart.googleapis.com/chart?cht=qr&chl={0}&chs=250x250&chld=L|0"
     :x:/@.ticket-id?value
     .onresponse
-      .p5.io.file.save-to-stream:/common/private/ingen-tickets/{0}.png
+      .p5.io.file.save-to-stream:/common/documents/private/ingen-tickets/{0}.png
         :x:/@.ticket-id?value
 
   /*
@@ -192,8 +192,15 @@ else
           text:plain
             content:x:/@.body?value
           image:png
-            filename:/common/private/ingen-tickets/{0}.png
+            filename:/common/documents/private/ingen-tickets/{0}.png
               :x:/@.ticket-id?value
+
+
+/*
+ * Deleting ticket's PNG file.
+ */
+delete-file:/common/documents/private/ingen-tickets/{0}.png
+  :x:/@.ticket-id?value
 
 
 /*
