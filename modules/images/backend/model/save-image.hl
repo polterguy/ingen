@@ -1,4 +1,4 @@
-﻿/*
+/*
  * This file will save the given **[image]** image according to the rules of the system,
  * which implies creating three versions.
  *
@@ -11,14 +11,15 @@
 /*
  * Sanity checking invocation.
  */
-micro.lambda.contract.min::/..
-  _arg:string
+micro.lambda.contract.min:x:/..
+  image:string
+  name:string
 
 
 /*
  * Figuring out (only) filename of image.
  */
-split:x:/../*/image?value
+split:x:/../*/name?value
   =:/
 
 

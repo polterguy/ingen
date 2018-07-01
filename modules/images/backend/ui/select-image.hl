@@ -219,10 +219,11 @@ create-widgets
                * Looping through each image that was uploaded and invoking file
                * responsible for saving image.
                */
-              for-each:x:/../*/files/*?value
+              for-each:x:/../*/files/*
                 eval-x:x:/+/*
                 micro.evaluate.file:@INGEN/modules/images/backend/model/save-image.hl
-                  image:x:/@_dp?value
+                  image:x:/@_dp/#?value
+                  name:x:/@_dp/#/*/original-filename?value
 
               /*
                * Re-databinding thumbnails.
